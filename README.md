@@ -1,63 +1,104 @@
 # Academic Agent
 
-A simple CLI tool for converting PDF files to Markdown while preserving images, diagrams, and formulas using docling.
+An intelligent system for processing academic materials using Groq LLM and docling, capable of converting PDFs to structured notes with smart organization.
 
 ## Project Structure
 
-- **docling-processor/**: Contains scripts for PDF to Markdown conversion
-  - `pdf_processor_agent.py`: CLI tool for PDF processing
+- **agents/academic/**: Contains the main agent implementations
+  - `academic_agent.py`: Main agent orchestrating all operations
+  - `ingestion_agent.py`: Handles PDF ingestion and initial processing
+  - `analysis_agent.py`: Analyzes content and extracts key information
+  - `outline_agent.py`: Generates structured outlines
+  - `notes_agent.py`: Creates comprehensive notes
+  - `update_agent.py`: Updates existing notes with new information
   - `requirements.txt`: Project dependencies
 
-- **.venv/**: Virtual environment with installed dependencies
+- **tools/**: Reusable tools and utilities
+  - **pdf_processor/**: PDF processing tools
+    - `processor.py`: Core PDF processing functionality
+    - `cli.py`: Command-line interface
+    - `__init__.py`: Package initialization
 
-- **output/**: Contains processed data (gitignored)
-  - Markdown files
-  - Extracted images
+- **processed/**: Contains processed data (gitignored)
+  - `ingestion/`: Initial processed PDFs and metadata
+  - `analysis/`: Content analysis results
+  - `outlines/`: Generated outlines
+  - `notes/`: Comprehensive notes
 
 ## Getting Started
 
 ### Prerequisites
 
 - Python 3.8+
-- docling (will be installed via requirements.txt)
+- Groq API key for LLM functionality
 - Virtual environment setup
 
 ### Installation
 
-1. Activate the virtual environment:
+1. Clone the repository:
    ```bash
-   source .venv/bin/activate
+   git clone <repository-url>
+   cd academic-agent
    ```
 
-2. Install dependencies:
+2. Create and activate a virtual environment:
    ```bash
-   uv pip install -r docling-processor/requirements.txt
+   python -m venv .venv
+   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   ```
+
+3. Install dependencies:
+   ```bash
+   pip install -r agents/academic/requirements.txt
+   ```
+
+4. Set up environment variables:
+   ```bash
+   cp .env.example .env
+   # Edit .env with your Groq API key and other settings
    ```
 
 ### Usage
 
-The tool provides two main functionalities:
+The agent can be used in two modes:
 
-1. Convert a single PDF file:
+1. Command-line mode with specific actions:
    ```bash
-   python docling-processor/pdf_processor_agent.py --pdf /path/to/file.pdf --output /path/to/output
+   python -m agents.academic.academic_agent --pdf /path/to/file.pdf --analyze --generate-outline --generate-notes
    ```
 
-2. Process all PDFs in a directory:
+2. Interactive mode for ongoing operations:
    ```bash
-   python docling-processor/pdf_processor_agent.py --dir /path/to/pdfs --output /path/to/output
+   python -m agents.academic.academic_agent --interactive
    ```
 
 ### Features
 
-- PDF to Markdown conversion
-- Automatic image extraction and referencing
-- Picture classification
-- Formula enrichment and LaTeX support
-- Support for batch processing
+- Smart PDF processing with content-based file naming
+- Automatic metadata extraction and organization
+- Content analysis and key concept identification
+- Structured outline generation
+- Comprehensive notes creation
+- Support for updating existing notes with new information
+- Interactive mode for complex workflows
+- Groq LLM integration for intelligent processing
 
-### Arguments
+### Configuration
 
-- `--pdf`: Path to a single PDF file to convert
-- `--dir`: Path to a directory containing PDFs to convert
-- `--output`: Output directory for markdown files and images (required)
+The following environment variables can be configured in `.env`:
+
+- `GROQ_API_KEY`: Your Groq API key
+- `PDF_PROCESSOR_DEVICE`: Device to use for PDF processing (cpu/mps/cuda)
+- `OUTPUT_BASE_DIR`: Base directory for processed files
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.

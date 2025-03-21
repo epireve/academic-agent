@@ -23,22 +23,12 @@ build/
 .vscode/
 *.swp
 *.swo
-
-# OS specific files
 .DS_Store
-Thumbs.db
 
-# Logs
-*.log
-logs/
-
-# Temporary files
-tmp/
-temp/
-
-# Course output files
-output/
-docling-processor/convert_pdfs.sh
-
-# Generated content
+# Project specific
 processed/
+output/
+*.pdf
+*.md
+!README.md
+!**/README.md
