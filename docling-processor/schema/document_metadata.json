@@ -1,0 +1,147 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Academic Document Metadata",
+  "description": "Schema for academic document metadata after processing with docling",
+  "type": "object",
+  "properties": {
+    "documentId": {
+      "type": "string",
+      "description": "Unique identifier for the document"
+    },
+    "title": {
+      "type": "string",
+      "description": "Title of the document"
+    },
+    "authors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of document authors"
+    },
+    "course": {
+      "type": "string",
+      "description": "Course code or name that the document belongs to"
+    },
+    "topic": {
+      "type": "string",
+      "description": "Topic or module within the course"
+    },
+    "originalFilename": {
+      "type": "string",
+      "description": "Original filename of the PDF document"
+    },
+    "markdownPath": {
+      "type": "string",
+      "description": "Path to the generated markdown file"
+    },
+    "conversionDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date and time when the conversion was performed"
+    },
+    "images": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "imagePath": {
+            "type": "string",
+            "description": "Path to the image file"
+          },
+          "pageNumber": {
+            "type": "integer",
+            "description": "Page number where the image appears"
+          },
+          "classification": {
+            "type": "string",
+            "description": "Classification of the image (chart, diagram, photo, etc.)"
+          },
+          "caption": {
+            "type": "string",
+            "description": "Caption or description of the image"
+          }
+        },
+        "required": ["imagePath"]
+      },
+      "description": "List of images extracted from the document"
+    },
+    "tables": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "pageNumber": {
+            "type": "integer",
+            "description": "Page number where the table appears"
+          },
+          "rows": {
+            "type": "integer",
+            "description": "Number of rows in the table"
+          },
+          "columns": {
+            "type": "integer",
+            "description": "Number of columns in the table"
+          },
+          "caption": {
+            "type": "string",
+            "description": "Caption or title of the table"
+          }
+        }
+      },
+      "description": "List of tables extracted from the document"
+    },
+    "formulas": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "formula": {
+            "type": "string",
+            "description": "The formula in LaTeX format"
+          },
+          "pageNumber": {
+            "type": "integer",
+            "description": "Page number where the formula appears"
+          },
+          "explanation": {
+            "type": "string",
+            "description": "Explanation or description of the formula"
+          }
+        }
+      },
+      "description": "List of mathematical formulas extracted from the document"
+    },
+    "pageCount": {
+      "type": "integer",
+      "description": "Total number of pages in the original document"
+    },
+    "wordCount": {
+      "type": "integer",
+      "description": "Total word count in the document"
+    },
+    "processingStats": {
+      "type": "object",
+      "properties": {
+        "conversionTimeSeconds": {
+          "type": "number",
+          "description": "Time taken to convert the document in seconds"
+        },
+        "imagesExtracted": {
+          "type": "integer",
+          "description": "Number of images extracted"
+        },
+        "tablesExtracted": {
+          "type": "integer",
+          "description": "Number of tables extracted"
+        },
+        "formulasExtracted": {
+          "type": "integer",
+          "description": "Number of formulas extracted"
+        }
+      },
+      "description": "Statistics about the processing of the document"
+    }
+  },
+  "required": ["documentId", "title", "originalFilename", "markdownPath", "conversionDate"]
+}
