@@ -39,3 +39,6 @@ temp/
 # Course output files
 output/
 docling-processor/convert_pdfs.sh
+
+# Generated content
+processed/
