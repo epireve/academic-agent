@@ -35,3 +35,7 @@ logs/
 # Temporary files
 tmp/
 temp/
+
+# Course output files
+output/
+docling-processor/convert_pdfs.sh

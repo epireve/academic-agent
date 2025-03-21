@@ -26,16 +26,20 @@ class DoclingTools:
     def convert_pdf_to_markdown(self, pdf_path: str, output_dir: str, 
                               image_mode: str = "referenced",
                               enrich_pictures: bool = True,
-                              enrich_formulas: bool = True) -> str:
+                              enrich_formulas: bool = True,
+                              course: str = "sra", 
+                              category: str = "lectures") -> str:
         """
         Convert a PDF to Markdown using docling with enhanced image handling
         
         Args:
             pdf_path: Path to the PDF file
-            output_dir: Directory where to save the markdown file
+            output_dir: Base directory for output
             image_mode: How to handle images (referenced, embedded, placeholder)
             enrich_pictures: Whether to enable picture classification
             enrich_formulas: Whether to enable formula enrichment
+            course: Course category (sra = Security Risk Analysis)
+            category: Document category (lectures, notes, transcripts)
             
         Returns:
             Path to the generated markdown file
@@ -43,11 +47,16 @@ class DoclingTools:
         if not os.path.exists(pdf_path):
             return f"Error: PDF file {pdf_path} does not exist"
         
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
+        # Create structured output path
+        structured_output_dir = os.path.join(output_dir, course, category, "markdown")
+        image_dir = os.path.join(output_dir, course, category, "images")
+        
+        # Ensure directories exist
+        os.makedirs(structured_output_dir, exist_ok=True)
+        os.makedirs(image_dir, exist_ok=True)
         
         # Build the docling command
-        cmd = ["docling", "--to", "md", "--output", output_dir, "--device", "mps", 
+        cmd = ["docling", "--to", "md", "--output", structured_output_dir, "--device", "mps", 
               f"--image-export-mode={image_mode}"]
         
         if enrich_pictures:
@@ -62,7 +71,7 @@ class DoclingTools:
             subprocess.run(cmd, check=True, capture_output=True, text=True)
             filename = os.path.basename(pdf_path)
             filename_no_ext = os.path.splitext(filename)[0]
-            output_path = os.path.join(output_dir, f"{filename_no_ext}.md")
+            output_path = os.path.join(structured_output_dir, f"{filename_no_ext}.md")
             return f"Successfully converted {pdf_path} to {output_path}"
         except subprocess.CalledProcessError as e:
             return f"Error converting PDF: {e.stderr}"
@@ -121,6 +130,47 @@ class DoclingTools:
                     })
         
         return pdfs
+    
+    def extract_metadata_from_path(self, path: str) -> Dict[str, str]:
+        """
+        Try to extract course and category information from a filepath
+        
+        Args:
+            path: Path to analyze
+            
+        Returns:
+            Dictionary with course, category if they could be extracted
+        """
+        path_parts = path.split(os.sep)
+        filename = os.path.basename(path)
+        
+        # This is a simple heuristic, we can make it more sophisticated later
+        metadata = {
+            "course": "sra",   # default (sra = Security Risk Analysis)
+            "category": "lectures" # default
+        }
+        
+        # Special case for Security Risk Analysis course
+        if any("security risk" in part.lower() or "woa7017" in part.lower() for part in path_parts):
+            metadata["course"] = "sra"
+        
+        # Try to extract course from path
+        for part in path_parts:
+            part = part.lower()
+            # Look for course codes in the path
+            if "woa" in part or "course" in part:
+                metadata["course"] = part.replace(" ", "_")
+        
+        # Try to extract category from filename
+        filename_no_ext = os.path.splitext(filename)[0].lower()
+        if "lecture" in filename_no_ext or "slides" in filename_no_ext:
+            metadata["category"] = "lectures"
+        elif "note" in filename_no_ext:
+            metadata["category"] = "notes"
+        elif "transcript" in filename_no_ext or "recording" in filename_no_ext:
+            metadata["category"] = "transcripts"
+        
+        return metadata
 
 def setup_agent(api_key: Optional[str] = None, use_openai: bool = False):
     """
@@ -151,10 +201,15 @@ def main():
     parser = argparse.ArgumentParser(description="Advanced PDF Processing Agent")
     parser.add_argument("--pdf", help="Path to a PDF file to process")
     parser.add_argument("--dir", help="Directory containing PDFs to process")
-    parser.add_argument("--output", required=True, help="Output directory for markdown files")
+    parser.add_argument("--output", default="/Users/invoture/dev.local/academic-agent/data/output", 
+                       help="Base output directory for markdown files")
+    parser.add_argument("--course", default="sra", help="Course category (sra = Security Risk Analysis)")
+    parser.add_argument("--category", default="lectures", 
+                      help="Document category (lectures, notes, transcripts)")
     parser.add_argument("--openai-key", help="OpenAI API key")
     parser.add_argument("--use-openai", action="store_true", help="Use OpenAI model (requires API key)")
     parser.add_argument("--interactive", action="store_true", help="Run in interactive mode")
+    parser.add_argument("--auto-metadata", action="store_true", help="Automatically extract metadata from path")
     
     args = parser.parse_args()
     
@@ -163,13 +218,43 @@ def main():
         tools = DoclingTools()
         
         if args.pdf:
-            result = tools.convert_pdf_to_markdown(args.pdf, args.output)
+            # Try to automatically extract metadata if requested
+            if args.auto_metadata:
+                metadata = tools.extract_metadata_from_path(args.pdf)
+                course = metadata["course"]
+                category = metadata["category"]
+                print(f"Auto-detected metadata: Course={course}, Category={category}")
+            else:
+                course = args.course
+                category = args.category
+            
+            result = tools.convert_pdf_to_markdown(
+                args.pdf, 
+                args.output,
+                course=course,
+                category=category
+            )
             print(result)
         elif args.dir:
             pdfs = tools.list_pdfs_in_directory(args.dir)
             for pdf in pdfs:
                 if "error" not in pdf:
-                    result = tools.convert_pdf_to_markdown(pdf["path"], args.output)
+                    # Try to automatically extract metadata if requested
+                    if args.auto_metadata:
+                        metadata = tools.extract_metadata_from_path(pdf["path"])
+                        course = metadata["course"]
+                        category = metadata["category"]
+                        print(f"Processing {pdf['filename']} with metadata: Course={course}, Category={category}")
+                    else:
+                        course = args.course
+                        category = args.category
+                    
+                    result = tools.convert_pdf_to_markdown(
+                        pdf["path"], 
+                        args.output,
+                        course=course,
+                        category=category
+                    )
                     print(result)
         else:
             print("Error: Please provide either --pdf or --dir argument")
@@ -194,11 +279,11 @@ def main():
         else:
             # Non-interactive mode with an agent
             if args.pdf:
-                prompt = f"Convert the PDF file at {args.pdf} to markdown and save it to {args.output} directory. Use referenced image mode and enable picture classification and formula enrichment."
+                prompt = f"Convert the PDF file at {args.pdf} to markdown and save it to {args.output}/{args.course}/{args.category}/markdown directory. Use referenced image mode and enable picture classification and formula enrichment."
                 response = agent.run(prompt)
                 print(response)
             elif args.dir:
-                prompt = f"Process all PDF files in the directory {args.dir} and convert them to markdown files in the {args.output} directory. Use referenced image mode and enable picture classification and formula enrichment."
+                prompt = f"Process all PDF files in the directory {args.dir} and convert them to markdown files in the {args.output}/{args.course}/{args.category}/markdown directory. Use referenced image mode and enable picture classification and formula enrichment."
                 response = agent.run(prompt)
                 print(response)
 

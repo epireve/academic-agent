@@ -5,14 +5,25 @@ An intelligent agent for processing academic material, particularly converting P
 ## Project Structure
 
 - **docling-processor/**: Contains scripts and tools for PDF to Markdown conversion
-  - `.venv/`: Virtual environment with installed dependencies
   - `convert_pdfs.sh`: Bash script for batch conversion of PDFs
   - `pdf_processor_agent.py`: Simple agent for PDF processing
   - `advanced_pdf_agent.py`: Advanced agent using smolagents framework
   - `requirements.txt`: Project dependencies
+  - `schema/`: Contains JSON schemas for document metadata
 
-- **.rules/**: Contains project rules and guidelines
-  - `academic_agent_rules.md`: Rules based on smolagents framework
+- **.venv/**: Virtual environment with installed dependencies
+
+- **output/**: Contains processed data
+  - `{course}/`: Course category (e.g., sra for Security Risk Analysis)
+    - `lectures/`: Course slides and presentation materials
+      - `markdown/`: Converted markdown files
+      - `images/`: Extracted images from PDFs
+    - `notes/`: Personal notes and supplementary materials
+      - `markdown/`: Converted markdown files
+      - `images/`: Extracted images from PDFs
+    - `transcripts/`: Class transcriptions and recordings
+      - `markdown/`: Converted markdown files
+      - `images/`: Extracted images from PDFs
 
 ## Getting Started
 
@@ -26,13 +37,12 @@ An intelligent agent for processing academic material, particularly converting P
 
 1. Activate the virtual environment:
    ```bash
-   cd docling-processor
    source .venv/bin/activate
    ```
 
 2. Install additional dependencies if needed:
    ```bash
-   uv pip install -r requirements.txt
+   uv pip install -r docling-processor/requirements.txt
    ```
 
 ### Usage
@@ -42,7 +52,13 @@ An intelligent agent for processing academic material, particularly converting P
 To convert a PDF to Markdown while preserving images and formulas:
 
 ```bash
-./convert_pdfs.sh
+cd docling-processor
+./convert_pdfs.sh [course] [category]
+```
+
+Example:
+```bash
+./convert_pdfs.sh sra lectures
 ```
 
 #### Using the Python Agent
@@ -50,31 +66,56 @@ To convert a PDF to Markdown while preserving images and formulas:
 For more advanced processing:
 
 ```bash
-python pdf_processor_agent.py --pdf /path/to/your.pdf --output /output/directory
+python docling-processor/pdf_processor_agent.py --pdf /path/to/your.pdf --course sra --category lectures
 ```
 
 Or process an entire directory:
 
 ```bash
-python pdf_processor_agent.py --dir /path/to/pdf/directory --output /output/directory
+python docling-processor/pdf_processor_agent.py --dir /path/to/pdf/directory --course sra --category notes
 ```
 
 #### Using the Advanced Agent
 
+For automatic metadata extraction from file paths:
+
+```bash
+python docling-processor/advanced_pdf_agent.py --pdf /path/to/your.pdf --auto-metadata
+```
+
 For interactive processing with the smolagents framework:
 
 ```bash
-python advanced_pdf_agent.py --interactive --output /output/directory
+python docling-processor/advanced_pdf_agent.py --interactive
+```
+
+## Output Structure
+
+The project uses a simplified folder structure organized by courses and categories:
+
+```
+output/
+└── sra/                      # Course (e.g., Security Risk Analysis)
+    ├── lectures/             # Course slides and presentations
+    │   ├── markdown/         # Converted markdown files
+    │   └── images/          # Extracted images
+    ├── notes/               # Personal notes
+    │   ├── markdown/
+    │   └── images/
+    └── transcripts/         # Class transcriptions
+        ├── markdown/
+        └── images/
 ```
 
 ## Features
 
-- PDF to Markdown conversion with docling
-- Preservation of images, diagrams, and charts
-- Formula understanding and conversion
-- Picture classification and captioning
-- Batch processing of multiple PDF files
-- Intelligent agent capabilities with smolagents
+- Converts PDF files to Markdown format
+- Preserves images and formulas
+- Organizes content by course and category
+- Supports batch processing of multiple PDFs
+- Automatic metadata extraction
+- Enhanced image handling with classification
+- Formula enrichment and LaTeX support
 
 ## Framework
 
@@ -84,4 +125,4 @@ This project uses:
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the LICENSE file for details

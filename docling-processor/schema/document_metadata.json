@@ -19,21 +19,44 @@
       },
       "description": "List of document authors"
     },
-    "course": {
-      "type": "string",
-      "description": "Course code or name that the document belongs to"
-    },
-    "topic": {
-      "type": "string",
-      "description": "Topic or module within the course"
+    "organization": {
+      "type": "object",
+      "properties": {
+        "course": {
+          "type": "string",
+          "description": "Course code or name (e.g., sra, woa7017, etc.)"
+        },
+        "category": {
+          "type": "string",
+          "description": "Document category (lectures, notes, transcripts)",
+          "enum": ["lectures", "notes", "transcripts"]
+        }
+      },
+      "required": ["course", "category"],
+      "description": "Organizational structure of the document"
     },
     "originalFilename": {
       "type": "string",
       "description": "Original filename of the PDF document"
     },
-    "markdownPath": {
-      "type": "string",
-      "description": "Path to the generated markdown file"
+    "paths": {
+      "type": "object",
+      "properties": {
+        "markdownPath": {
+          "type": "string",
+          "description": "Path to the generated markdown file"
+        },
+        "imagesDir": {
+          "type": "string",
+          "description": "Directory containing extracted images"
+        },
+        "originalPdfPath": {
+          "type": "string",
+          "description": "Path to the original PDF file"
+        }
+      },
+      "required": ["markdownPath"],
+      "description": "Paths to various files related to the document"
     },
     "conversionDate": {
       "type": "string",
@@ -143,5 +166,5 @@
       "description": "Statistics about the processing of the document"
     }
   },
-  "required": ["documentId", "title", "originalFilename", "markdownPath", "conversionDate"]
+  "required": ["documentId", "title", "organization", "originalFilename", "paths", "conversionDate"]
 }
