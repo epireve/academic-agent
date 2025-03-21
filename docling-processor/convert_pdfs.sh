@@ -1,37 +1,35 @@
 #!/bin/bash
 
 # Activate the virtual environment
-source .venv/bin/activate
+source ../.venv/bin/activate
 
-# Define source and target directories
+# Define source directory
 SOURCE_DIR="/Users/invoture/Documents/UM Masters/Security Risk Analysis and Evaluation (WOA7017)/Old materials"
-TARGET_DIR="/Users/invoture/dev.local/mse-st/sra/markdown"
-IMAGE_DIR="/Users/invoture/dev.local/mse-st/sra/images"
 
-# Ensure the image directory exists
+# Base directories
+BASE_OUTPUT_DIR="/Users/invoture/dev.local/academic-agent/output"
+
+# Default values - specifically setting 'sra' for Security Risk Analysis
+DEFAULT_COURSE="sra"     # sra = Security Risk Analysis
+DEFAULT_CATEGORY="lectures"  # Default category (lectures, notes, transcripts)
+
+# Get course and category from command line arguments
+COURSE=${1:-$DEFAULT_COURSE}
+CATEGORY=${2:-$DEFAULT_CATEGORY}
+
+# Create output directories
+TARGET_DIR="${BASE_OUTPUT_DIR}/${COURSE}/${CATEGORY}/markdown"
+IMAGE_DIR="${BASE_OUTPUT_DIR}/${COURSE}/${CATEGORY}/images"
+
+mkdir -p "$TARGET_DIR"
 mkdir -p "$IMAGE_DIR"
 
-# Convert all PDF files with enriched features for image handling
-find "$SOURCE_DIR" -name "*.pdf" | while read -r pdf_path; do
-    # Get the filename without the directory path
-    filename=$(basename "$pdf_path")
-    # Remove the .pdf extension
-    filename_no_ext="${filename%.pdf}"
-    # Target markdown file
-    target_file="$TARGET_DIR/$filename_no_ext.md"
-    
-    echo "Converting $pdf_path to $target_file with enhanced image handling"
-    
-    # Convert PDF to markdown with enhanced image handling
-    # Using image-export-mode as referenced to maintain image references
-    # Enable picture classification and formula enrichment
-    docling --to md \
-        --output "$TARGET_DIR" \
-        --device mps \
-        --image-export-mode referenced \
-        --enrich-picture-classes \
-        --enrich-formula \
-        "$pdf_path"
-done
+echo "Using output directories:"
+echo "Markdown: $TARGET_DIR"
+echo "Images: $IMAGE_DIR"
 
-echo "Conversion completed with enhanced image handling!"
+# Process all PDF files in the source directory
+find "$SOURCE_DIR" -name "*.pdf" -type f | while read -r pdf_file; do
+    echo "Processing: $pdf_file"
+    python pdf_processor_agent.py --pdf "$pdf_file" --output "$BASE_OUTPUT_DIR" --course "$COURSE" --category "$CATEGORY"
+done
