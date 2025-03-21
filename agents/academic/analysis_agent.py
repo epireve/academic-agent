@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
-Analysis Agent - Specialized agent for analyzing academic content
-Part of the Academic Agent system
+Analysis Agent - Specialized agent for analyzing academic content and extracting
+key concepts and relationships.
 """
 
 import os
@@ -21,6 +21,10 @@ except ImportError:
     from smolagents import CodeAgent
     from smolagents import HfApiModel
 
+# Load environment variables
+from dotenv import load_dotenv
+load_dotenv()
+
 # Define base paths
 BASE_DIR = Path(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 OUTPUT_DIR = BASE_DIR / "output"
@@ -33,12 +37,17 @@ class AnalysisAgent:
     themes, topics, and key concepts
     """
     
-    def __init__(self, api_key: str):
+    def __init__(self, api_key: Optional[str] = None):
+        # Get API key from environment if not provided
+        self.api_key = api_key or os.getenv("GROQ_API_KEY")
+        if not self.api_key:
+            raise ValueError("Groq API key is required. Set GROQ_API_KEY environment variable or pass it to the constructor.")
+            
         # Configure Groq model
         self.model = HfApiModel(
             model_id="llama3-70b-8192",
             provider="groq",
-            api_key=api_key
+            api_key=self.api_key
         )
         
         # Create the agent
@@ -180,7 +189,7 @@ def main():
     args = parser.parse_args()
     
     # Get API key from environment or command line
-    api_key = args.api_key or os.environ.get("GROQ_API_KEY")
+    api_key = args.api_key or os.getenv("GROQ_API_KEY")
     if not api_key:
         print("Error: Groq API key is required. Set GROQ_API_KEY environment variable or use --api-key")
         sys.exit(1)

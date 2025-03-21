@@ -1,6 +1,12 @@
 # Academic Agent
 
-An intelligent system for processing academic materials using Groq LLM and docling, capable of converting PDFs to structured notes with smart organization.
+An intelligent academic content processing system built with smolagents framework and Groq LLM. This agent specializes in converting academic PDFs into structured, searchable knowledge by leveraging:
+
+- **smolagents**: A powerful agent framework for building composable AI systems
+- **Groq LLM**: State-of-the-art language model for content analysis
+- **docling**: Advanced PDF processing with image and formula preservation
+
+The system intelligently processes academic materials, extracts key concepts, generates structured outlines, and creates comprehensive notes while maintaining semantic relationships between different pieces of content.
 
 ## Project Structure
 
@@ -77,19 +83,33 @@ The agent can be used in two modes:
 - Smart PDF processing with content-based file naming
 - Automatic metadata extraction and organization
 - Content analysis and key concept identification
-- Structured outline generation
-- Comprehensive notes creation
+- Structured outline generation with semantic relationships
+- Comprehensive notes creation with cross-references
 - Support for updating existing notes with new information
 - Interactive mode for complex workflows
 - Groq LLM integration for intelligent processing
+- Built on smolagents framework for robust agent interactions
 
 ### Configuration
 
 The following environment variables can be configured in `.env`:
 
-- `GROQ_API_KEY`: Your Groq API key
+- `GROQ_API_KEY`: Your Groq API key (required)
 - `PDF_PROCESSOR_DEVICE`: Device to use for PDF processing (cpu/mps/cuda)
 - `OUTPUT_BASE_DIR`: Base directory for processed files
+- `LOG_LEVEL`: Logging verbosity (default: INFO)
+
+## Architecture
+
+The system uses the smolagents framework to create a network of specialized agents that work together:
+
+1. **Ingestion Agent**: Handles initial PDF processing and metadata extraction
+2. **Analysis Agent**: Performs deep content analysis and concept mapping
+3. **Outline Agent**: Creates structured outlines based on content relationships
+4. **Notes Agent**: Generates comprehensive notes with cross-references
+5. **Update Agent**: Manages content updates and version control
+
+Each agent is designed to be modular and can be extended or modified independently.
 
 ## Contributing
 

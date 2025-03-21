@@ -10,6 +10,7 @@ import argparse
 import json
 from typing import List, Dict, Any, Optional, Tuple
 from pathlib import Path
+from dotenv import load_dotenv
 
 try:
     from smolagents import CodeAgent
@@ -20,6 +21,9 @@ except ImportError:
     subprocess.check_call([sys.executable, "-m", "pip", "install", "smolagents"])
     from smolagents import CodeAgent
     from smolagents import HfApiModel
+
+# Load environment variables
+load_dotenv()
 
 # Add parent directory to path for importing the pdf_processor
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
@@ -37,7 +41,7 @@ class IngestionAgent:
     and preparing them for further analysis
     """
     
-    def __init__(self, api_key: str, device: str = "mps"):
+    def __init__(self, api_key: Optional[str] = None, device: str = "mps"):
         """
         Initialize the ingestion agent
         
@@ -45,13 +49,18 @@ class IngestionAgent:
             api_key: Groq API key for LLM access
             device: Device to use for PDF processing (cpu, cuda, mps)
         """
+        # Get API key from environment if not provided
+        self.api_key = api_key or os.getenv("GROQ_API_KEY")
+        if not self.api_key:
+            raise ValueError("Groq API key is required. Set GROQ_API_KEY environment variable or pass it to the constructor.")
+            
         self.processor = DoclingProcessor(device=device)
         
         # Configure Groq model
         self.model = HfApiModel(
             model_id="llama3-70b-8192",
             provider="groq",
-            api_key=api_key
+            api_key=self.api_key
         )
         
         # Create an agent for metadata extraction and classification
@@ -245,13 +254,13 @@ def main():
     args = parser.parse_args()
     
     # Get API key from environment or command line
-    api_key = args.api_key or os.environ.get("GROQ_API_KEY")
+    api_key = args.api_key or os.getenv("GROQ_API_KEY")
     if not api_key:
         print("Error: Groq API key is required. Set GROQ_API_KEY environment variable or use --api-key")
         sys.exit(1)
     
     # Create the ingestion agent with specified device
-    agent = IngestionAgent(api_key, device=args.device)
+    agent = IngestionAgent(api_key=api_key, device=args.device)
     
     # Process PDF or directory
     if args.pdf:

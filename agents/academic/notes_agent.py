@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 Notes Agent - Specialized agent for generating comprehensive academic notes
-Part of the Academic Agent system
+from source materials and outlines.
 """
 
 import os
@@ -11,6 +11,8 @@ import json
 from typing import List, Dict, Any, Optional
 from datetime import datetime
 from pathlib import Path
+import re
+from dotenv import load_dotenv
 
 try:
     from smolagents import CodeAgent
@@ -21,6 +23,9 @@ except ImportError:
     subprocess.check_call([sys.executable, "-m", "pip", "install", "smolagents"])
     from smolagents import CodeAgent
     from smolagents import HfApiModel
+
+# Load environment variables
+load_dotenv()
 
 # Define base paths
 BASE_DIR = Path(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
@@ -36,12 +41,17 @@ class NotesAgent:
     materials and outlines
     """
     
-    def __init__(self, api_key: str):
+    def __init__(self, api_key: Optional[str] = None):
+        # Get API key from environment if not provided
+        self.api_key = api_key or os.getenv("GROQ_API_KEY")
+        if not self.api_key:
+            raise ValueError("Groq API key is required. Set GROQ_API_KEY environment variable or pass it to the constructor.")
+            
         # Configure Groq model
         self.model = HfApiModel(
             model_id="llama3-70b-8192",
             provider="groq",
-            api_key=api_key
+            api_key=self.api_key
         )
         
         # Create the agent
@@ -298,7 +308,7 @@ def main():
     args = parser.parse_args()
     
     # Get API key from environment or command line
-    api_key = args.api_key or os.environ.get("GROQ_API_KEY")
+    api_key = args.api_key or os.getenv("GROQ_API_KEY")
     if not api_key:
         print("Error: Groq API key is required. Set GROQ_API_KEY environment variable or use --api-key")
         sys.exit(1)
