@@ -1,0 +1,238 @@
+name: Academic Agent Tests
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.9, 3.10, 3.11, 3.12]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Cache pip dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest-xvfb  # For headless GUI testing if needed
+
+    - name: Create test directories
+      run: |
+        mkdir -p logs
+        mkdir -p tests/data
+        mkdir -p processed/{raw,markdown,metadata,analysis,outlines,notes}
+
+    - name: Run unit tests
+      run: |
+        pytest tests/unit/ -v --cov=agents --cov=tools --cov-report=xml --cov-report=term-missing
+      env:
+        GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        TESTING: true
+
+    - name: Run integration tests
+      run: |
+        pytest tests/integration/ -v -m "not slow" --cov=agents --cov=tools --cov-append --cov-report=xml
+      env:
+        GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        TESTING: true
+
+    - name: Run slow tests (on main branch only)
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+      run: |
+        pytest tests/ -v -m "slow" --cov=agents --cov=tools --cov-append --cov-report=xml
+      env:
+        GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        TESTING: true
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false
+
+  lint:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install linting dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install black flake8 mypy bandit safety
+
+    - name: Run Black formatting check
+      run: |
+        black --check --diff agents/ tools/ tests/
+
+    - name: Run Flake8 linting
+      run: |
+        flake8 agents/ tools/ tests/ --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 agents/ tools/ tests/ --count --exit-zero --max-complexity=10 --max-line-length=88 --statistics
+
+    - name: Run MyPy type checking
+      run: |
+        mypy agents/ tools/ --ignore-missing-imports --no-strict-optional
+
+    - name: Run Bandit security linting
+      run: |
+        bandit -r agents/ tools/ -f json -o bandit-report.json || true
+
+    - name: Run Safety dependency check
+      run: |
+        safety check --json --output safety-report.json || true
+
+  test-matrix:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ['3.11']
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Create test directories
+      run: |
+        mkdir -p logs
+        mkdir -p tests/data
+        mkdir -p processed/raw processed/markdown processed/metadata
+        mkdir -p processed/analysis processed/outlines processed/notes
+
+    - name: Run core tests only
+      run: |
+        pytest tests/unit/test_base_agent.py tests/unit/test_pdf_processing.py -v
+      env:
+        TESTING: true
+
+  security:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install security tools
+      run: |
+        python -m pip install --upgrade pip
+        pip install bandit safety semgrep
+
+    - name: Run Bandit security scan
+      run: |
+        bandit -r agents/ tools/ -f json -o bandit-report.json
+        bandit -r agents/ tools/ -f txt
+
+    - name: Run Safety dependency scan
+      run: |
+        pip install -r requirements.txt
+        safety check
+
+    - name: Run Semgrep security scan
+      run: |
+        semgrep --config=auto agents/ tools/ --json --output=semgrep-report.json || true
+
+    - name: Upload security scan results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: security-reports
+        path: |
+          bandit-report.json
+          semgrep-report.json
+
+  performance:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest-benchmark memory-profiler
+
+    - name: Run performance tests
+      run: |
+        pytest tests/ -v -m "performance" --benchmark-only --benchmark-json=benchmark-results.json
+      env:
+        TESTING: true
+
+    - name: Upload benchmark results
+      uses: actions/upload-artifact@v3
+      with:
+        name: benchmark-results
+        path: benchmark-results.json
+
+  docs:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install documentation dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install sphinx sphinx-rtd-theme sphinx-autodoc-typehints
+
+    - name: Generate API documentation
+      run: |
+        sphinx-apidoc -o docs/api agents/ tools/
+        sphinx-build -b html docs/ docs/_build/html
+
+    - name: Upload documentation
+      uses: actions/upload-artifact@v3
+      with:
+        name: documentation
+        path: docs/_build/html/
