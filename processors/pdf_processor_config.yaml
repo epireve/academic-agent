@@ -1,0 +1,392 @@
+# High-Performance PDF Processor Configuration
+# Academic Agent v2 - Task 11 Implementation
+
+# Device Configuration
+device:
+  # Device preference: auto, cpu, cuda, mps
+  # 'auto' will auto-detect the best available device
+  type: auto
+  
+  # Enable GPU acceleration if available
+  use_gpu: true
+  
+  # GPU memory management (in GB)
+  max_gpu_memory: 8.0
+  
+  # Clear GPU cache after each batch
+  clear_gpu_cache: true
+
+# Processing Configuration
+processing:
+  # Batch size for concurrent processing
+  batch_size: 2
+  
+  # Maximum worker threads for parallel processing
+  max_workers: 4
+  
+  # Maximum pages to process per document (null for unlimited)
+  max_pages: null
+  
+  # Processing timeout per document (in seconds)
+  timeout: 300
+  
+  # Enable chapter splitting for textbooks
+  split_chapters: true
+  
+  # Extract images from PDFs
+  extract_images: true
+  
+  # Output format: markdown, html, json
+  output_format: markdown
+
+# Marker Library Configuration
+marker:
+  # Model configuration
+  models:
+    # Enable editor model for better text cleaning
+    enable_editor_model: true
+    
+    # Enable OCR for scanned documents
+    enable_ocr: true
+    
+    # Default language for OCR
+    default_language: en
+    
+    # Supported languages (null for auto-detection)
+    languages: null
+    
+    # Batch multiplier for model processing
+    batch_multiplier: 1
+  
+  # Quality settings
+  quality:
+    # Extract table structures
+    extract_tables: true
+    
+    # Extract mathematical equations
+    extract_equations: true
+    
+    # Preserve document formatting
+    preserve_formatting: true
+    
+    # Enable pagination in output
+    paginate_output: false
+  
+  # Model caching
+  cache:
+    # Directory for model cache
+    cache_dir: ~/.cache/marker_models
+    
+    # Enable model caching
+    enable_caching: true
+    
+    # Cache size limit in GB
+    cache_size_limit: 5.0
+
+# Output Configuration
+output:
+  # Image extraction settings
+  images:
+    # Extract images from PDFs
+    extract: true
+    
+    # Save images to disk
+    save_images: true
+    
+    # Image format: png, jpg, webp
+    format: png
+    
+    # Image quality (for jpg/webp)
+    quality: 90
+    
+    # Maximum image dimension
+    max_dimension: 2048
+  
+  # Chapter splitting settings
+  chapters:
+    # Enable chapter splitting
+    enable: true
+    
+    # Minimum chapter length (words)
+    min_length: 100
+    
+    # Chapter detection patterns
+    patterns:
+      - "^#\\s+Chapter\\s+(\\d+)[\\s\\.:]*(.*)$"
+      - "^##\\s+Chapter\\s+(\\d+)[\\s\\.:]*(.*)$"
+      - "^#\\s+CHAPTER\\s+(\\d+)[\\s\\.:]*(.*)$"
+      - "^##\\s+CHAPTER\\s+(\\d+)[\\s\\.:]*(.*)$"
+      - "^#\\s+(\\d+)[\\s\\.:]+(.*)$"
+      - "^##\\s+(\\d+)[\\s\\.:]+(.*)$"
+  
+  # Metadata extraction
+  metadata:
+    # Extract document metadata
+    extract_metadata: true
+    
+    # Include processing statistics
+    include_stats: true
+    
+    # Generate processing summary
+    generate_summary: true
+
+# Performance Monitoring
+monitoring:
+  # Enable performance tracking
+  enabled: true
+  
+  # Log level: DEBUG, INFO, WARNING, ERROR
+  log_level: INFO
+  
+  # Performance metrics to track
+  metrics:
+    - processing_time
+    - memory_usage
+    - pages_processed
+    - file_size
+    - success_rate
+    - error_rate
+  
+  # System resource monitoring
+  system:
+    # Monitor CPU usage
+    monitor_cpu: true
+    
+    # Monitor memory usage
+    monitor_memory: true
+    
+    # Monitor GPU usage (if available)
+    monitor_gpu: true
+    
+    # Monitoring interval (seconds)
+    interval: 1.0
+  
+  # Alert thresholds
+  alerts:
+    # Memory usage threshold (percentage)
+    memory_threshold: 80.0
+    
+    # Processing time threshold (seconds)
+    time_threshold: 300.0
+    
+    # Error rate threshold (percentage)
+    error_threshold: 10.0
+
+# Cache Configuration
+cache:
+  # Enable result caching
+  enabled: true
+  
+  # Cache directory
+  cache_dir: ~/.cache/pdf_processor
+  
+  # Cache size limit in GB
+  size_limit: 2.0
+  
+  # Cache expiration time (hours)
+  expiration_hours: 24
+  
+  # Cache cleanup interval (hours)
+  cleanup_interval: 6
+
+# Error Handling
+error_handling:
+  # Retry configuration
+  retry:
+    # Enable retry on failure
+    enabled: true
+    
+    # Maximum retry attempts
+    max_attempts: 3
+    
+    # Retry delay (seconds)
+    delay: 1.0
+    
+    # Exponential backoff multiplier
+    backoff_multiplier: 2.0
+  
+  # Fallback behavior
+  fallback:
+    # Continue processing on individual file errors
+    continue_on_error: true
+    
+    # Use alternative processing methods
+    use_fallback_methods: true
+    
+    # Generate error reports
+    generate_error_reports: true
+
+# Academic Document Settings
+academic:
+  # Document type detection
+  document_types:
+    - textbook
+    - research_paper
+    - lecture_slides
+    - assignment
+    - syllabus
+    - handbook
+  
+  # Subject-specific processing
+  subjects:
+    # Enable subject-specific optimizations
+    enabled: true
+    
+    # Subject categories
+    categories:
+      - computer_science
+      - mathematics
+      - physics
+      - chemistry
+      - biology
+      - engineering
+      - business
+      - literature
+      - history
+      - social_sciences
+  
+  # Citation handling
+  citations:
+    # Extract citation information
+    extract_citations: true
+    
+    # Citation formats to recognize
+    formats:
+      - apa
+      - mla
+      - chicago
+      - ieee
+      - harvard
+  
+  # Table processing
+  tables:
+    # Extract table structures
+    extract_tables: true
+    
+    # Preserve table formatting
+    preserve_formatting: true
+    
+    # Convert tables to markdown
+    convert_to_markdown: true
+    
+    # Generate table images as fallback
+    generate_images: true
+
+# Development and Testing
+development:
+  # Enable debug mode
+  debug: false
+  
+  # Enable profiling
+  profiling: false
+  
+  # Test configuration
+  testing:
+    # Use test fixtures
+    use_fixtures: false
+    
+    # Test data directory
+    test_data_dir: tests/fixtures
+    
+    # Enable simulation mode (when Marker unavailable)
+    simulation_mode: true
+    
+    # Simulation delay (seconds)
+    simulation_delay: 0.1
+  
+  # Development paths
+  paths:
+    # Project root directory
+    project_root: .
+    
+    # Input directory
+    input_dir: input
+    
+    # Output directory
+    output_dir: output
+    
+    # Logs directory
+    logs_dir: logs
+    
+    # Cache directory
+    cache_dir: cache
+
+# Integration Settings
+integration:
+  # API configuration
+  api:
+    # Enable REST API
+    enabled: false
+    
+    # API host
+    host: localhost
+    
+    # API port
+    port: 8000
+    
+    # API key for authentication
+    api_key: null
+  
+  # Database integration
+  database:
+    # Enable database logging
+    enabled: false
+    
+    # Database connection string
+    connection_string: null
+    
+    # Table prefix
+    table_prefix: pdf_processor_
+  
+  # External services
+  external:
+    # Cloud storage integration
+    cloud_storage:
+      enabled: false
+      provider: null  # aws, gcp, azure
+      credentials: null
+    
+    # Monitoring services
+    monitoring:
+      enabled: false
+      service: null  # prometheus, grafana
+      endpoint: null
+
+# Security Settings
+security:
+  # File validation
+  file_validation:
+    # Enable file type validation
+    enabled: true
+    
+    # Allowed file extensions
+    allowed_extensions:
+      - .pdf
+    
+    # Maximum file size (MB)
+    max_file_size: 500
+    
+    # Scan for malicious content
+    malware_scan: false
+  
+  # Processing security
+  processing:
+    # Sandboxed processing
+    sandboxed: false
+    
+    # Temporary file cleanup
+    cleanup_temp_files: true
+    
+    # Secure file permissions
+    secure_permissions: true
+  
+  # Data privacy
+  privacy:
+    # Anonymize personal information
+    anonymize_personal_info: false
+    
+    # Remove metadata
+    remove_metadata: false
+    
+    # Encrypt cached data
+    encrypt_cache: false
