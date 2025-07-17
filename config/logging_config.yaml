@@ -1,0 +1,288 @@
+---
+# Comprehensive Logging Configuration for Academic Agent
+logging:
+  # Global logging settings
+  level: INFO
+  log_dir: logs
+  max_bytes: 10485760  # 10MB
+  backup_count: 5
+  json_console: false
+  json_file: true
+  enable_metrics: true
+  
+  # Formatters
+  formatters:
+    standard:
+      format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+      datefmt: "%Y-%m-%d %H:%M:%S"
+    
+    detailed:
+      format: "%(asctime)s - %(name)s - %(levelname)s - %(filename)s:%(lineno)d - %(funcName)s - %(message)s"
+      datefmt: "%Y-%m-%d %H:%M:%S"
+    
+    json:
+      format: "json"
+      include_context: true
+  
+  # Handlers
+  handlers:
+    console:
+      class: logging.StreamHandler
+      level: INFO
+      formatter: standard
+      stream: ext://sys.stdout
+    
+    file:
+      class: logging.handlers.RotatingFileHandler
+      level: DEBUG
+      formatter: json
+      filename: logs/academic_agent.log
+      maxBytes: 10485760
+      backupCount: 5
+      encoding: utf8
+    
+    error_file:
+      class: logging.handlers.RotatingFileHandler
+      level: ERROR
+      formatter: detailed
+      filename: logs/academic_agent_errors.log
+      maxBytes: 10485760
+      backupCount: 5
+      encoding: utf8
+    
+    metrics_file:
+      class: logging.handlers.RotatingFileHandler
+      level: INFO
+      formatter: json
+      filename: logs/academic_agent_metrics.log
+      maxBytes: 10485760
+      backupCount: 5
+      encoding: utf8
+    
+    # Syslog handler for production environments
+    syslog:
+      class: logging.handlers.SysLogHandler
+      level: WARNING
+      formatter: standard
+      address: localhost:514
+      facility: local0
+      enabled: false
+  
+  # Logger configurations
+  loggers:
+    academic_agent:
+      level: INFO
+      handlers: [console, file, error_file]
+      propagate: false
+    
+    academic_agent.ingestion:
+      level: DEBUG
+      handlers: [console, file, error_file]
+      propagate: false
+    
+    academic_agent.analysis:
+      level: INFO
+      handlers: [console, file, error_file]
+      propagate: false
+    
+    academic_agent.outline:
+      level: INFO
+      handlers: [console, file, error_file]
+      propagate: false
+    
+    academic_agent.notes:
+      level: INFO
+      handlers: [console, file, error_file]
+      propagate: false
+    
+    academic_agent.quality:
+      level: INFO
+      handlers: [console, file, error_file]
+      propagate: false
+    
+    academic_agent.update:
+      level: INFO
+      handlers: [console, file, error_file]
+      propagate: false
+    
+    academic_agent.communication:
+      level: INFO
+      handlers: [console, file, error_file]
+      propagate: false
+    
+    academic_agent.error_handler:
+      level: DEBUG
+      handlers: [console, file, error_file]
+      propagate: false
+    
+    academic_agent.retry_handler:
+      level: DEBUG
+      handlers: [console, file, error_file]
+      propagate: false
+    
+    academic_agent.circuit_breaker:
+      level: INFO
+      handlers: [console, file, error_file]
+      propagate: false
+    
+    academic_agent.error_monitor:
+      level: INFO
+      handlers: [console, file, error_file]
+      propagate: false
+    
+    # External library loggers
+    smolagents:
+      level: WARNING
+      handlers: [console, file]
+      propagate: false
+    
+    litellm:
+      level: WARNING
+      handlers: [console, file]
+      propagate: false
+    
+    marker:
+      level: INFO
+      handlers: [console, file]
+      propagate: false
+    
+    docling:
+      level: INFO
+      handlers: [console, file]
+      propagate: false
+
+# Error handling configuration
+error_handling:
+  # Global error handling settings
+  max_retries: 3
+  retry_delay: 1.0
+  exponential_backoff: true
+  circuit_breaker_enabled: true
+  error_monitoring_enabled: true
+  
+  # Retry configuration
+  retry:
+    initial_delay: 1.0
+    max_delay: 60.0
+    exponential_base: 2.0
+    jitter: true
+    retryable_exceptions:
+      - RetryableError
+      - ConnectionError
+      - TimeoutError
+      - ModelError
+  
+  # Circuit breaker configuration
+  circuit_breaker:
+    failure_threshold: 5
+    recovery_timeout: 60.0
+    expected_exception: Exception
+  
+  # Error monitoring configuration
+  monitoring:
+    error_rate_threshold: 0.1  # 10%
+    consecutive_errors_threshold: 5
+    error_spike_threshold: 10
+    history_window: 3600  # 1 hour in seconds
+    alert_window: 300     # 5 minutes in seconds
+  
+  # Operation-specific configurations
+  operations:
+    pdf_processing:
+      max_retries: 5
+      retry_delay: 2.0
+      circuit_breaker_enabled: true
+      timeout: 300
+    
+    content_analysis:
+      max_retries: 3
+      retry_delay: 1.0
+      circuit_breaker_enabled: false
+      timeout: 180
+    
+    outline_generation:
+      max_retries: 3
+      retry_delay: 1.0
+      circuit_breaker_enabled: false
+      timeout: 120
+    
+    notes_generation:
+      max_retries: 3
+      retry_delay: 1.0
+      circuit_breaker_enabled: false
+      timeout: 300
+    
+    quality_evaluation:
+      max_retries: 2
+      retry_delay: 0.5
+      circuit_breaker_enabled: false
+      timeout: 60
+    
+    model_api_calls:
+      max_retries: 5
+      retry_delay: 1.0
+      circuit_breaker_enabled: true
+      timeout: 30
+
+# Metrics and monitoring
+metrics:
+  enabled: true
+  collection_interval: 60  # seconds
+  
+  # Performance metrics
+  performance:
+    - operation_duration
+    - memory_usage
+    - cpu_usage
+    - processing_throughput
+  
+  # Quality metrics
+  quality:
+    - quality_scores
+    - improvement_cycles
+    - success_rates
+    - error_rates
+  
+  # Agent communication metrics
+  communication:
+    - message_count
+    - message_latency
+    - failed_messages
+    - retry_counts
+  
+  # Export configuration
+  export:
+    prometheus:
+      enabled: false
+      port: 9090
+      path: /metrics
+    
+    json_file:
+      enabled: true
+      path: logs/metrics.json
+      rotation: true
+    
+    csv_file:
+      enabled: false
+      path: logs/metrics.csv
+
+# Integration with existing JSON configuration
+integration:
+  # Map JSON config sections to YAML equivalents
+  json_config_path: config/academic_agent_config.json
+  
+  # Override settings from JSON
+  override_from_json:
+    - quality_threshold
+    - improvement_threshold
+    - max_improvement_cycles
+    - communication_interval
+    - processing.max_concurrent_agents
+    - processing.processing_timeout
+    - processing.retry_on_failure
+  
+  # Merge agent prompts from JSON
+  merge_agent_prompts: true
+  
+  # Merge feedback loops from JSON
+  merge_feedback_loops: true

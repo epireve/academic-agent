@@ -1,0 +1,57 @@
+debug: true
+
+logging:
+  level: DEBUG
+  console_enabled: true
+  file_enabled: true
+
+processing:
+  max_concurrent_agents: 1
+  processing_timeout: 3600
+  enable_checkpointing: true
+
+# Development-specific agent overrides
+agents:
+  ingestion_agent:
+    timeout: 300  # Shorter timeout for development
+  
+  notes_agent:
+    timeout: 600  # Shorter timeout for development
+
+# Enable more detailed feedback loops in development
+feedback_loops:
+  - source: quality_manager
+    target: notes_agent
+    type: quality
+    interval: 180  # More frequent in development
+    enabled: true
+  
+  - source: quality_manager
+    target: outline_agent
+    type: quality
+    interval: 300
+    enabled: true
+  
+  - source: update_agent
+    target: notes_agent
+    type: improvement_suggestions
+    interval: 600  # More frequent in development
+    enabled: true
+  
+  - source: notes_agent
+    target: quality_manager
+    type: content_verification
+    interval: 300  # More frequent in development
+    enabled: true
+
+# Lower quality thresholds for development
+quality_threshold: 0.65
+improvement_criteria:
+  content_quality:
+    threshold: 0.65
+  clarity:
+    threshold: 0.6
+  structure:
+    threshold: 0.7
+  citations:
+    threshold: 0.8

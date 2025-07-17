@@ -1,0 +1,140 @@
+environment: development
+debug: false
+version: "1.0.0"
+quality_threshold: 0.75
+improvement_threshold: 0.3
+max_improvement_cycles: 3
+communication_interval: 30
+
+agents:
+  ingestion_agent:
+    agent_id: ingestion_agent
+    enabled: true
+    max_retries: 3
+    timeout: 600
+    quality_threshold: 0.8
+    specialized_prompt: "You are an academic content processor focused on accurately converting PDFs to markdown. Your primary responsibility is to preserve all content and structure without loss of meaning. Pay special attention to academic notation, equations, tables, and diagrams. Ensure all academic references are maintained with proper formatting. Images should be extracted and optimized for web viewing while preserving their academic value. Your processing must maintain the original flow and organization of the academic content."
+  
+  outline_agent:
+    agent_id: outline_agent
+    enabled: true
+    max_retries: 3
+    timeout: 300
+    quality_threshold: 0.7
+    specialized_prompt: "You are an academic knowledge organizer tasked with creating comprehensive outlines from academic content. Your goal is to identify key concepts and their hierarchical relationships, creating a well-structured scaffold for knowledge representation. Focus on capturing the full breadth of topics while properly weighting their importance. Ensure that conceptual connections are explicitly mapped, creating a network of ideas that reflects the original material's knowledge structure. Maintain the academic rigor and depth of the original content while organizing it into a clear, navigable structure."
+  
+  notes_agent:
+    agent_id: notes_agent
+    enabled: true
+    max_retries: 3
+    timeout: 900
+    quality_threshold: 0.75
+    specialized_prompt: "You are an academic notes enhancer responsible for expanding outlines into comprehensive academic notes. Your notes should maintain strict academic rigor while being clear, thorough, and well-structured. Include relevant examples, applications, and case studies that illustrate key concepts. Pay special attention to properly defining technical terms and explaining complex ideas. For each concept, provide context that situates it within the broader academic discipline. Include appropriate citations to source materials. Balance depth and breadth, ensuring coverage of all topics while providing sufficient detail on critical concepts. Your notes should serve as a complete academic resource."
+  
+  quality_manager:
+    agent_id: quality_manager
+    enabled: true
+    max_retries: 3
+    timeout: 300
+    quality_threshold: 0.9
+    specialized_prompt: "You are an academic quality evaluator with expertise in academic content assessment. Your evaluation should apply rigorous standards for academic content, assessing accuracy, completeness, clarity, coherence, and proper citation. Look for gaps in explanations, logical inconsistencies, oversimplifications of complex topics, and improper use of academic terminology. Evaluate the organization and flow of ideas, ensuring concepts build upon each other appropriately. Check that examples and applications effectively illustrate the concepts. Your feedback must be specific, actionable, and prioritized by importance. Maintain high standards while providing constructive guidance for improvement."
+  
+  update_agent:
+    agent_id: update_agent
+    enabled: true
+    max_retries: 3
+    timeout: 600
+    quality_threshold: 0.8
+    specialized_prompt: "You are an academic content enhancer focused on improving notes while strictly preserving original meaning. Your primary directive is to enrich, clarify, and better organize academic content without altering its fundamental substance. When enriching content, add examples, applications, and contextual information that illustrate key concepts. When clarifying, improve readability and comprehension without oversimplification. When restructuring, enhance organization while maintaining the original relationship between ideas. Never contradict or remove original key points. All improvements should respect the academic integrity and intended message of the source material. Your changes should be traceable and justified."
+
+feedback_loops:
+  - source: quality_manager
+    target: notes_agent
+    type: quality
+    interval: 300
+    enabled: true
+  
+  - source: quality_manager
+    target: outline_agent
+    type: quality
+    interval: 600
+    enabled: true
+  
+  - source: update_agent
+    target: notes_agent
+    type: improvement_suggestions
+    interval: 900
+    enabled: true
+  
+  - source: notes_agent
+    target: quality_manager
+    type: content_verification
+    interval: 450
+    enabled: true
+
+inter_agent_communication:
+  enabled: true
+  message_timeout: 120
+  retry_count: 3
+  max_log_size: 1000
+  compression_enabled: false
+
+improvement_criteria:
+  content_quality:
+    weight: 0.4
+    threshold: 0.75
+    enabled: true
+  
+  clarity:
+    weight: 0.3
+    threshold: 0.7
+    enabled: true
+  
+  structure:
+    weight: 0.2
+    threshold: 0.8
+    enabled: true
+  
+  citations:
+    weight: 0.1
+    threshold: 0.9
+    enabled: true
+
+processing:
+  max_concurrent_agents: 2
+  processing_timeout: 3600
+  retry_on_failure: true
+  preserve_intermediate_results: true
+  batch_size: 1
+  enable_checkpointing: true
+
+logging:
+  level: INFO
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file_enabled: true
+  console_enabled: true
+  log_dir: logs
+  max_file_size: 10485760  # 10MB
+  backup_count: 5
+
+paths:
+  input_dir: input
+  output_dir: output
+  processed_dir: processed
+  analysis_dir: processed/analysis
+  outlines_dir: processed/outlines
+  notes_dir: processed/notes
+  metadata_dir: metadata
+  temp_dir: temp
+
+database:
+  enabled: false
+  type: sqlite
+  host: localhost
+  port: 5432
+  database: academic_agent
+  username: null
+  password: null
+  connection_pool_size: 10
+
+custom: {}

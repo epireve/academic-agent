@@ -1,0 +1,79 @@
+debug: true
+
+logging:
+  level: DEBUG
+  console_enabled: true
+  file_enabled: false  # Disable file logging for tests
+  
+processing:
+  max_concurrent_agents: 1
+  processing_timeout: 300  # 5 minutes for tests
+  batch_size: 1
+  enable_checkpointing: false  # Disable checkpointing for tests
+
+# Test-specific agent settings (shorter timeouts)
+agents:
+  ingestion_agent:
+    timeout: 60
+    max_retries: 1
+  
+  outline_agent:
+    timeout: 30
+    max_retries: 1
+  
+  notes_agent:
+    timeout: 90
+    max_retries: 1
+  
+  quality_manager:
+    timeout: 30
+    max_retries: 1
+  
+  update_agent:
+    timeout: 60
+    max_retries: 1
+
+# Minimal feedback loops for testing
+feedback_loops:
+  - source: quality_manager
+    target: notes_agent
+    type: quality
+    interval: 60
+    enabled: true
+
+# Lower quality thresholds for testing
+quality_threshold: 0.5
+improvement_criteria:
+  content_quality:
+    threshold: 0.5
+  clarity:
+    threshold: 0.4
+  structure:
+    threshold: 0.5
+  citations:
+    threshold: 0.6
+
+# Simplified inter-agent communication for testing
+inter_agent_communication:
+  enabled: true
+  message_timeout: 30
+  retry_count: 1
+  max_log_size: 100
+  compression_enabled: false
+
+# Use temporary paths for testing
+paths:
+  input_dir: test_input
+  output_dir: test_output
+  processed_dir: test_processed
+  analysis_dir: test_processed/analysis
+  outlines_dir: test_processed/outlines
+  notes_dir: test_processed/notes
+  metadata_dir: test_metadata
+  temp_dir: test_temp
+
+# In-memory database for testing
+database:
+  enabled: false
+  type: sqlite
+  database: ":memory:"

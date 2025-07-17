@@ -1,0 +1,109 @@
+{
+  "consolidation_settings": {
+    "search_patterns": {
+      "week": [
+        "week[-_]?(\\d+)",
+        "w(\\d+)",
+        "(\\d+)[-_]?week",
+        "lecture[-_]?(\\d+)",
+        "class[-_]?(\\d+)",
+        "session[-_]?(\\d+)"
+      ],
+      "transcript": [
+        "transcript",
+        "notes",
+        "summary",
+        "class",
+        "lecture",
+        "recording"
+      ],
+      "course": [
+        "woc7017",
+        "sra",
+        "security[-_]?risk",
+        "risk[-_]?assessment",
+        "security[-_]?analysis"
+      ]
+    },
+    "confidence_thresholds": {
+      "high": 0.8,
+      "medium": 0.6,
+      "low": 0.4
+    },
+    "unified_structure": {
+      "transcripts": "transcripts/standardized",
+      "lectures": "lectures/markdown",
+      "notes": "notes/markdown",
+      "textbook": "textbook/markdown",
+      "images": "images/consolidated",
+      "metadata": "metadata/consolidated"
+    },
+    "file_extensions": {
+      "supported": [".md", ".txt", ".pdf"],
+      "preferred": ".md"
+    },
+    "naming_conventions": {
+      "week_format": "week_{week_number:02d}_{content_type}.md",
+      "date_format": "%Y-%m-%d",
+      "timestamp_format": "%Y-%m-%d %H:%M:%S"
+    }
+  },
+  "processing_options": {
+    "merge_duplicates": true,
+    "preserve_original_metadata": true,
+    "add_consolidation_headers": true,
+    "create_indexes": true,
+    "generate_reports": true,
+    "backup_conflicts": true
+  },
+  "quality_checks": {
+    "minimum_confidence": 0.3,
+    "require_week_numbers": false,
+    "validate_content_types": true,
+    "check_file_sizes": true,
+    "verify_markdown_syntax": false
+  },
+  "logging": {
+    "level": "INFO",
+    "log_file": "logs/consolidation.log",
+    "enable_progress_tracking": true,
+    "detailed_error_reporting": true
+  },
+  "default_paths": {
+    "search_paths": [
+      "/Users/invoture/dev.local/academic-agent/output/sra/transcripts/markdown",
+      "/Users/invoture/dev.local/academic-agent/markdown",
+      "/Users/invoture/dev.local/mse-st/sra"
+    ],
+    "output_path": "/Users/invoture/dev.local/academic-agent/output/consolidated",
+    "backup_path": "/Users/invoture/dev.local/academic-agent/output/backup"
+  },
+  "content_type_mappings": {
+    "transcript": {
+      "keywords": ["transcript", "recording", "audio", "video"],
+      "priority": 1,
+      "merge_strategy": "choose_best"
+    },
+    "lecture": {
+      "keywords": ["lecture", "presentation", "slides"],
+      "priority": 2,
+      "merge_strategy": "choose_best"
+    },
+    "notes": {
+      "keywords": ["notes", "summary", "class"],
+      "priority": 3,
+      "merge_strategy": "merge_content"
+    },
+    "textbook": {
+      "keywords": ["chapter", "textbook", "book"],
+      "priority": 4,
+      "merge_strategy": "preserve_all"
+    }
+  },
+  "duplicate_resolution": {
+    "strategy": "confidence_based",
+    "backup_duplicates": true,
+    "log_decisions": true,
+    "manual_review_threshold": 0.1
+  }
+}

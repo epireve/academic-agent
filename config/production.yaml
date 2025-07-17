@@ -1,0 +1,91 @@
+debug: false
+
+logging:
+  level: INFO
+  console_enabled: false
+  file_enabled: true
+  max_file_size: 52428800  # 50MB for production
+  backup_count: 10
+
+processing:
+  max_concurrent_agents: 4
+  processing_timeout: 7200  # 2 hours for production
+  batch_size: 5
+  enable_checkpointing: true
+
+# Production-optimized agent settings
+agents:
+  ingestion_agent:
+    timeout: 1800  # 30 minutes for production
+    max_retries: 5
+  
+  outline_agent:
+    timeout: 900  # 15 minutes for production
+    max_retries: 5
+  
+  notes_agent:
+    timeout: 2700  # 45 minutes for production
+    max_retries: 5
+  
+  quality_manager:
+    timeout: 600  # 10 minutes for production
+    max_retries: 5
+  
+  update_agent:
+    timeout: 1800  # 30 minutes for production
+    max_retries: 5
+
+# Less frequent feedback loops in production
+feedback_loops:
+  - source: quality_manager
+    target: notes_agent
+    type: quality
+    interval: 600
+    enabled: true
+  
+  - source: quality_manager
+    target: outline_agent
+    type: quality
+    interval: 900
+    enabled: true
+  
+  - source: update_agent
+    target: notes_agent
+    type: improvement_suggestions
+    interval: 1800
+    enabled: true
+  
+  - source: notes_agent
+    target: quality_manager
+    type: content_verification
+    interval: 900
+    enabled: true
+
+# Higher quality thresholds for production
+quality_threshold: 0.85
+improvement_criteria:
+  content_quality:
+    threshold: 0.85
+  clarity:
+    threshold: 0.8
+  structure:
+    threshold: 0.9
+  citations:
+    threshold: 0.95
+
+# Enhanced inter-agent communication for production
+inter_agent_communication:
+  enabled: true
+  message_timeout: 180
+  retry_count: 5
+  max_log_size: 5000
+  compression_enabled: true
+
+# Database configuration for production
+database:
+  enabled: true
+  type: postgresql
+  host: localhost
+  port: 5432
+  database: academic_agent_prod
+  connection_pool_size: 20
