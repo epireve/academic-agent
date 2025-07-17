@@ -1,0 +1,770 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Setup Project Repository and Structure",
+        "description": "Create a new repository for Academic Agent v2.0 with a clean directory structure that ensures proper separation of concerns.",
+        "details": "1. Initialize a new Git repository named 'academic-agent-v2'\n2. Create main directories: src/, tests/, config/, docs/\n3. Set up virtual environment using Python 3.9+\n4. Create initial README.md with project overview\n5. Set up .gitignore file for Python projects\n6. Create subdirectories in src/: core/, processors/, generators/, agents/, utils/\n7. Set up pyproject.toml for dependency management using Poetry\n8. Initialize pre-commit hooks for code quality checks",
+        "testStrategy": "1. Verify all directories are created correctly\n2. Ensure .gitignore is properly configured\n3. Validate pyproject.toml structure\n4. Test virtual environment activation",
+        "priority": "high",
+        "dependencies": [],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Initialize Git Repository",
+            "description": "Create a new Git repository named 'academic-agent-v2' and set up initial commit",
+            "dependencies": [],
+            "details": "Use 'git init' to create the repository, then add and commit an empty README.md file",
+            "status": "done",
+            "testStrategy": "Verify the existence of the .git directory and initial commit"
+          },
+          {
+            "id": 2,
+            "title": "Create Main Directory Structure",
+            "description": "Set up the main directories for the project",
+            "dependencies": [
+              1
+            ],
+            "details": "Create directories: src/, tests/, config/, docs/",
+            "status": "done",
+            "testStrategy": "Check for the existence of all specified directories"
+          },
+          {
+            "id": 3,
+            "title": "Set Up Virtual Environment",
+            "description": "Create and activate a virtual environment using Python 3.9+",
+            "dependencies": [],
+            "details": "Use venv or virtualenv to create the environment, then activate it and verify Python version",
+            "status": "done",
+            "testStrategy": "Confirm virtual environment activation and Python version"
+          },
+          {
+            "id": 4,
+            "title": "Create Detailed README.md",
+            "description": "Write a comprehensive README.md file with project overview and setup instructions",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "Include sections for project description, installation, usage, and contribution guidelines",
+            "status": "done",
+            "testStrategy": "Review README.md content for completeness and accuracy"
+          },
+          {
+            "id": 5,
+            "title": "Configure .gitignore",
+            "description": "Set up a .gitignore file tailored for Python projects",
+            "dependencies": [
+              1
+            ],
+            "details": "Include common Python-specific patterns, virtual environment folders, and IDE-specific files",
+            "status": "done",
+            "testStrategy": "Verify .gitignore content and test its effectiveness"
+          },
+          {
+            "id": 6,
+            "title": "Create Subdirectories in src/",
+            "description": "Set up the internal structure of the src/ directory",
+            "dependencies": [
+              2
+            ],
+            "details": "Create subdirectories: core/, processors/, generators/, agents/, utils/",
+            "status": "done",
+            "testStrategy": "Confirm the existence of all specified subdirectories"
+          },
+          {
+            "id": 7,
+            "title": "Set Up Dependency Management",
+            "description": "Initialize pyproject.toml for dependency management using Poetry",
+            "dependencies": [
+              3
+            ],
+            "details": "Install Poetry, then use 'poetry init' to create pyproject.toml and specify initial dependencies",
+            "status": "done",
+            "testStrategy": "Verify pyproject.toml content and successful Poetry initialization"
+          },
+          {
+            "id": 8,
+            "title": "Configure Pre-commit Hooks",
+            "description": "Set up pre-commit hooks for automated code quality checks",
+            "dependencies": [
+              5,
+              7
+            ],
+            "details": "Install pre-commit, create .pre-commit-config.yaml with linters and formatters",
+            "status": "done",
+            "testStrategy": "Test pre-commit hook execution on a sample commit"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Install and Configure Marker Library",
+        "description": "Integrate the Marker library with GPU acceleration for high-performance PDF processing.",
+        "details": "1. Add Marker library (latest version) to pyproject.toml\n2. Install CUDA toolkit (version 11.3+) for GPU acceleration\n3. Configure Marker to use GPU (if available) or fall back to CPU\n4. Create a MarkerConfig class in src/core/config.py for Marker settings\n5. Implement a simple PDF loading test to verify Marker installation",
+        "testStrategy": "1. Unit test for MarkerConfig class\n2. Integration test to load a sample PDF using Marker\n3. Performance test comparing GPU vs CPU processing speed\n4. Error handling test for missing GPU",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Add Marker Library to pyproject.toml",
+            "description": "Include the latest version of the Marker library in the project's dependencies.",
+            "dependencies": [],
+            "details": "Research the latest stable version of Marker library compatible with the project's Python version. Add the appropriate entry to pyproject.toml file.",
+            "status": "done",
+            "testStrategy": "Verify the pyproject.toml file contains the correct Marker library entry."
+          },
+          {
+            "id": 2,
+            "title": "Install CUDA Toolkit for GPU Acceleration",
+            "description": "Download and install CUDA toolkit version 11.3 or higher to enable GPU acceleration.",
+            "dependencies": [],
+            "details": "Visit NVIDIA's website to download the appropriate CUDA toolkit version. Follow the installation instructions for the specific operating system.\n<info added on 2025-07-17T23:18:30.995Z>\nSince macOS with Apple Silicon (M1/M2) doesn't support CUDA, we'll use Metal Performance Shaders (MPS) instead. Visit Apple's developer documentation for information on MPS. Ensure PyTorch is installed with MPS support (typically included in PyTorch 1.12+ for macOS). No separate download is needed as MPS is built into macOS. Verify MPS availability in Python with:\n\n```python\nimport torch\nprint(torch.backends.mps.is_available())\n```\n\nThe marker-pdf library will use MPS acceleration through PyTorch when properly configured.\n</info added on 2025-07-17T23:18:30.995Z>",
+            "status": "done",
+            "testStrategy": "Run 'nvcc --version' to confirm successful installation and version."
+          },
+          {
+            "id": 3,
+            "title": "Configure Marker for GPU Usage",
+            "description": "Set up Marker to utilize GPU acceleration when available, with a fallback to CPU processing.",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Implement a configuration function that checks for GPU availability and sets up Marker accordingly. Use CUDA if available, otherwise default to CPU.",
+            "status": "done",
+            "testStrategy": "Create a test script that verifies Marker's ability to detect and use GPU when present."
+          },
+          {
+            "id": 4,
+            "title": "Create MarkerConfig Class",
+            "description": "Develop a MarkerConfig class in src/core/config.py to manage Marker library settings.",
+            "dependencies": [
+              1
+            ],
+            "details": "Design a class with attributes for Marker's configuration options, including GPU usage, processing parameters, and any other relevant settings.",
+            "status": "done",
+            "testStrategy": "Write unit tests to ensure the MarkerConfig class correctly stores and retrieves configuration values."
+          },
+          {
+            "id": 5,
+            "title": "Implement PDF Loading Test",
+            "description": "Create a simple test to verify Marker installation and basic PDF processing functionality.",
+            "dependencies": [
+              1,
+              3,
+              4
+            ],
+            "details": "Develop a test script that loads a sample academic PDF using Marker, extracts text, and performs basic analysis to confirm proper installation and configuration.",
+            "status": "done",
+            "testStrategy": "Run the test with both GPU and CPU configurations, comparing processing times and output accuracy."
+          },
+          {
+            "id": 6,
+            "title": "Benchmark Against Current Solution",
+            "description": "Compare Marker's performance with the existing smolagents+docling approach for academic PDF processing.",
+            "dependencies": [
+              5
+            ],
+            "details": "Create a set of diverse academic PDFs for testing. Implement benchmarking scripts to measure processing speed, accuracy, and memory usage of both Marker and the current solution.",
+            "status": "done",
+            "testStrategy": "Run benchmarks multiple times and analyze results to determine if Marker provides significant improvements in handling academic PDFs."
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Implement YAML-based Configuration System",
+        "description": "Develop a robust configuration management system using YAML files and Pydantic for validation.",
+        "details": "1. Create config/default.yaml for default configurations\n2. Implement ConfigLoader class in src/core/config.py using PyYAML\n3. Use Pydantic for config validation and type checking\n4. Implement environment-specific config overrides (dev, test, prod)\n5. Create utility functions for accessing config values throughout the project",
+        "testStrategy": "1. Unit tests for ConfigLoader class\n2. Validation tests for correct YAML parsing\n3. Test environment-specific config loading\n4. Integration test to ensure config values are accessible in other modules",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 4,
+        "title": "Set up Logging and Error Handling System",
+        "description": "Establish a comprehensive logging and error handling infrastructure for the entire project.",
+        "details": "1. Implement custom Logger class in src/core/logging.py using Python's logging module\n2. Configure log rotation and log levels based on environment\n3. Create custom exceptions in src/core/exceptions.py\n4. Implement global exception handler\n5. Integrate logging with Marker library operations",
+        "testStrategy": "1. Unit tests for Logger class\n2. Verify log rotation functionality\n3. Test custom exceptions\n4. Integration test for global exception handling\n5. Verify Marker operations are properly logged",
+        "priority": "high",
+        "dependencies": [
+          1,
+          3
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 5,
+        "title": "Implement Monitoring System",
+        "description": "Set up a monitoring system using Prometheus for tracking performance metrics and system health.",
+        "details": "1. Install prometheus-client library\n2. Create MetricsCollector class in src/core/monitoring.py\n3. Define key metrics: processing speed, memory usage, error rates\n4. Implement metric collection points in core processing functions\n5. Set up Prometheus server configuration\n6. Create Grafana dashboard for visualizing metrics",
+        "testStrategy": "1. Unit tests for MetricsCollector class\n2. Integration tests to verify metric collection during PDF processing\n3. Load testing to ensure accurate performance metrics\n4. Verify Prometheus server can scrape metrics\n5. Test Grafana dashboard functionality",
+        "priority": "medium",
+        "dependencies": [
+          1,
+          3,
+          4
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 6,
+        "title": "Establish Testing Framework",
+        "description": "Set up a comprehensive testing infrastructure using pytest for unit and integration testing.",
+        "details": "1. Add pytest and pytest-asyncio to pyproject.toml\n2. Create tests/ directory structure mirroring src/\n3. Implement test fixtures for common operations (e.g., config loading, PDF processing)\n4. Set up test data directory with sample PDFs, transcripts, and expected outputs\n5. Implement code coverage reporting using pytest-cov\n6. Create Makefile or scripts for running different test suites",
+        "testStrategy": "1. Verify pytest configuration and test discovery\n2. Test fixtures for reusability and correctness\n3. Run sample unit and integration tests\n4. Verify code coverage reporting\n5. Test Makefile or test running scripts",
+        "priority": "high",
+        "dependencies": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 7,
+        "title": "Implement Content Consolidation Module",
+        "description": "Develop a module to merge transcripts from multiple locations and resolve naming inconsistencies.",
+        "details": "1. Create ContentConsolidator class in src/processors/content_consolidator.py\n2. Implement file scanning for both source locations\n3. Develop naming convention resolver\n4. Implement content merging logic with conflict resolution\n5. Create unified directory structure: courses/WOC7017/[raw|transcripts|summaries|notes|outputs]\n6. Implement progress tracking and logging during consolidation",
+        "testStrategy": "1. Unit tests for ContentConsolidator class\n2. Integration tests with sample directory structures\n3. Test conflict resolution scenarios\n4. Verify correct handling of edge cases (missing files, duplicates)\n5. Performance testing for large datasets",
+        "priority": "high",
+        "dependencies": [
+          1,
+          3,
+          4
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement File Scanning for Multiple Locations",
+            "description": "Develop a function to scan and catalog files from both source locations.",
+            "dependencies": [],
+            "details": "Create a function in ContentConsolidator class that scans '/Users/invoture/dev.local/academic-agent/output/sra/transcripts/markdown' and '/Users/invoture/dev.local/mse-st/sra' directories. Store file metadata including path, name, and modification date.",
+            "status": "pending",
+            "testStrategy": "Unit test the scanning function with mock directories containing sample files."
+          },
+          {
+            "id": 2,
+            "title": "Develop Naming Convention Resolver",
+            "description": "Create a system to resolve naming inconsistencies across files.",
+            "dependencies": [
+              1
+            ],
+            "details": "Implement a naming convention resolver that identifies patterns in file names, extracts relevant information (e.g., course code, lecture number), and generates a standardized name for each file.",
+            "status": "pending",
+            "testStrategy": "Create a set of test cases with various naming conventions and verify the resolver's output."
+          },
+          {
+            "id": 3,
+            "title": "Implement Content Merging Logic",
+            "description": "Develop logic to merge content from multiple files and resolve conflicts.",
+            "dependencies": [
+              2
+            ],
+            "details": "Create a function that compares content of files with the same standardized name, merges non-conflicting content, and flags conflicts for manual review. Implement versioning to keep track of changes.",
+            "status": "pending",
+            "testStrategy": "Test with sample conflicting and non-conflicting content to ensure proper merging and conflict flagging."
+          },
+          {
+            "id": 4,
+            "title": "Create Unified Directory Structure",
+            "description": "Implement the creation of a unified directory structure for consolidated content.",
+            "dependencies": [
+              3
+            ],
+            "details": "Develop a function to create the directory structure: courses/WOC7017/[raw|transcripts|summaries|notes|outputs]. Ensure proper permissions and error handling for directory creation.",
+            "status": "pending",
+            "testStrategy": "Verify directory creation with different permission scenarios and existing directory cases."
+          },
+          {
+            "id": 5,
+            "title": "Implement File Movement and Organization",
+            "description": "Develop functionality to move and organize files into the new unified structure.",
+            "dependencies": [
+              4
+            ],
+            "details": "Create methods to move files from source locations to appropriate directories in the new structure based on their content type and resolved names. Implement checks to avoid overwriting and handle duplicates.",
+            "status": "pending",
+            "testStrategy": "Test file movement with various scenarios including existing files, permissions issues, and duplicate handling."
+          },
+          {
+            "id": 6,
+            "title": "Implement Progress Tracking and Logging",
+            "description": "Develop a system for tracking consolidation progress and logging operations.",
+            "dependencies": [
+              5
+            ],
+            "details": "Create a ProgressTracker class that monitors file processing, movement, and error states. Implement logging functionality to record all operations, warnings, and errors during the consolidation process.",
+            "status": "pending",
+            "testStrategy": "Simulate a full consolidation process and verify log outputs and progress tracking accuracy."
+          },
+          {
+            "id": 7,
+            "title": "Develop Main Consolidation Workflow",
+            "description": "Create the main workflow that orchestrates the entire consolidation process.",
+            "dependencies": [
+              6
+            ],
+            "details": "Implement the main consolidation method in ContentConsolidator class that calls all other functions in the correct order, handles exceptions, and provides a final report of the consolidation process.",
+            "status": "pending",
+            "testStrategy": "Perform an end-to-end test of the consolidation process with a representative set of test data and verify the final output and report."
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "title": "Resolve Week Numbering Issues",
+        "description": "Implement a system to fix week numbering discrepancies, particularly the week-13/14 issue.",
+        "details": "1. Create WeekResolver class in src/processors/week_resolver.py\n2. Implement logic to detect and correct week numbering inconsistencies\n3. Develop a mapping system for week numbers to actual content\n4. Create a configuration option for manual week number overrides\n5. Implement logging for all week number resolutions",
+        "testStrategy": "1. Unit tests for WeekResolver class\n2. Integration tests with sample week numbering scenarios\n3. Test manual override functionality\n4. Verify correct handling of edge cases (missing weeks, duplicate numbers)\n5. Test logging output for resolutions",
+        "priority": "medium",
+        "dependencies": [
+          7
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 9,
+        "title": "Implement Content Quality Assurance Module",
+        "description": "Develop a module to validate migrated content for completeness and formatting consistency.",
+        "details": "1. Create ContentValidator class in src/processors/content_validator.py\n2. Implement checks for file integrity and format consistency\n3. Develop content completeness verification (all expected sections present)\n4. Implement markdown linting using mdl or a similar tool\n5. Create summary report generation for validation results\n6. Integrate with logging system for detailed error reporting",
+        "testStrategy": "1. Unit tests for ContentValidator class\n2. Integration tests with various content scenarios (good, bad, mixed)\n3. Test markdown linting functionality\n4. Verify summary report generation\n5. Test logging integration for validation errors",
+        "priority": "high",
+        "dependencies": [
+          7,
+          8
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 10,
+        "title": "Develop Missing Content Placeholder Generator",
+        "description": "Create a system to generate placeholders for missing weeks and identify source materials.",
+        "details": "1. Implement PlaceholderGenerator class in src/generators/placeholder_generator.py\n2. Create template for missing content placeholders\n3. Develop logic to identify missing weeks or sections\n4. Implement source material identification and linking\n5. Integrate with ContentValidator to trigger placeholder generation\n6. Add logging for placeholder creation and source material identification",
+        "testStrategy": "1. Unit tests for PlaceholderGenerator class\n2. Integration tests with ContentValidator\n3. Verify correct placeholder generation for various missing content scenarios\n4. Test source material identification accuracy\n5. Validate logging output for placeholder creation",
+        "priority": "medium",
+        "dependencies": [
+          7,
+          8,
+          9
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 11,
+        "title": "Implement High-Performance PDF Processor using Marker",
+        "description": "Develop a PDF processing module using the Marker library with batch capabilities.",
+        "details": "1. Create PDFProcessor class in src/processors/pdf_processor.py\n2. Implement single PDF processing using Marker\n3. Develop batch processing capabilities with optimal resource usage\n4. Implement progress tracking and logging\n5. Integrate with monitoring system for performance metrics\n6. Implement error handling and retry mechanism for failed processing\n7. Optimize for GPU usage when available",
+        "testStrategy": "1. Unit tests for PDFProcessor class\n2. Integration tests with various PDF types (text, images, tables)\n3. Performance tests for batch processing\n4. Verify correct GPU utilization\n5. Test error handling and retry mechanism\n6. Validate logging and monitoring integration",
+        "priority": "high",
+        "dependencies": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Set up Marker library and create PDFProcessor class",
+            "description": "Initialize the project with Marker library and create the PDFProcessor class in src/processors/pdf_processor.py",
+            "dependencies": [],
+            "details": "Install Marker library, set up project structure, and create PDFProcessor class with basic methods for single PDF processing",
+            "status": "pending",
+            "testStrategy": "Unit test for PDFProcessor class initialization and basic method signatures"
+          },
+          {
+            "id": 2,
+            "title": "Implement single PDF processing using Marker",
+            "description": "Develop core functionality for processing a single PDF file using Marker library",
+            "dependencies": [
+              1
+            ],
+            "details": "Implement methods for loading, parsing, and extracting text and metadata from a single PDF file",
+            "status": "pending",
+            "testStrategy": "Integration test with sample PDFs to verify correct text extraction and metadata parsing"
+          },
+          {
+            "id": 3,
+            "title": "Develop batch processing capabilities",
+            "description": "Create a batch processing system for handling multiple PDFs concurrently",
+            "dependencies": [
+              2
+            ],
+            "details": "Implement queue system, worker pool, and resource management for optimal batch processing",
+            "status": "pending",
+            "testStrategy": "Performance test with varying batch sizes to ensure efficient resource usage"
+          },
+          {
+            "id": 4,
+            "title": "Implement chapter splitting functionality",
+            "description": "Add capability to split PDFs into chapters or sections",
+            "dependencies": [
+              2
+            ],
+            "details": "Develop algorithms to detect chapter boundaries and split PDFs accordingly",
+            "status": "pending",
+            "testStrategy": "Unit tests for chapter detection and splitting accuracy"
+          },
+          {
+            "id": 5,
+            "title": "Enhance academic document handling",
+            "description": "Improve processing of academic papers, theses, and research documents",
+            "dependencies": [
+              2,
+              4
+            ],
+            "details": "Implement specialized parsing for academic structures, citations, and references",
+            "status": "pending",
+            "testStrategy": "Comparison tests against current smolagents+docling approach using academic paper samples"
+          },
+          {
+            "id": 6,
+            "title": "Implement progress tracking and logging",
+            "description": "Add comprehensive logging and progress tracking for both single and batch processing",
+            "dependencies": [
+              3
+            ],
+            "details": "Develop a logging system and progress indicators for real-time monitoring of PDF processing tasks",
+            "status": "pending",
+            "testStrategy": "Integration test to verify accurate progress reporting and log generation"
+          },
+          {
+            "id": 7,
+            "title": "Integrate with monitoring system for performance metrics",
+            "description": "Connect the PDF processor to the existing monitoring system for performance tracking",
+            "dependencies": [
+              3,
+              6
+            ],
+            "details": "Implement hooks to send processing speed, resource usage, and error rates to the monitoring system",
+            "status": "pending",
+            "testStrategy": "End-to-end test to confirm correct metric reporting to the monitoring dashboard"
+          },
+          {
+            "id": 8,
+            "title": "Optimize for GPU usage and implement error handling",
+            "description": "Enable GPU acceleration when available and add robust error handling with retry mechanism",
+            "dependencies": [
+              3,
+              7
+            ],
+            "details": "Implement GPU detection and utilization for faster processing, and create an error handling system with configurable retry attempts",
+            "status": "pending",
+            "testStrategy": "Performance comparison tests with and without GPU, and fault injection tests for error handling"
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "title": "Develop Simplified Academic Agent System",
+        "description": "Replace the complex smolagents architecture with a streamlined academic agent implementation.",
+        "details": "1. Create AcademicAgent class in src/agents/academic_agent.py\n2. Implement core agent functionality (task planning, execution)\n3. Develop plugin system for extensibility\n4. Integrate with PDFProcessor for content processing\n5. Implement agent state management and persistence\n6. Create agent configuration system using YAML\n7. Develop logging and monitoring integration for agent activities",
+        "testStrategy": "1. Unit tests for AcademicAgent class\n2. Integration tests with PDFProcessor\n3. Test plugin system with mock plugins\n4. Verify state management and persistence\n5. Validate agent configuration loading\n6. Test logging and monitoring of agent activities",
+        "priority": "high",
+        "dependencies": [
+          1,
+          3,
+          4,
+          11
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 13,
+        "title": "Implement Study Notes Generator",
+        "description": "Create a module to generate comprehensive study notes with Mermaid diagrams.",
+        "details": "1. Create StudyNotesGenerator class in src/generators/study_notes_generator.py\n2. Implement markdown generation from processed PDF content\n3. Integrate Mermaid.js for diagram generation\n4. Develop logic for identifying key concepts and creating diagrams\n5. Implement cross-referencing between related content\n6. Create templates for consistent note formatting\n7. Integrate with AcademicAgent for intelligent content enhancement",
+        "testStrategy": "1. Unit tests for StudyNotesGenerator class\n2. Integration tests with processed PDF content\n3. Verify Mermaid diagram generation\n4. Test cross-referencing functionality\n5. Validate template usage and formatting consistency\n6. Test integration with AcademicAgent",
+        "priority": "high",
+        "dependencies": [
+          11,
+          12
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 14,
+        "title": "Develop Export System",
+        "description": "Build a PDF converter using consolidated images and local references.",
+        "details": "1. Create ExportSystem class in src/generators/export_system.py\n2. Implement markdown to PDF conversion using WeasyPrint or a similar library\n3. Develop image consolidation and local referencing system\n4. Implement table of contents generation\n5. Create customizable templates for different export formats (PDF, HTML)\n6. Integrate with StudyNotesGenerator for content input\n7. Implement batch export capabilities",
+        "testStrategy": "1. Unit tests for ExportSystem class\n2. Integration tests with StudyNotesGenerator\n3. Verify PDF output quality and formatting\n4. Test image consolidation and local referencing\n5. Validate table of contents generation\n6. Test batch export performance and error handling",
+        "priority": "medium",
+        "dependencies": [
+          11,
+          13
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 15,
+        "title": "Implement Asynchronous Processing",
+        "description": "Enhance the system with asynchronous processing capabilities for improved performance.",
+        "details": "1. Refactor core processing modules to use async/await syntax\n2. Implement AsyncPDFProcessor class extending PDFProcessor\n3. Update AcademicAgent to handle async tasks\n4. Implement task queue system using asyncio.Queue\n5. Develop concurrency controls to manage resource usage\n6. Update logging and monitoring for async operations\n7. Implement graceful shutdown mechanisms",
+        "testStrategy": "1. Unit tests for async classes and functions\n2. Integration tests for async processing pipeline\n3. Performance tests comparing sync vs async processing\n4. Test concurrency controls under high load\n5. Verify logging and monitoring in async context\n6. Test graceful shutdown scenarios",
+        "priority": "high",
+        "dependencies": [
+          11,
+          12,
+          13,
+          14
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 16,
+        "title": "Implement Memory Management System",
+        "description": "Develop a memory management system to optimize resource usage during processing.",
+        "details": "1. Create MemoryManager class in src/core/memory_manager.py\n2. Implement memory usage tracking for key operations\n3. Develop adaptive batch sizing based on available memory\n4. Implement memory-efficient data structures for large datasets\n5. Create cleanup routines for freeing unused resources\n6. Integrate with monitoring system for memory usage alerts\n7. Implement memory profiling tools for optimization",
+        "testStrategy": "1. Unit tests for MemoryManager class\n2. Integration tests with PDF processing pipeline\n3. Stress tests with large datasets to verify memory efficiency\n4. Validate adaptive batch sizing under various memory conditions\n5. Test cleanup routines and resource freeing\n6. Verify memory usage alerts and profiling tools",
+        "priority": "high",
+        "dependencies": [
+          11,
+          15
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 17,
+        "title": "Implement Quality Validation System",
+        "description": "Develop a system to ensure 90% accuracy in PDF-to-markdown conversion.",
+        "details": "1. Create QualityValidator class in src/processors/quality_validator.py\n2. Implement content comparison algorithms (e.g., Levenshtein distance)\n3. Develop heuristics for identifying common conversion errors\n4. Implement manual review flagging for uncertain cases\n5. Create detailed quality reports with accuracy metrics\n6. Integrate with ExportSystem for automated quality checks\n7. Implement feedback loop for continuous improvement",
+        "testStrategy": "1. Unit tests for QualityValidator class\n2. Integration tests with known good and bad conversions\n3. Accuracy tests against manually verified datasets\n4. Verify manual review flagging system\n5. Validate quality report generation\n6. Test integration with ExportSystem\n7. Verify feedback loop functionality",
+        "priority": "high",
+        "dependencies": [
+          11,
+          13,
+          14
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 18,
+        "title": "Develop Comprehensive Integration Testing Suite",
+        "description": "Create an extensive integration testing suite to validate the full processing pipeline.",
+        "details": "1. Design end-to-end test scenarios covering full pipeline\n2. Implement IntegrationTestSuite class in tests/integration/test_suite.py\n3. Create mock data generators for various input types\n4. Develop automated test runners for different pipeline configurations\n5. Implement performance benchmarking within integration tests\n6. Create detailed test reports with code coverage and performance metrics\n7. Integrate with CI/CD pipeline for automated testing",
+        "testStrategy": "1. Verify all pipeline components are covered in integration tests\n2. Run integration tests with various input data and configurations\n3. Validate mock data generators\n4. Test automated test runners\n5. Verify performance benchmarking accuracy\n6. Review test reports for completeness\n7. Test CI/CD integration",
+        "priority": "high",
+        "dependencies": [
+          6,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 19,
+        "title": "Implement Production Deployment System",
+        "description": "Develop a robust production deployment system with monitoring, logging, and rollback capabilities.",
+        "details": "1. Create DeploymentManager class in src/core/deployment_manager.py\n2. Implement blue-green deployment strategy\n3. Develop automated database migration scripts\n4. Implement feature flagging system for gradual rollouts\n5. Create rollback mechanisms for failed deployments\n6. Integrate with monitoring and alerting systems\n7. Implement automated smoke tests post-deployment",
+        "testStrategy": "1. Unit tests for DeploymentManager class\n2. Integration tests for blue-green deployment\n3. Verify database migration scripts\n4. Test feature flagging system\n5. Validate rollback mechanisms\n6. Verify monitoring and alerting integration\n7. Test post-deployment smoke tests",
+        "priority": "high",
+        "dependencies": [
+          3,
+          4,
+          5,
+          15,
+          16
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 20,
+        "title": "Implement Chapter Splitting for Textbook PDFs",
+        "description": "Develop functionality to automatically split textbook PDFs into individual chapters.",
+        "details": "1. Create ChapterSplitter class in src/processors/chapter_splitter.py\n2. Implement algorithms for detecting chapter boundaries (e.g., OCR, text analysis)\n3. Develop PDF splitting functionality using PyPDF2 or a similar library\n4. Implement metadata extraction for chapter titles and page numbers\n5. Create naming conventions for split chapters\n6. Integrate with PDFProcessor for seamless processing\n7. Implement error handling for irregular textbook formats",
+        "testStrategy": "1. Unit tests for ChapterSplitter class\n2. Integration tests with various textbook PDF formats\n3. Verify accuracy of chapter boundary detection\n4. Test metadata extraction functionality\n5. Validate naming conventions\n6. Test integration with PDFProcessor\n7. Verify error handling for edge cases",
+        "priority": "medium",
+        "dependencies": [
+          11
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 21,
+        "title": "Implement Image Extraction and Organization",
+        "description": "Develop a system to extract and organize images from PDFs with proper naming conventions.",
+        "details": "1. Create ImageExtractor class in src/processors/image_extractor.py\n2. Implement image extraction using Marker library\n3. Develop image quality assessment (resolution, clarity)\n4. Create naming convention system based on content and context\n5. Implement image deduplication\n6. Develop directory structure for organized image storage\n7. Integrate with ChapterSplitter for context-aware extraction",
+        "testStrategy": "1. Unit tests for ImageExtractor class\n2. Integration tests with PDFs containing various image types\n3. Verify image quality assessment accuracy\n4. Test naming convention system\n5. Validate image deduplication functionality\n6. Verify directory structure creation\n7. Test integration with ChapterSplitter",
+        "priority": "medium",
+        "dependencies": [
+          11,
+          20
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 22,
+        "title": "Implement Mermaid Diagram Generation",
+        "description": "Create a system to generate Mermaid diagrams for concept visualization in study notes.",
+        "details": "1. Create MermaidGenerator class in src/generators/mermaid_generator.py\n2. Implement natural language processing to identify key concepts and relationships\n3. Develop templates for common diagram types (flowcharts, class diagrams, etc.)\n4. Implement Mermaid syntax generation based on extracted relationships\n5. Create integration with StudyNotesGenerator\n6. Implement caching system for generated diagrams\n7. Develop error handling for complex or ambiguous relationships",
+        "testStrategy": "1. Unit tests for MermaidGenerator class\n2. Integration tests with various text inputs\n3. Verify accuracy of concept and relationship extraction\n4. Test Mermaid syntax generation\n5. Validate integration with StudyNotesGenerator\n6. Test caching system efficiency\n7. Verify error handling for edge cases",
+        "priority": "medium",
+        "dependencies": [
+          13
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 23,
+        "title": "Implement Cross-referencing System",
+        "description": "Develop a system to link related content across different weeks and topics.",
+        "details": "1. Create CrossReferencer class in src/processors/cross_referencer.py\n2. Implement keyword extraction and topic modeling\n3. Develop similarity scoring between content sections\n4. Create a graph database for content relationships\n5. Implement intelligent link insertion in markdown content\n6. Develop a user interface for manual cross-reference management\n7. Integrate with StudyNotesGenerator for automated cross-referencing",
+        "testStrategy": "1. Unit tests for CrossReferencer class\n2. Integration tests with sample course content\n3. Verify accuracy of keyword extraction and topic modeling\n4. Test similarity scoring with known related content\n5. Validate graph database queries\n6. Test link insertion in various markdown contexts\n7. Verify integration with StudyNotesGenerator",
+        "priority": "medium",
+        "dependencies": [
+          13,
+          22
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 24,
+        "title": "Implement Content Management System",
+        "description": "Develop a system to manage course information, processing history, and content relationships.",
+        "details": "1. Create ContentManager class in src/core/content_manager.py\n2. Implement database schema for content metadata (SQLAlchemy ORM)\n3. Develop CRUD operations for course information and content\n4. Implement processing history tracking\n5. Create API for content relationship queries\n6. Develop content versioning system\n7. Implement access control and user management",
+        "testStrategy": "1. Unit tests for ContentManager class\n2. Integration tests with sample course data\n3. Verify CRUD operations for all content types\n4. Test processing history accuracy\n5. Validate content relationship queries\n6. Test content versioning functionality\n7. Verify access control and user management",
+        "priority": "high",
+        "dependencies": [
+          3,
+          7,
+          23
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 25,
+        "title": "Implement Template System",
+        "description": "Develop a system for managing reusable templates for different content types.",
+        "details": "1. Create TemplateManager class in src/core/template_manager.py\n2. Implement template storage and retrieval system\n3. Develop template rendering engine using Jinja2\n4. Create default templates for common content types\n5. Implement template versioning\n6. Develop UI for template management\n7. Integrate with StudyNotesGenerator and ExportSystem",
+        "testStrategy": "1. Unit tests for TemplateManager class\n2. Integration tests with various template types\n3. Verify template rendering accuracy\n4. Test template versioning functionality\n5. Validate UI for template management\n6. Test integration with StudyNotesGenerator and ExportSystem",
+        "priority": "medium",
+        "dependencies": [
+          13,
+          14,
+          24
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 26,
+        "title": "Implement Version Control for Content",
+        "description": "Develop a system to track changes and maintain content history.",
+        "details": "1. Create VersionController class in src/core/version_controller.py\n2. Implement Git-like versioning for content files\n3. Develop diff generation for content changes\n4. Create rollback functionality for content versions\n5. Implement branching for experimental content changes\n6. Develop merge conflict resolution system\n7. Integrate with ContentManager for seamless versioning",
+        "testStrategy": "1. Unit tests for VersionController class\n2. Integration tests with sample content changes\n3. Verify diff generation accuracy\n4. Test rollback functionality\n5. Validate branching and merging operations\n6. Test conflict resolution scenarios\n7. Verify integration with ContentManager",
+        "priority": "medium",
+        "dependencies": [
+          24,
+          25
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 27,
+        "title": "Implement Batch Processing System",
+        "description": "Develop a system to handle multiple PDFs simultaneously with optimal resource usage.",
+        "details": "1. Create BatchProcessor class in src/processors/batch_processor.py\n2. Implement job queue system using Redis or RabbitMQ\n3. Develop worker processes for parallel processing\n4. Implement adaptive batch sizing based on system resources\n5. Create progress tracking and reporting system\n6. Develop error handling and automatic retries\n7. Integrate with MemoryManager for optimal resource allocation",
+        "testStrategy": "1. Unit tests for BatchProcessor class\n2. Integration tests with large sets of PDFs\n3. Verify parallel processing efficiency\n4. Test adaptive batch sizing under various load conditions\n5. Validate progress tracking accuracy\n6. Test error handling and retry mechanisms\n7. Verify integration with MemoryManager",
+        "priority": "high",
+        "dependencies": [
+          11,
+          15,
+          16
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 28,
+        "title": "Implement Search Functionality",
+        "description": "Develop an efficient search system across all course content.",
+        "details": "1. Create SearchEngine class in src/core/search_engine.py\n2. Implement full-text search using Elasticsearch or similar\n3. Develop indexing system for all content types\n4. Create API for complex search queries\n5. Implement relevance scoring and result ranking\n6. Develop search result highlighting\n7. Integrate with ContentManager for real-time index updates",
+        "testStrategy": "1. Unit tests for SearchEngine class\n2. Integration tests with sample course content\n3. Verify indexing accuracy for various content types\n4. Test complex search query performance\n5. Validate relevance scoring and ranking\n6. Test search result highlighting\n7. Verify real-time index updates",
+        "priority": "medium",
+        "dependencies": [
+          24,
+          26
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 29,
+        "title": "Implement Offline Access System",
+        "description": "Develop a system for offline access to course materials with embedded images.",
+        "details": "1. Create OfflinePackager class in src/generators/offline_packager.py\n2. Implement content bundling for offline use\n3. Develop image embedding system for offline documents\n4. Create sync mechanism for offline content updates\n5. Implement versioning for offline packages\n6. Develop compression system for efficient storage\n7. Create UI for managing offline content",
+        "testStrategy": "1. Unit tests for OfflinePackager class\n2. Integration tests with sample course content\n3. Verify offline bundle completeness\n4. Test image embedding in various document formats\n5. Validate sync mechanism for content updates\n6. Test versioning system for offline packages\n7. Verify UI functionality for offline content management",
+        "priority": "low",
+        "dependencies": [
+          14,
+          21,
+          24
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 30,
+        "title": "Implement Performance Optimization and Tuning",
+        "description": "Conduct comprehensive performance optimization and tuning across the entire system.",
+        "details": "1. Conduct system-wide performance profiling\n2. Identify and optimize critical code paths\n3. Implement caching strategies for frequently accessed data\n4. Optimize database queries and indexing\n5. Tune async operations for maximum throughput\n6. Optimize memory usage patterns\n7. Implement performance regression testing",
+        "testStrategy": "1. Benchmark tests for key system operations\n2. A/B testing of optimized vs. non-optimized code paths\n3. Load testing under various concurrency levels\n4. Database query performance analysis\n5. Memory usage profiling\n6. Long-running stability tests\n7. Verify performance improvements against baseline metrics",
+        "priority": "high",
+        "dependencies": [
+          15,
+          16,
+          27,
+          28
+        ],
+        "status": "pending",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2025-07-17T19:37:43.698Z",
+      "updated": "2025-07-17T23:31:15.900Z",
+      "description": "Tasks for master context"
+    }
+  }
+}

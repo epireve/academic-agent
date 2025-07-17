@@ -1,0 +1,182 @@
+# Academic Agent v2.0 Refactoring Project
+## Product Requirements Document
+
+### Executive Summary
+Transform the existing academic-agent project from a legacy system with substantial technical debt into a modern, maintainable, and scalable solution. Replace the current smolagents+docling PDF processing pipeline with the superior Marker library while consolidating scattered content and eliminating redundant tooling.
+
+### Project Goals
+1. **Eliminate Technical Debt**: Remove 27 redundant PDF converter scripts and consolidate functionality
+2. **Modernize PDF Processing**: Replace smolagents+docling with Marker library for 25x performance improvement
+3. **Consolidate Content**: Merge scattered transcripts and notes from multiple locations into unified structure
+4. **Improve Architecture**: Create clean, testable, configuration-driven system
+5. **Enhance Maintainability**: Reduce maintenance overhead by 80% through proper separation of concerns
+
+### Current State Analysis
+- **27 redundant PDF converter scripts** causing maintenance nightmares
+- **Scattered content** across `/Users/invoture/dev.local/academic-agent/output/sra/transcripts/markdown` and `/Users/invoture/dev.local/mse-st/sra`
+- **Mixed agent frameworks** (smolagents + custom BaseAgent) creating complexity
+- **Hardcoded paths** and missing error handling throughout codebase
+- **No testing infrastructure** leading to unreliable deployments
+- **Content gaps** due to postponed classes (weeks 1-5, 7, 13 missing from location 1)
+
+### Technical Requirements
+
+#### Phase 1: Foundation Setup (Weeks 1-2)
+- **Project Structure**: Create clean v2.0 directory structure with proper separation of concerns
+- **Marker Integration**: Install and configure Marker library with GPU acceleration
+- **Configuration System**: Implement YAML-based configuration management
+- **Core Infrastructure**: Set up logging, error handling, and monitoring systems
+- **Testing Framework**: Establish unit and integration testing infrastructure
+
+#### Phase 2: Content Migration (Weeks 3-4)
+- **Content Consolidation**: Merge transcripts from both locations resolving naming inconsistencies
+- **Numbering Resolution**: Fix week numbering issues (week-13/14 discrepancy)
+- **Quality Assurance**: Validate migrated content for completeness and formatting consistency
+- **Missing Content**: Generate placeholders for missing weeks and identify source materials
+
+#### Phase 3: Core Implementation (Weeks 5-6)
+- **Marker PDF Processor**: Implement high-performance PDF processing with batch capabilities
+- **Simplified Agent System**: Replace complex smolagents architecture with streamlined academic agent
+- **Study Notes Generator**: Create comprehensive study notes with Mermaid diagrams
+- **Export System**: Build PDF converter using consolidated images and local references
+
+#### Phase 4: Enhancement & Testing (Weeks 7-8)
+- **Performance Optimization**: Implement async processing and memory management
+- **Quality Validation**: Ensure 90% accuracy in PDF-to-markdown conversion
+- **Integration Testing**: Comprehensive testing of full pipeline
+- **Production Deployment**: Monitoring, logging, and rollback capabilities
+
+### Functional Requirements
+
+#### Content Processing Pipeline
+- **Input**: PDF files, audio transcripts, lecture slides
+- **Processing**: Extract text, images, tables, equations using Marker library
+- **Enhancement**: Generate comprehensive study notes with diagrams and cross-references
+- **Output**: Markdown files, PDF exports, HTML formats
+
+#### Content Management System
+- **Organization**: Unified directory structure for courses/WOC7017/[raw|transcripts|summaries|notes|outputs]
+- **Metadata**: Track course information, processing history, content relationships
+- **Templates**: Reusable templates for different content types
+- **Version Control**: Track changes and maintain content history
+
+#### Processing Capabilities
+- **Batch Processing**: Handle multiple PDFs simultaneously with optimal resource usage
+- **Chapter Splitting**: Automatically split textbook PDFs into individual chapters
+- **Image Extraction**: Extract and organize images with proper naming conventions
+- **Diagram Generation**: Create Mermaid diagrams for concept visualization
+- **Cross-referencing**: Link related content across different weeks and topics
+
+### Non-Functional Requirements
+
+#### Performance
+- **Processing Speed**: 50% faster than current system (target: 25 pages/second)
+- **Memory Usage**: 30% reduction in memory footprint
+- **Response Time**: PDF processing completion within 5 minutes for typical academic documents
+- **Throughput**: Support processing of complete course materials (14 weeks) in under 2 hours
+
+#### Reliability
+- **Error Rate**: <5% processing failures
+- **Recovery**: Automatic retry mechanisms for transient failures
+- **Monitoring**: Real-time performance and error tracking
+- **Backup**: Automated backup of processed content and configurations
+
+#### Maintainability
+- **Code Quality**: 80% test coverage, type hints, comprehensive documentation
+- **Configuration**: External YAML configuration files, no hardcoded values
+- **Extensibility**: Easy addition of new courses and document types
+- **Debugging**: Comprehensive logging and error reporting
+
+### User Stories
+
+#### As a Course Administrator
+- I want to upload a complete course PDF and have it automatically split into weekly chapters
+- I want to process audio transcripts and generate comprehensive study notes
+- I want to export all materials to PDF format with consistent formatting
+- I want to track processing status and view performance metrics
+
+#### As a Student
+- I want to access well-formatted study notes with diagrams and cross-references
+- I want to download PDF versions of all course materials
+- I want to search across all course content efficiently
+- I want to access materials offline with embedded images
+
+#### As a System Administrator
+- I want to configure processing parameters without code changes
+- I want to monitor system performance and resource usage
+- I want to set up automated processing pipelines
+- I want to manage multiple courses simultaneously
+
+### Technical Specifications
+
+#### Architecture Components
+- **Core Module**: Configuration management, logging, exception handling
+- **Processors**: PDF processing (Marker), transcript processing, content enhancement
+- **Generators**: Study notes generation, PDF conversion, Mermaid rendering
+- **Agents**: Academic agent orchestration, simplified workflow management
+- **Utils**: File operations, image processing, markdown utilities
+
+#### Technology Stack
+- **PDF Processing**: Marker library with GPU acceleration
+- **Agent Framework**: Simplified custom implementation (removing smolagents)
+- **Configuration**: YAML-based with Pydantic validation
+- **Testing**: Pytest with async support
+- **Monitoring**: Prometheus metrics, structured logging
+- **Storage**: Local filesystem with organized directory structure
+
+#### Integration Points
+- **File System**: Unified content storage and organization
+- **Configuration**: YAML files for courses, processing, and deployment
+- **Monitoring**: Performance metrics and error tracking
+- **Export**: Multiple output formats (MD, PDF, HTML)
+
+### Success Metrics
+
+#### Technical Metrics
+- **Processing Speed**: 50% improvement over current system
+- **Code Quality**: 80% test coverage, zero critical bugs
+- **Memory Usage**: 30% reduction in resource consumption
+- **Error Rate**: <5% processing failures
+
+#### Operational Metrics
+- **Deployment Time**: 70% reduction in deployment complexity
+- **Maintenance Time**: 80% reduction in ongoing maintenance
+- **User Satisfaction**: 90% positive feedback on reliability
+- **Content Quality**: 90% accuracy in PDF conversion
+
+### Risk Assessment
+
+#### Technical Risks
+- **Marker Library Integration**: New dependency may have learning curve
+- **Content Migration**: Risk of data loss during consolidation
+- **Performance**: GPU requirements may not be available in all environments
+- **Testing**: Complex async operations may be difficult to test
+
+#### Mitigation Strategies
+- **Parallel Development**: Keep old system running during migration
+- **Incremental Migration**: Phase-by-phase rollout with rollback capability
+- **Comprehensive Testing**: Extensive unit and integration tests
+- **Documentation**: Detailed setup and troubleshooting guides
+
+### Timeline
+- **Phase 1**: Foundation Setup (Weeks 1-2)
+- **Phase 2**: Content Migration (Weeks 3-4)
+- **Phase 3**: Core Implementation (Weeks 5-6)
+- **Phase 4**: Enhancement & Testing (Weeks 7-8)
+- **Total Duration**: 8 weeks
+
+### Resource Requirements
+- **Development**: 1 senior developer (full-time)
+- **Testing**: Access to representative PDF samples and test data
+- **Infrastructure**: GPU-enabled environment for Marker library
+- **Storage**: Sufficient space for content migration and processing
+- **Monitoring**: Performance tracking and alerting systems
+
+### Definition of Done
+- All 27 redundant PDF converters replaced with single Marker-based processor
+- Content successfully consolidated from both locations with zero data loss
+- New system processes complete course materials 50% faster than current
+- 80% test coverage achieved with comprehensive integration tests
+- Production deployment with monitoring and rollback capabilities
+- Documentation complete for users and system administrators
+- Performance metrics meet or exceed all specified targets
