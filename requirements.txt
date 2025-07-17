@@ -1,0 +1,11 @@
+# Core dependencies
+smolagents>=0.1.0  # Agent framework
+docling>=1.2.0  # PDF processing
+python-frontmatter>=1.0.0  # Metadata handling
+litellm>=1.0.0  # LLM interface
+python-dotenv>=1.0.0  # Environment variables
+
+# Development
+black>=22.0.0  # Code formatting
+flake8>=6.0.0  # Code linting
+pytest>=7.0.0  # Testing 
