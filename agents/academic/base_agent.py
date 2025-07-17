@@ -1,0 +1,472 @@
+import sys
+import os
+from dataclasses import dataclass
+from datetime import datetime
+from typing import Dict, Optional, List, Any
+import uuid
+from pathlib import Path
+
+# Add the v2 core modules to the path
+sys.path.append(str(Path(__file__).parent.parent.parent / "academic-agent-v2" / "src"))
+
+try:
+    from core.logging import get_logger
+    from core.exceptions import (
+        AcademicAgentError,
+        CommunicationError,
+        ValidationError,
+        ProcessingError,
+        handle_exception
+    )
+    from core.error_handling import with_error_handling, error_context
+    from core.monitoring import get_system_monitor
+    from core.config_manager import get_config
+except ImportError as e:
+    # Fallback to basic logging if enhanced system is not available
+    import logging
+    print(f"Warning: Enhanced logging/error handling not available: {e}")
+    print("Falling back to basic logging")
+    
+    def get_logger(name):
+        return logging.getLogger(name)
+    
+    class AcademicAgentError(Exception):
+        pass
+    
+    class CommunicationError(AcademicAgentError):
+        pass
+    
+    class ValidationError(AcademicAgentError):
+        pass
+    
+    class ProcessingError(AcademicAgentError):
+        pass
+    
+    def handle_exception(exc, logger, operation, context=None):
+        return AcademicAgentError(str(exc))
+    
+    def with_error_handling(operation_name, **kwargs):
+        def decorator(func):
+            return func
+        return decorator
+    
+    def error_context(operation_name, context=None):
+        from contextlib import contextmanager
+        @contextmanager
+        def ctx():
+            yield get_logger("error_context")
+        return ctx()
+    
+    def get_system_monitor():
+        class MockMonitor:
+            def __init__(self):
+                self.metrics_collector = self
+            def collect_metric(self, metric):
+                pass
+        return MockMonitor()
+    
+    def get_config():
+        class MockConfig:
+            def __init__(self):
+                self.quality_threshold = 0.7
+                self.max_improvement_cycles = 3
+                self.communication_interval = 30
+        return MockConfig()
+
+
+@dataclass
+class AgentMessage:
+    """Enhanced message format for inter-agent communication with validation and tracking"""
+
+    sender: str  # Agent identifier
+    recipient: str  # Target agent
+    message_type: str  # Type of communication
+    content: Dict  # Message payload
+    metadata: Dict  # Additional context
+    timestamp: datetime  # Message timestamp
+    message_id: str = None  # Unique message ID
+    priority: int = 0  # Message priority (0-5)
+    retry_count: int = 0  # Number of retries
+    parent_id: Optional[str] = None  # Parent message ID
+    children: List[str] = None  # Child message IDs
+    acknowledged: bool = False  # Whether message was acknowledged
+    processing_started: Optional[datetime] = None  # When processing started
+    processing_completed: Optional[datetime] = None  # When processing completed
+    error_info: Optional[Dict] = None  # Error information if processing failed
+    
+    def __post_init__(self):
+        if self.message_id is None:
+            self.message_id = str(uuid.uuid4())
+        if self.children is None:
+            self.children = []
+
+    def validate(self) -> bool:
+        """Validate message format and content with enhanced checks"""
+        required_fields = ["sender", "recipient", "message_type", "content"]
+        
+        # Check required fields
+        for field in required_fields:
+            if not hasattr(self, field) or getattr(self, field) is None:
+                return False
+        
+        # Validate message type
+        valid_types = [
+            "quality_feedback", "content_update", "processing_request",
+            "processing_response", "error_notification", "status_update",
+            "improvement_suggestion", "content_verification"
+        ]
+        if self.message_type not in valid_types:
+            return False
+        
+        # Validate content structure
+        if not isinstance(self.content, dict):
+            return False
+        
+        # Validate priority
+        if not isinstance(self.priority, int) or not (0 <= self.priority <= 5):
+            return False
+        
+        return True
+
+    def acknowledge(self) -> bool:
+        """Send acknowledgment to sender"""
+        self.acknowledged = True
+        return True
+
+    def start_processing(self) -> bool:
+        """Mark message as processing started"""
+        self.processing_started = datetime.now()
+        return True
+    
+    def complete_processing(self, success: bool = True, error_info: Dict = None) -> bool:
+        """Mark message processing as completed"""
+        self.processing_completed = datetime.now()
+        if not success and error_info:
+            self.error_info = error_info
+        return True
+
+    def retry(self) -> bool:
+        """Retry message delivery with enhanced retry logic"""
+        max_retries = 3
+        if self.retry_count < max_retries:
+            self.retry_count += 1
+            # Reset processing timestamps for retry
+            self.processing_started = None
+            self.processing_completed = None
+            self.error_info = None
+            return True
+        return False
+    
+    def get_processing_duration(self) -> Optional[float]:
+        """Get processing duration in seconds"""
+        if self.processing_started and self.processing_completed:
+            return (self.processing_completed - self.processing_started).total_seconds()
+        return None
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert message to dictionary for logging/serialization"""
+        return {
+            "message_id": self.message_id,
+            "sender": self.sender,
+            "recipient": self.recipient,
+            "message_type": self.message_type,
+            "content": self.content,
+            "metadata": self.metadata,
+            "timestamp": self.timestamp.isoformat(),
+            "priority": self.priority,
+            "retry_count": self.retry_count,
+            "parent_id": self.parent_id,
+            "children": self.children,
+            "acknowledged": self.acknowledged,
+            "processing_started": self.processing_started.isoformat() if self.processing_started else None,
+            "processing_completed": self.processing_completed.isoformat() if self.processing_completed else None,
+            "processing_duration": self.get_processing_duration(),
+            "error_info": self.error_info
+        }
+
+
+class BaseAgent:
+    """Enhanced base class for all academic agents with comprehensive logging and error handling"""
+
+    def __init__(self, agent_id: str):
+        self.agent_id = agent_id
+        self.logger = get_logger(agent_id)
+        self.monitor = get_system_monitor()
+        self.config = get_config()
+        
+        # Configuration from config system
+        self.quality_threshold = getattr(self.config, 'quality_threshold', 0.7)
+        self.max_retries = 3
+        self.processing_timeout = 300  # 5 minutes in seconds
+        self.communication_interval = getattr(self.config, 'communication_interval', 30)
+        
+        # Message tracking
+        self.sent_messages: Dict[str, AgentMessage] = {}
+        self.received_messages: Dict[str, AgentMessage] = {}
+        self.message_queue: List[AgentMessage] = []
+        
+        # Performance tracking
+        self.operation_metrics = {
+            'total_operations': 0,
+            'successful_operations': 0,
+            'failed_operations': 0,
+            'average_processing_time': 0.0,
+            'quality_scores': []
+        }
+        
+        # Initialize agent
+        self.logger.info(f"Agent {agent_id} initialized with quality threshold {self.quality_threshold}")
+
+    @with_error_handling("send_message", max_retries=3)
+    def send_message(
+        self,
+        recipient: str,
+        message_type: str,
+        content: Dict,
+        priority: int = 0,
+        parent_id: Optional[str] = None,
+    ) -> bool:
+        """Send a message to another agent with enhanced validation and tracking"""
+        
+        with error_context("send_message", {"recipient": recipient, "message_type": message_type}):
+            message = AgentMessage(
+                sender=self.agent_id,
+                recipient=recipient,
+                message_type=message_type,
+                content=content,
+                metadata={"agent_version": "2.0", "timestamp": datetime.now().isoformat()},
+                timestamp=datetime.now(),
+                priority=priority,
+                parent_id=parent_id,
+            )
+
+            if not message.validate():
+                raise ValidationError(
+                    f"Invalid message format for {message_type} to {recipient}",
+                    validation_type="message_format",
+                    context={"message_id": message.message_id}
+                )
+
+            # Track the message
+            self.sent_messages[message.message_id] = message
+            
+            # Log the message
+            self.logger.info(
+                f"Sending message to {recipient}: {message_type}",
+                extra_context={
+                    "message_id": message.message_id,
+                    "priority": priority,
+                    "content_size": len(str(content))
+                }
+            )
+            
+            # Record communication metric
+            try:
+                self.monitor.metrics_collector.collect_metric({
+                    "name": "messages_sent",
+                    "value": 1,
+                    "tags": {
+                        "sender": self.agent_id,
+                        "recipient": recipient,
+                        "message_type": message_type
+                    }
+                })
+            except:
+                # Fallback if monitoring is not available
+                pass
+            
+            return True
+
+    @with_error_handling("receive_message", max_retries=2)
+    def receive_message(self, message: AgentMessage) -> bool:
+        """Process received message with enhanced validation and tracking"""
+        
+        with error_context("receive_message", {"sender": message.sender, "message_type": message.message_type}):
+            if not message.validate():
+                raise ValidationError(
+                    f"Received invalid message from {message.sender}",
+                    validation_type="message_format",
+                    context={"message_id": message.message_id}
+                )
+
+            # Track the message
+            self.received_messages[message.message_id] = message
+            message.start_processing()
+            
+            # Acknowledge the message
+            message.acknowledge()
+            
+            # Log the message
+            self.logger.info(
+                f"Received message from {message.sender}: {message.message_type}",
+                extra_context={
+                    "message_id": message.message_id,
+                    "priority": message.priority,
+                    "retry_count": message.retry_count
+                }
+            )
+            
+            # Record communication metric
+            try:
+                self.monitor.metrics_collector.collect_metric({
+                    "name": "messages_received",
+                    "value": 1,
+                    "tags": {
+                        "sender": message.sender,
+                        "recipient": self.agent_id,
+                        "message_type": message.message_type
+                    }
+                })
+            except:
+                # Fallback if monitoring is not available
+                pass
+            
+            # Process the message based on type
+            success = self._process_message(message)
+            
+            # Complete processing
+            message.complete_processing(success=success)
+            
+            return success
+    
+    def _process_message(self, message: AgentMessage) -> bool:
+        """Process message based on type - to be implemented by subclasses"""
+        self.logger.info(f"Processing message: {message.message_type}")
+        return True
+
+    def check_quality(self, content: Any) -> float:
+        """Base quality check method - to be implemented by subclasses"""
+        raise NotImplementedError("Quality check must be implemented by child class")
+
+    def log_metrics(self, metrics: Dict) -> None:
+        """Log performance metrics with enhanced tracking"""
+        self.logger.info(f"Performance metrics: {metrics}")
+        
+        # Update operation metrics
+        self.operation_metrics['total_operations'] += 1
+        if metrics.get('success', True):
+            self.operation_metrics['successful_operations'] += 1
+        else:
+            self.operation_metrics['failed_operations'] += 1
+        
+        # Track quality scores
+        if 'quality_score' in metrics:
+            self.operation_metrics['quality_scores'].append(metrics['quality_score'])
+        
+        # Track processing time
+        if 'processing_time' in metrics:
+            current_avg = self.operation_metrics['average_processing_time']
+            total_ops = self.operation_metrics['total_operations']
+            new_avg = ((current_avg * (total_ops - 1)) + metrics['processing_time']) / total_ops
+            self.operation_metrics['average_processing_time'] = new_avg
+        
+        # Record metrics
+        try:
+            for metric_name, value in metrics.items():
+                if isinstance(value, (int, float)):
+                    self.monitor.metrics_collector.collect_metric({
+                        "name": f"agent_{metric_name}",
+                        "value": value,
+                        "tags": {"agent_id": self.agent_id}
+                    })
+        except:
+            # Fallback if monitoring is not available
+            pass
+
+    @with_error_handling("handle_error", max_retries=1)
+    def handle_error(self, error: Exception, context: Dict) -> bool:
+        """Handle errors with enhanced error processing and recovery"""
+        
+        # Convert to structured error if needed
+        if not isinstance(error, AcademicAgentError):
+            structured_error = handle_exception(error, self.logger, context.get('operation', 'unknown'), context)
+        else:
+            structured_error = error
+        
+        # Log the error with full context
+        self.logger.error(
+            f"Error in {context.get('operation', 'unknown operation')}: {structured_error.message}",
+            extra_context={
+                "error_code": getattr(structured_error, 'error_code', 'unknown'),
+                "recoverable": getattr(structured_error, 'recoverable', True),
+                "retry_count": context.get('retry_count', 0),
+                "context": context
+            }
+        )
+        
+        # Record error metric
+        try:
+            self.monitor.metrics_collector.collect_metric({
+                "name": "agent_errors",
+                "value": 1,
+                "tags": {
+                    "agent_id": self.agent_id,
+                    "error_type": type(structured_error).__name__,
+                    "recoverable": str(getattr(structured_error, 'recoverable', True))
+                }
+            })
+        except:
+            # Fallback if monitoring is not available
+            pass
+        
+        # Attempt recovery if error is recoverable
+        if getattr(structured_error, 'recoverable', True) and context.get("retry_count", 0) < self.max_retries:
+            self.logger.info(
+                f"Attempting recovery for {context.get('operation')} (Attempt {context.get('retry_count', 0) + 1})",
+                extra_context={
+                    "suggestions": getattr(structured_error, 'suggestions', []),
+                    "recovery_strategy": "retry_with_backoff"
+                }
+            )
+            return True
+        
+        # Log failure to recover
+        self.logger.error(
+            f"Failed to recover from error in {context.get('operation')}",
+            extra_context={
+                "final_attempt": True,
+                "suggestions": getattr(structured_error, 'suggestions', [])
+            }
+        )
+        
+        return False
+
+    def validate_input(self, input_data: Any) -> bool:
+        """Validate input data - to be implemented by subclasses"""
+        raise NotImplementedError("Input validation must be implemented by child class")
+
+    def validate_output(self, output_data: Any) -> bool:
+        """Validate output data - to be implemented by subclasses"""
+        raise NotImplementedError("Output validation must be implemented by child class")
+    
+    def get_agent_status(self) -> Dict[str, Any]:
+        """Get comprehensive agent status"""
+        return {
+            "agent_id": self.agent_id,
+            "quality_threshold": self.quality_threshold,
+            "operation_metrics": self.operation_metrics,
+            "messages_sent": len(self.sent_messages),
+            "messages_received": len(self.received_messages),
+            "messages_in_queue": len(self.message_queue),
+            "average_quality_score": (
+                sum(self.operation_metrics['quality_scores']) / len(self.operation_metrics['quality_scores'])
+                if self.operation_metrics['quality_scores'] else 0.0
+            ),
+            "success_rate": (
+                self.operation_metrics['successful_operations'] / self.operation_metrics['total_operations']
+                if self.operation_metrics['total_operations'] > 0 else 0.0
+            )
+        }
+    
+    def shutdown(self):
+        """Gracefully shutdown the agent"""
+        self.logger.info(f"Shutting down agent {self.agent_id}")
+        
+        # Log final metrics
+        final_status = self.get_agent_status()
+        self.logger.info(f"Final agent status: {final_status}")
+        
+        # Clear message queues
+        self.sent_messages.clear()
+        self.received_messages.clear()
+        self.message_queue.clear()
