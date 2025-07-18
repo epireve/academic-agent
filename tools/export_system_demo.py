@@ -19,11 +19,12 @@ from typing import Dict, List, Any
 # Add parent directory to path for imports
 sys.path.append(str(Path(__file__).parent.parent))
 
-from agents.academic.export_system import ExportSystemTool, ExportConfig
-from agents.academic.export_integration import (
-    ExportSystemIntegrator, IntegratedExportRequest,
-    export_study_notes, export_processed_pdfs, batch_export_directory
-)
+from src.processors.export_manager import ExportManager, ExportConfig
+# TODO: Map export_integration functionality to new export_manager
+# from src.processors.export_manager import (
+#     ExportSystemIntegrator, IntegratedExportRequest,
+#     export_study_notes, export_processed_pdfs, batch_export_directory
+# )
 
 def create_sample_content():
     """Create sample content for demonstration"""

@@ -24,8 +24,8 @@ from datetime import datetime
 # Add parent directory to path for imports
 sys.path.append(str(Path(__file__).parent.parent))
 
-from agents.academic.export_system import (
-    ExportSystemTool, ExportConfig, ImageConsolidator, 
+from src.processors.export_manager import (
+    ExportManager, ExportConfig, ImageConsolidator, 
     ExportQualityValidator, AcademicTemplate
 )
 
@@ -34,7 +34,7 @@ class ExportCLI:
     
     def __init__(self):
         self.base_dir = Path.cwd()
-        self.export_tool = ExportSystemTool(self.base_dir)
+        self.export_tool = ExportManager(self.base_dir)
         self.config_path = self.base_dir / "config" / "export_system_config.yaml"
         self.default_config = self._load_default_config()
     

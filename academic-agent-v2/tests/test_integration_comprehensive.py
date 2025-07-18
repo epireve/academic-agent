@@ -31,12 +31,12 @@ import logging
 # Add src to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from core.config_manager import get_config_manager
-from core.logging import get_logger, setup_logging
-from core.memory_manager import get_memory_manager, memory_profile
-from core.monitoring import get_system_monitor
-from core.exceptions import AcademicAgentError, MemoryException
-from processors.pdf_processor import PDFProcessor
+from src.core.config_manager import get_config_manager
+from src.core.logging import get_logger, setup_logging
+from src.core.memory_manager import get_memory_manager, memory_profile
+from src.core.monitoring import get_system_monitor
+from src.core.exceptions import AcademicAgentError, MemoryException
+from src.processors.pdf_processor import PDFProcessor
 
 
 class IntegrationTestFixtures:

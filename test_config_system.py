@@ -14,7 +14,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent / "config"))
 
 try:
-    from config_manager import ConfigurationManager, AcademicAgentConfig, ConfigurationError
+    from src.core.config_manager import ConfigurationManager, AcademicAgentConfig, ConfigurationError
     
     def test_basic_config_loading():
         """Test basic configuration loading."""

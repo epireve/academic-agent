@@ -27,8 +27,8 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent
 sys.path.append(str(project_root))
 
-from agents.academic.content_quality_agent import ContentQualityAgent
-from agents.academic.consolidation_agent import ContentConsolidationAgent, FileMapping
+from src.agents.content_quality_agent import ContentQualityAgent
+from src.agents.consolidation_agent import ContentConsolidationAgent, FileMapping
 
 
 class QualityAssuranceDemo:

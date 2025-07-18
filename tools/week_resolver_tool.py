@@ -19,11 +19,11 @@ import logging
 from pathlib import Path
 from typing import List, Dict, Any
 
-# Add the processors module to the path
-sys.path.append(str(Path(__file__).parent.parent / "academic-agent-v2" / "src"))
+# Add the unified src module to the path
+sys.path.append(str(Path(__file__).parent.parent))
 
 try:
-    from processors.week_resolver import WeekResolver, WeekResolutionResult
+    from src.processors.week_resolver import WeekResolver, WeekResolutionResult
 except ImportError as e:
     print(f"Error importing WeekResolver: {e}")
     print("Please ensure the week_resolver.py file is in the correct location.")

@@ -18,7 +18,7 @@ def test_basic_logging():
     print("Testing basic logging...")
     
     try:
-        from core.logging import get_logger
+        from src.core.logging import get_logger
         
         logger = get_logger("test_component")
         
@@ -50,7 +50,7 @@ def test_operation_context():
     print("Testing operation context...")
     
     try:
-        from core.logging import get_logger
+        from src.core.logging import get_logger
         
         logger = get_logger("test_operations")
         
@@ -77,8 +77,8 @@ def test_error_handling():
     print("Testing error handling...")
     
     try:
-        from core.error_handling import with_error_handling, error_context
-        from core.exceptions import ProcessingError, ValidationError
+        from src.core.error_handling import with_error_handling, error_context
+        from src.core.exceptions import ProcessingError, ValidationError
         
         # Test error context
         try:
@@ -121,7 +121,7 @@ def test_configuration():
     print("Testing configuration management...")
     
     try:
-        from core.config_manager import get_config_manager, get_config
+        from src.core.config_manager import get_config_manager, get_config
         
         # Test configuration loading
         config_manager = get_config_manager()
@@ -148,7 +148,7 @@ def test_monitoring():
     print("Testing monitoring system...")
     
     try:
-        from core.monitoring import get_system_monitor
+        from src.core.monitoring import get_system_monitor
         
         monitor = get_system_monitor()
         

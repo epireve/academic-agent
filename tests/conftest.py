@@ -18,9 +18,9 @@ from datetime import datetime
 import sys
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from agents.academic.base_agent import BaseAgent, AgentMessage
-from agents.academic.communication_manager import CommunicationManager
-from agents.academic.quality_manager import QualityManager
+from src.agents.base_agent import BaseAgent, AgentMessage
+from src.agents.communication_manager import CommunicationManager
+from src.agents.quality_manager import QualityManager
 
 
 @pytest.fixture(scope="session")
@@ -389,7 +389,7 @@ def setup_test_environment(tmp_path: Path) -> None:
     logs_dir.mkdir(exist_ok=True)
     
     # Mock the logs directory path
-    with patch('agents.academic.base_agent.Path') as mock_path:
+    with patch('src.agents.base_agent.Path') as mock_path:
         mock_path.return_value = logs_dir
         yield
 

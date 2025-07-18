@@ -16,7 +16,7 @@ from typing import Dict, List, Any
 sys.path.append(str(Path(__file__).parent.parent / "academic-agent-v2" / "src"))
 
 try:
-    from processors.week_resolver import WeekResolver
+    from src.processors.week_resolver import WeekResolver
 except ImportError as e:
     print(f"Error importing WeekResolver: {e}")
     sys.exit(1)
