@@ -1,0 +1,344 @@
+# Content Management System Configuration
+# Comprehensive configuration for academic content management
+
+cms:
+  # Database configuration
+  database:
+    type: sqlite
+    path: "cms/content_database.db"
+    backup_enabled: true
+    backup_interval_hours: 24
+    vacuum_interval_days: 7
+    
+  # Storage configuration
+  storage:
+    base_path: "cms/storage"
+    versioning_enabled: true
+    compression_enabled: false
+    max_file_size_mb: 100
+    allowed_extensions:
+      - ".md"
+      - ".txt"
+      - ".pdf"
+      - ".docx"
+      - ".pptx"
+      - ".xlsx"
+      - ".jpg"
+      - ".jpeg"
+      - ".png"
+      - ".gif"
+      - ".svg"
+    
+  # Content processing configuration
+  processing:
+    auto_index_content: true
+    auto_detect_relationships: true
+    auto_quality_assessment: true
+    batch_processing_size: 10
+    processing_timeout_seconds: 300
+    
+  # Search configuration
+  search:
+    index_path: "cms/search_index"
+    rebuild_index_on_startup: false
+    full_text_search_enabled: true
+    fuzzy_search_enabled: true
+    search_result_limit: 100
+    context_size: 50
+    min_term_length: 3
+    
+    # Stop words for indexing
+    stop_words:
+      - "the"
+      - "a"
+      - "an"
+      - "and"
+      - "or"
+      - "but"
+      - "in"
+      - "on"
+      - "at"
+      - "to"
+      - "for"
+      - "of"
+      - "with"
+      - "by"
+      - "is"
+      - "are"
+      - "was"
+      - "were"
+      - "be"
+      - "been"
+      - "being"
+      - "have"
+      - "has"
+      - "had"
+      - "do"
+      - "does"
+      - "did"
+      - "will"
+      - "would"
+      - "could"
+      - "should"
+      - "may"
+      - "might"
+      - "must"
+      - "can"
+      - "this"
+      - "that"
+      - "these"
+      - "those"
+    
+  # Relationship detection configuration
+  relationships:
+    auto_detection_enabled: true
+    strength_threshold: 0.3
+    max_relationships_per_content: 50
+    
+    # Relationship type weights
+    type_weights:
+      same_week: 0.3
+      content_type_match: 0.4
+      keyword_overlap: 0.2
+      tag_overlap: 0.1
+    
+    # Content type relationship mappings
+    type_relationships:
+      lecture-transcript: 0.8
+      lecture-notes: 0.6
+      textbook-notes: 0.5
+      assignment-tutorial: 0.7
+      exam-notes: 0.4
+    
+  # Quality assessment configuration
+  quality:
+    enabled: true
+    threshold: 0.7
+    auto_assessment_on_import: true
+    criteria_weights:
+      completeness: 0.25
+      accuracy: 0.25
+      clarity: 0.20
+      structure: 0.20
+      consistency: 0.10
+    
+  # Version control configuration
+  versioning:
+    enabled: true
+    max_versions_per_content: 10
+    auto_version_on_update: true
+    compress_old_versions: true
+    
+  # Analytics configuration
+  analytics:
+    enabled: true
+    report_generation_enabled: true
+    report_retention_days: 90
+    real_time_metrics: true
+    
+    # Metrics to track
+    metrics:
+      - "content_creation_rate"
+      - "processing_success_rate"
+      - "quality_scores"
+      - "access_patterns"
+      - "relationship_density"
+      - "storage_usage"
+    
+  # Integration configuration
+  integration:
+    consolidation_agent:
+      enabled: true
+      auto_import_on_consolidation: true
+      
+    quality_manager:
+      enabled: true
+      auto_assess_new_content: true
+      
+    cross_reference_system:
+      enabled: true
+      auto_link_references: true
+    
+  # Performance configuration
+  performance:
+    cache_size: 1000
+    cache_ttl_seconds: 3600
+    database_connection_pool_size: 5
+    batch_operation_size: 100
+    
+  # Security configuration
+  security:
+    file_validation_enabled: true
+    content_sanitization_enabled: true
+    access_logging_enabled: true
+    
+  # Content types configuration
+  content_types:
+    lecture:
+      icon: "🎓"
+      color: "#3498db"
+      description: "Course lecture materials"
+      auto_extract_topics: true
+      
+    transcript:
+      icon: "📝"
+      color: "#2ecc71"
+      description: "Lecture transcripts and recordings"
+      auto_link_to_lectures: true
+      
+    notes:
+      icon: "📋"
+      color: "#f39c12"
+      description: "Study notes and summaries"
+      auto_extract_key_points: true
+      
+    textbook:
+      icon: "📚"
+      color: "#9b59b6"
+      description: "Textbook chapters and readings"
+      auto_extract_chapters: true
+      
+    assignment:
+      icon: "📄"
+      color: "#e74c3c"
+      description: "Assignments and homework"
+      auto_detect_due_dates: true
+      
+    tutorial:
+      icon: "🔧"
+      color: "#1abc9c"
+      description: "Tutorials and guides"
+      auto_extract_steps: true
+      
+    exam:
+      icon: "📊"
+      color: "#34495e"
+      description: "Exams and assessments"
+      auto_extract_questions: true
+      
+    image:
+      icon: "🖼️"
+      color: "#95a5a6"
+      description: "Images and diagrams"
+      auto_extract_text: true
+      
+    diagram:
+      icon: "📈"
+      color: "#e67e22"
+      description: "Flowcharts and diagrams"
+      auto_convert_to_text: true
+
+# Course management configuration
+courses:
+  auto_create_structure: true
+  default_structure:
+    - "lectures"
+    - "transcripts"
+    - "notes"
+    - "assignments"
+    - "tutorials"
+    - "exams"
+    - "resources"
+  
+  metadata_fields:
+    - "instructor"
+    - "department"
+    - "credits"
+    - "prerequisites"
+    - "learning_outcomes"
+    - "assessment_methods"
+    - "schedule"
+    - "location"
+
+# Reporting configuration
+reporting:
+  enabled: true
+  auto_generate_reports: true
+  report_schedule: "weekly"
+  
+  report_types:
+    content_summary:
+      enabled: true
+      frequency: "daily"
+      
+    quality_assessment:
+      enabled: true
+      frequency: "weekly"
+      
+    usage_analytics:
+      enabled: true
+      frequency: "weekly"
+      
+    relationship_analysis:
+      enabled: true
+      frequency: "monthly"
+      
+    storage_analysis:
+      enabled: true
+      frequency: "monthly"
+
+# Notification configuration
+notifications:
+  enabled: true
+  channels:
+    - "log"
+    - "file"
+  
+  events:
+    content_added:
+      enabled: true
+      level: "info"
+      
+    quality_threshold_failed:
+      enabled: true
+      level: "warning"
+      
+    processing_error:
+      enabled: true
+      level: "error"
+      
+    storage_limit_reached:
+      enabled: true
+      level: "warning"
+      threshold_mb: 1000
+
+# Logging configuration specific to CMS
+logging:
+  cms_specific:
+    level: "INFO"
+    format: "%(asctime)s - CMS - %(name)s - %(levelname)s - %(message)s"
+    file_enabled: true
+    rotation_enabled: true
+    max_file_size_mb: 10
+    backup_count: 5
+    
+  operation_logging:
+    content_operations: true
+    relationship_operations: true
+    search_operations: true
+    quality_operations: true
+    analytics_operations: true
+
+# Maintenance configuration
+maintenance:
+  auto_cleanup_enabled: true
+  cleanup_schedule: "weekly"
+  
+  cleanup_operations:
+    orphaned_files: true
+    old_versions: true
+    expired_cache: true
+    old_search_indexes: true
+    old_reports: true
+  
+  optimization:
+    database_optimization: true
+    index_optimization: true
+    storage_optimization: true
+
+# Development and debugging configuration
+development:
+  debug_mode: false
+  verbose_logging: false
+  performance_profiling: false
+  test_data_generation: false
