@@ -1,0 +1,107 @@
+# Docker ignore file for Academic Agent
+
+# Version control
+.git
+.gitignore
+.github
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env
+venv
+pip-log.txt
+pip-delete-this-directory.txt
+.tox
+.coverage
+.coverage.*
+.pytest_cache
+htmlcov
+.mypy_cache
+.black_cache
+
+# Virtual environments
+venv/
+.venv/
+ENV/
+env/
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Logs
+logs/*
+*.log
+
+# Temporary files
+tmp/
+temp/
+.tmp/
+
+# Output directories (exclude from container)
+output/
+processed/
+raw/
+
+# Test data
+tests/data/
+htmlcov/
+
+# Documentation
+docs/_build/
+
+# Development tools
+.taskmaster/
+.claude/
+marker_env/
+
+# Large binary files
+*.pdf
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.mp4
+*.avi
+*.mov
+
+# Deployment specific
+deployment/tmp/
+deployment/secrets/
+*.key
+*.pem
+*.crt
+
+# Node modules (if any)
+node_modules/
+
+# Database
+*.db
+*.sqlite3
+
+# Cache
+.cache/
+*.cache

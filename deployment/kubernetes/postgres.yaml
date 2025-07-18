@@ -1,0 +1,162 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+  namespace: academic-agent
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: fast-ssd
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: academic-agent-postgres
+  namespace: academic-agent
+  labels:
+    app: postgres
+    component: database
+spec:
+  serviceName: academic-agent-postgres
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+        component: database
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:15
+        ports:
+        - containerPort: 5432
+          name: postgres
+        env:
+        - name: POSTGRES_DB
+          value: academic_agent_prod
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: academic-agent-db-secrets
+              key: username
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: academic-agent-db-secrets
+              key: password
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
+        volumeMounts:
+        - name: postgres-storage
+          mountPath: /var/lib/postgresql/data
+        - name: init-scripts
+          mountPath: /docker-entrypoint-initdb.d
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1Gi
+          limits:
+            cpu: 2
+            memory: 4Gi
+        livenessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -U
+            - academic_agent
+            - -d
+            - academic_agent_prod
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -U
+            - academic_agent
+            - -d
+            - academic_agent_prod
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+      volumes:
+      - name: postgres-storage
+        persistentVolumeClaim:
+          claimName: postgres-pvc
+      - name: init-scripts
+        configMap:
+          name: postgres-init-scripts
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: academic-agent-postgres
+  namespace: academic-agent
+  labels:
+    app: postgres
+    component: database
+spec:
+  ports:
+  - port: 5432
+    targetPort: 5432
+    name: postgres
+  selector:
+    app: postgres
+  type: ClusterIP
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-init-scripts
+  namespace: academic-agent
+data:
+  init.sql: |
+    -- Create Grafana database
+    CREATE DATABASE grafana;
+    CREATE USER grafana WITH PASSWORD 'CHANGE_ME_IN_PRODUCTION';
+    GRANT ALL PRIVILEGES ON DATABASE grafana TO grafana;
+    
+    -- Create academic agent tables
+    CREATE TABLE IF NOT EXISTS agent_operations (
+        id SERIAL PRIMARY KEY,
+        operation_id VARCHAR(255) UNIQUE NOT NULL,
+        agent_type VARCHAR(100) NOT NULL,
+        status VARCHAR(50) NOT NULL,
+        start_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        end_time TIMESTAMP,
+        input_data JSONB,
+        output_data JSONB,
+        error_message TEXT,
+        metrics JSONB
+    );
+    
+    CREATE TABLE IF NOT EXISTS quality_metrics (
+        id SERIAL PRIMARY KEY,
+        operation_id VARCHAR(255) REFERENCES agent_operations(operation_id),
+        metric_name VARCHAR(100) NOT NULL,
+        metric_value DECIMAL(10,4) NOT NULL,
+        timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        metadata JSONB
+    );
+    
+    CREATE TABLE IF NOT EXISTS system_events (
+        id SERIAL PRIMARY KEY,
+        event_type VARCHAR(100) NOT NULL,
+        event_data JSONB NOT NULL,
+        timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        source VARCHAR(100) NOT NULL
+    );
+    
+    -- Create indexes
+    CREATE INDEX idx_agent_operations_status ON agent_operations(status);
+    CREATE INDEX idx_agent_operations_start_time ON agent_operations(start_time);
+    CREATE INDEX idx_quality_metrics_timestamp ON quality_metrics(timestamp);
+    CREATE INDEX idx_system_events_timestamp ON system_events(timestamp);
+    CREATE INDEX idx_system_events_type ON system_events(event_type);

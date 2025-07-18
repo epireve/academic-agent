@@ -1,0 +1,392 @@
+name: Academic Agent CI/CD
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+  release:
+    types: [ published ]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # Security scanning and linting
+  security:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
+
+    - name: Install security tools
+      run: |
+        python -m pip install --upgrade pip
+        pip install bandit safety semgrep trivy
+
+    - name: Run Bandit security scan
+      run: |
+        bandit -r agents/ tools/ academic-agent-v2/src/ -f json -o bandit-report.json
+        bandit -r agents/ tools/ academic-agent-v2/src/ -f txt
+
+    - name: Run Safety dependency scan
+      run: |
+        pip install -r requirements.txt
+        pip install -r academic-agent-v2/pyproject.toml || true
+        safety check --json --output safety-report.json || true
+
+    - name: Run Semgrep security scan
+      run: |
+        semgrep --config=auto agents/ tools/ academic-agent-v2/src/ --json --output=semgrep-report.json || true
+
+    - name: Upload security scan results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: security-reports
+        path: |
+          bandit-report.json
+          safety-report.json
+          semgrep-report.json
+
+  # Unit and integration tests
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+        test-type: ['unit', 'integration']
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Cache pip dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt', '**/pyproject.toml') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        cd academic-agent-v2 && pip install poetry && poetry install
+
+    - name: Create test directories
+      run: |
+        mkdir -p logs tests/data processed/{raw,markdown,metadata,analysis,outlines,notes}
+
+    - name: Run ${{ matrix.test-type }} tests
+      run: |
+        if [ "${{ matrix.test-type }}" = "unit" ]; then
+          pytest tests/unit/ -v --cov=agents --cov=tools --cov-report=xml --cov-report=term-missing
+        else
+          pytest tests/integration/ -v -m "not slow" --cov=agents --cov=tools --cov-append --cov-report=xml
+        fi
+      env:
+        GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        TESTING: true
+        DATABASE_URL: postgresql://postgres:test_password@localhost:5432/test_db
+        REDIS_URL: redis://localhost:6379/0
+
+    - name: Upload coverage reports
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        flags: ${{ matrix.test-type }}
+        name: ${{ matrix.test-type }}-${{ matrix.python-version }}
+
+  # Build and push Docker image
+  build:
+    needs: [security, test]
+    runs-on: ubuntu-latest
+    outputs:
+      image-digest: ${{ steps.build.outputs.digest }}
+      image-tag: ${{ steps.meta.outputs.tags }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Log in to Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=sha
+          type=raw,value=latest,enable={{is_default_branch}}
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+
+    - name: Build and push Docker image
+      id: build
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        platforms: linux/amd64,linux/arm64
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        build-args: |
+          BUILDTIME=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.created'] }}
+          VERSION=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}
+          REVISION=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.revision'] }}
+
+    - name: Generate SBOM
+      uses: anchore/sbom-action@v0
+      with:
+        image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+        format: spdx-json
+        output-file: sbom.spdx.json
+
+    - name: Upload SBOM
+      uses: actions/upload-artifact@v3
+      with:
+        name: sbom
+        path: sbom.spdx.json
+
+  # Container security scanning
+  container-scan:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+
+    - name: Upload Trivy scan results
+      uses: github/codeql-action/upload-sarif@v2
+      if: always()
+      with:
+        sarif_file: 'trivy-results.sarif'
+
+  # Deploy to staging
+  deploy-staging:
+    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    needs: [build, container-scan]
+    runs-on: ubuntu-latest
+    environment: staging
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Set up Kubernetes
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'v1.28.0'
+
+    - name: Update kubeconfig
+      run: |
+        aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name ${{ secrets.EKS_CLUSTER_NAME_STAGING }}
+
+    - name: Deploy to staging
+      run: |
+        # Update image tag in Kubernetes manifests
+        sed -i "s|academic-agent:latest|${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}|g" deployment/kubernetes/app.yaml
+        
+        # Apply Kubernetes manifests
+        kubectl apply -f deployment/kubernetes/namespace.yaml
+        kubectl apply -f deployment/kubernetes/secrets.yaml
+        kubectl apply -f deployment/kubernetes/postgres.yaml
+        kubectl apply -f deployment/kubernetes/redis.yaml
+        kubectl apply -f deployment/kubernetes/app.yaml
+        
+        # Wait for deployment to be ready
+        kubectl rollout status deployment/academic-agent-app -n academic-agent --timeout=600s
+
+    - name: Run smoke tests
+      run: |
+        # Wait for service to be ready
+        kubectl wait --for=condition=ready pod -l app=academic-agent -n academic-agent --timeout=300s
+        
+        # Get service URL
+        SERVICE_URL=$(kubectl get service academic-agent-service -n academic-agent -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+        
+        # Run basic health check
+        curl -f http://$SERVICE_URL/health || exit 1
+
+  # Deploy to production
+  deploy-production:
+    if: github.event_name == 'release' && github.event.action == 'published'
+    needs: [build, container-scan]
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Set up Kubernetes
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'v1.28.0'
+
+    - name: Update kubeconfig
+      run: |
+        aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name ${{ secrets.EKS_CLUSTER_NAME_PROD }}
+
+    - name: Create backup before deployment
+      run: |
+        # Create database backup
+        kubectl exec -n academic-agent deployment/academic-agent-postgres -- pg_dump -U academic_agent academic_agent_prod > backup-pre-deploy.sql
+        
+        # Upload backup to S3
+        aws s3 cp backup-pre-deploy.sql s3://${{ secrets.S3_BACKUP_BUCKET }}/pre-deploy/$(date +%Y%m%d-%H%M%S)-backup.sql
+
+    - name: Deploy to production
+      run: |
+        # Update image tag in Kubernetes manifests
+        sed -i "s|academic-agent:latest|${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}|g" deployment/kubernetes/app.yaml
+        
+        # Apply Kubernetes manifests with production configuration
+        kubectl apply -f deployment/kubernetes/namespace.yaml
+        kubectl apply -f deployment/kubernetes/secrets.yaml
+        kubectl apply -f deployment/kubernetes/postgres.yaml
+        kubectl apply -f deployment/kubernetes/redis.yaml
+        
+        # Perform rolling update
+        kubectl set image deployment/academic-agent-app academic-agent=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} -n academic-agent
+        
+        # Wait for deployment to be ready
+        kubectl rollout status deployment/academic-agent-app -n academic-agent --timeout=600s
+
+    - name: Run production health checks
+      run: |
+        # Wait for service to be ready
+        kubectl wait --for=condition=ready pod -l app=academic-agent -n academic-agent --timeout=300s
+        
+        # Get service URL
+        SERVICE_URL=$(kubectl get service academic-agent-service -n academic-agent -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+        
+        # Run comprehensive health checks
+        curl -f http://$SERVICE_URL/health || exit 1
+        curl -f http://$SERVICE_URL/ready || exit 1
+        curl -f http://$SERVICE_URL/metrics || exit 1
+
+    - name: Rollback on failure
+      if: failure()
+      run: |
+        echo "Deployment failed, initiating rollback..."
+        kubectl rollout undo deployment/academic-agent-app -n academic-agent
+        kubectl rollout status deployment/academic-agent-app -n academic-agent --timeout=300s
+
+  # Performance testing
+  performance-test:
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    needs: deploy-staging
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
+
+    - name: Install performance testing tools
+      run: |
+        pip install locust pytest-benchmark
+
+    - name: Run performance tests
+      run: |
+        # Run load tests against staging environment
+        locust -f tests/performance/load_test.py --host=${{ secrets.STAGING_URL }} --users=10 --spawn-rate=2 --run-time=300s --headless
+
+    - name: Upload performance results
+      uses: actions/upload-artifact@v3
+      with:
+        name: performance-results
+        path: performance-results.json
+
+  # Notify deployment status
+  notify:
+    if: always()
+    needs: [deploy-staging, deploy-production, performance-test]
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Notify Slack
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        text: |
+          Academic Agent Deployment Status: ${{ job.status }}
+          Branch: ${{ github.ref }}
+          Commit: ${{ github.sha }}
+          Actor: ${{ github.actor }}
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      if: always()
