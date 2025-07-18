@@ -342,6 +342,27 @@ class NonRetryableError(AcademicAgentError):
         super().__init__(message, **kwargs)
 
 
+class MemoryException(AcademicAgentError):
+    """Exception related to memory management operations."""
+    
+    def __init__(self, message: str, memory_usage: Optional[float] = None, **kwargs):
+        super().__init__(message, **kwargs)
+        self.memory_usage = memory_usage
+        if memory_usage:
+            self.add_context("memory_usage_mb", memory_usage)
+
+
+class ResourceExhaustedException(MemoryException):
+    """Exception raised when system resources are exhausted."""
+    
+    def __init__(self, message: str, **kwargs):
+        kwargs['recoverable'] = False
+        super().__init__(message, **kwargs)
+        self.add_suggestion("Free up system memory or reduce processing load")
+        self.add_suggestion("Consider increasing system memory limits")
+        self.add_suggestion("Enable memory optimization settings")
+
+
 # Exception handling utilities
 def handle_exception(
     exception: Exception,

@@ -42,6 +42,17 @@ try:
         start_monitoring,
         get_monitoring_summary
     )
+    from .memory_manager import (
+        MemoryManager,
+        MemoryPool,
+        LRUCache,
+        MemoryStats,
+        MemoryThresholds,
+        get_memory_manager,
+        shutdown_memory_manager,
+        memory_monitor,
+        memory_profile
+    )
     
     # Make key components available at package level
     __all__ = [
@@ -81,6 +92,17 @@ try:
         'get_system_monitor',
         'start_monitoring',
         'get_monitoring_summary',
+        
+        # Memory Management
+        'MemoryManager',
+        'MemoryPool',
+        'LRUCache',
+        'MemoryStats',
+        'MemoryThresholds',
+        'get_memory_manager',
+        'shutdown_memory_manager',
+        'memory_monitor',
+        'memory_profile',
     ]
 
 except ImportError as e:
