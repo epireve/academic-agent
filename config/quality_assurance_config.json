@@ -1,0 +1,284 @@
+{
+  "quality_assessment": {
+    "weights": {
+      "completeness": 0.25,
+      "formatting": 0.20,
+      "consistency": 0.20,
+      "academic_quality": 0.35
+    },
+    "thresholds": {
+      "excellent": 0.90,
+      "good": 0.75,
+      "acceptable": 0.60,
+      "poor": 0.40,
+      "minimum_pass": 0.70
+    },
+    "required_sections": {
+      "transcript": [
+        "overview",
+        "key_concepts",
+        "summary"
+      ],
+      "lecture": [
+        "introduction",
+        "main_content",
+        "conclusion"
+      ],
+      "notes": [
+        "summary",
+        "key_points"
+      ],
+      "textbook": [
+        "chapter_title",
+        "sections",
+        "summary"
+      ],
+      "comprehensive_study_notes": [
+        "high-level concept overview",
+        "executive summary",
+        "key concepts",
+        "detailed analysis",
+        "practical applications",
+        "exam focus areas",
+        "review questions"
+      ]
+    },
+    "academic_quality_indicators": {
+      "concept_introduction_weight": 0.3,
+      "examples_weight": 0.2,
+      "analysis_depth_weight": 0.3,
+      "structure_weight": 0.2,
+      "minimum_word_count": 100,
+      "optimal_word_count": 1000
+    }
+  },
+  "formatting_rules": {
+    "max_line_length": 120,
+    "header_consistency": true,
+    "list_formatting": true,
+    "image_alt_text": true,
+    "proper_emphasis": true,
+    "link_validity": false,
+    "code_block_language": true,
+    "table_formatting": true,
+    "yaml_frontmatter": true
+  },
+  "severity_levels": {
+    "critical": {
+      "weight": 0.2,
+      "examples": [
+        "broken_links",
+        "invalid_markdown",
+        "missing_critical_sections"
+      ]
+    },
+    "high": {
+      "weight": 0.1,
+      "examples": [
+        "inconsistent_headers",
+        "missing_required_sections",
+        "poor_structure"
+      ]
+    },
+    "medium": {
+      "weight": 0.05,
+      "examples": [
+        "missing_alt_text",
+        "inconsistent_emphasis",
+        "long_lines"
+      ]
+    },
+    "low": {
+      "weight": 0.02,
+      "examples": [
+        "minor_spacing_issues",
+        "capitalization_inconsistency"
+      ]
+    }
+  },
+  "auto_fix_rules": {
+    "header_formatting": {
+      "enabled": true,
+      "pattern": "^(#{1,6})([^\\s#])",
+      "replacement": "\\1 \\2"
+    },
+    "list_formatting": {
+      "enabled": true,
+      "pattern": "^([-*+])([^\\s])",
+      "replacement": "\\1 \\2"
+    },
+    "emphasis_consistency": {
+      "enabled": true,
+      "bold_style": "**",
+      "italic_style": "*"
+    },
+    "trailing_whitespace": {
+      "enabled": true,
+      "remove": true
+    },
+    "multiple_blank_lines": {
+      "enabled": true,
+      "max_consecutive": 2
+    }
+  },
+  "content_type_validation": {
+    "transcript": {
+      "required_patterns": [
+        "speaker|lecturer|instructor",
+        "time|timestamp|duration"
+      ],
+      "structure_requirements": {
+        "min_sections": 3,
+        "max_sections": 10
+      }
+    },
+    "lecture": {
+      "required_patterns": [
+        "slide|presentation",
+        "learning objectives?|goals?"
+      ],
+      "structure_requirements": {
+        "min_sections": 4,
+        "max_sections": 15
+      }
+    },
+    "comprehensive_study_notes": {
+      "required_patterns": [
+        "mermaid|diagram",
+        "executive summary",
+        "key concepts"
+      ],
+      "structure_requirements": {
+        "min_sections": 6,
+        "max_sections": 20,
+        "min_word_count": 2000
+      }
+    },
+    "textbook": {
+      "required_patterns": [
+        "chapter \\d+",
+        "figure \\d+",
+        "table \\d+"
+      ],
+      "structure_requirements": {
+        "min_sections": 5,
+        "max_sections": 25,
+        "min_word_count": 1500
+      }
+    }
+  },
+  "consistency_checks": {
+    "header_hierarchy": {
+      "enforce_sequential": true,
+      "max_skip_levels": 1
+    },
+    "bullet_style": {
+      "enforce_single_style": true,
+      "preferred_style": "-"
+    },
+    "emphasis_style": {
+      "bold_style": "**",
+      "italic_style": "*",
+      "enforce_consistency": true
+    },
+    "link_formatting": {
+      "check_title_case": true,
+      "check_url_validity": false
+    },
+    "image_references": {
+      "check_alt_text": true,
+      "check_file_exists": true,
+      "require_captions": true
+    }
+  },
+  "analytics_configuration": {
+    "quality_distribution_ranges": {
+      "excellent": [0.90, 1.00],
+      "good": [0.75, 0.90],
+      "acceptable": [0.60, 0.75],
+      "poor": [0.40, 0.60],
+      "very_poor": [0.00, 0.40]
+    },
+    "trend_analysis": {
+      "min_data_points": 5,
+      "trend_window_size": 10,
+      "significance_threshold": 0.05
+    },
+    "improvement_tracking": {
+      "track_suggestions_implemented": true,
+      "track_quality_improvements": true,
+      "calculate_roi": true
+    }
+  },
+  "integration_settings": {
+    "consolidation_integration": {
+      "assess_after_consolidation": true,
+      "quality_threshold_for_consolidation": 0.5,
+      "auto_fix_during_consolidation": false
+    },
+    "workflow_integration": {
+      "quality_gates": [
+        {
+          "stage": "post_consolidation",
+          "min_quality_score": 0.7,
+          "required_sections_complete": true
+        },
+        {
+          "stage": "pre_publication",
+          "min_quality_score": 0.8,
+          "no_critical_issues": true
+        }
+      ]
+    }
+  },
+  "reporting_configuration": {
+    "default_output_format": "json",
+    "include_detailed_analysis": true,
+    "include_improvement_suggestions": true,
+    "include_analytics": true,
+    "generate_summary_reports": true,
+    "export_formats": [
+      "json",
+      "markdown",
+      "html",
+      "csv"
+    ]
+  },
+  "performance_settings": {
+    "batch_processing": {
+      "max_concurrent_assessments": 5,
+      "chunk_size": 10,
+      "progress_reporting_interval": 5
+    },
+    "caching": {
+      "enable_content_hash_cache": true,
+      "cache_duration_hours": 24,
+      "max_cache_entries": 1000
+    },
+    "timeouts": {
+      "single_file_assessment_timeout": 30,
+      "batch_assessment_timeout": 300,
+      "auto_fix_timeout": 10
+    }
+  },
+  "logging_configuration": {
+    "quality_assessment_logs": {
+      "level": "INFO",
+      "log_file": "logs/quality_assessment.log",
+      "include_metrics": true,
+      "include_performance_data": true
+    },
+    "auto_fix_logs": {
+      "level": "INFO",
+      "log_file": "logs/auto_fix.log",
+      "log_all_changes": true,
+      "include_before_after": false
+    },
+    "analytics_logs": {
+      "level": "INFO",
+      "log_file": "logs/quality_analytics.log",
+      "log_trend_analysis": true,
+      "log_improvement_tracking": true
+    }
+  }
+}
