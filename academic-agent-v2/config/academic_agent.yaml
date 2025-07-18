@@ -1,0 +1,162 @@
+# Academic Agent v2 Configuration
+# This file configures the simplified academic agent system
+
+# Agent identification
+agent_id: "academic_agent_v2"
+agent_type: "academic"
+version: "2.0"
+
+# Working directories
+working_directory: "."
+output_directory: "output"
+temp_directory: "temp"
+state_file: "state/academic_agent_v2_state.json"
+
+# State persistence settings
+enable_state_persistence: true
+state_save_interval: 300.0  # Save state every 5 minutes
+enable_plugin_hot_reload: false
+
+# Plugin configurations
+plugins:
+  PDFProcessorPlugin:
+    name: "PDFProcessorPlugin"
+    enabled: true
+    priority: 1
+    timeout: 600.0
+    max_retries: 3
+    config:
+      use_gpu: true
+      extract_images: true
+      max_pages: null
+      batch_size: 1
+      output_format: "markdown"
+      
+  ContentAnalysisPlugin:
+    name: "ContentAnalysisPlugin"
+    enabled: true
+    priority: 2
+    timeout: 300.0
+    max_retries: 2
+    config:
+      enable_advanced_analysis: true
+      quality_threshold: 0.7
+      enable_semantic_analysis: false
+      min_word_count: 100
+      analyze_structure: true
+      extract_keywords: true
+
+# Task planning configuration
+task_planning:
+  max_concurrent_tasks: 3
+  task_timeout: 3600.0
+  enable_dependency_resolution: true
+  priority_scheduling: true
+  retry_failed_tasks: true
+  max_task_retries: 2
+
+# Quality management configuration
+quality:
+  quality_threshold: 0.7
+  enable_quality_checks: true
+  quality_improvement_cycles: 3
+  auto_reject_low_quality: false
+  quality_metrics:
+    - "completeness"
+    - "accuracy"
+    - "clarity"
+    - "structure"
+
+# Monitoring and metrics configuration
+monitoring:
+  enable_monitoring: true
+  metrics_collection_interval: 60.0
+  enable_detailed_logging: true
+  performance_alerts: true
+  alert_thresholds:
+    task_failure_rate: 0.1
+    average_processing_time: 300.0
+    memory_usage: 0.8
+    cpu_usage: 0.9
+
+# Logging configuration (integrated with core logging system)
+logging:
+  level: "INFO"
+  enable_file_logging: true
+  enable_console_logging: true
+  log_directory: "logs"
+  max_log_file_size: 10485760  # 10MB
+  backup_count: 5
+  log_format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+# Integration with existing systems
+integration:
+  # Use the v2 PDF processor
+  pdf_processor:
+    backend: "marker"
+    device: "auto"  # auto-detect best device
+    
+  # Use the v2 configuration system
+  config_manager:
+    use_yaml_config: true
+    config_validation: true
+    
+  # Use the v2 logging system
+  logging_system:
+    structured_logging: true
+    error_handling: true
+    monitoring_integration: true
+
+# Workflow templates
+workflow_templates:
+  pdf_processing:
+    description: "Standard PDF processing workflow"
+    tasks:
+      - task_type: "pdf_processing"
+        plugin: "PDFProcessorPlugin"
+        priority: 1
+      - task_type: "content_analysis"
+        plugin: "ContentAnalysisPlugin"
+        priority: 2
+        dependencies: ["pdf_processing"]
+        
+  content_analysis_only:
+    description: "Content analysis workflow for existing text"
+    tasks:
+      - task_type: "content_analysis"
+        plugin: "ContentAnalysisPlugin"
+        priority: 1
+
+# Performance optimization
+performance:
+  enable_caching: true
+  cache_directory: "cache"
+  max_cache_size: 1073741824  # 1GB
+  enable_parallel_processing: true
+  max_worker_threads: 4
+
+# Error handling and recovery
+error_handling:
+  enable_automatic_recovery: true
+  max_recovery_attempts: 3
+  recovery_delay: 10.0  # seconds
+  enable_error_reporting: true
+  error_log_retention: 30  # days
+
+# Security settings
+security:
+  enable_input_validation: true
+  sanitize_file_paths: true
+  max_file_size: 104857600  # 100MB
+  allowed_file_types:
+    - ".pdf"
+    - ".txt"
+    - ".md"
+    - ".docx"
+
+# Development and debugging
+development:
+  debug_mode: false
+  enable_profiling: false
+  verbose_logging: false
+  test_mode: false
