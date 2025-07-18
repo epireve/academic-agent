@@ -57,7 +57,7 @@
   },
   "discrepancy_detection": {
     "expected_discrepancies": "{'missing_weeks', 'suspicious_gap'}",
-    "found_discrepancies": "{'missing_weeks', 'duplicate_weeks'}",
+    "found_discrepancies": "{'duplicate_weeks', 'missing_weeks'}",
     "discrepancy_details": [
       {
         "type": "missing_weeks",
@@ -75,59 +75,59 @@
         "weeks": {
           "2": [
             {
-              "file_path": "/var/folders/cv/w32jvw6d1cl53z3qm_hjsnrc0000gn/T/week_resolver_test_7jj4iw71/textbook/chapter_2.md",
+              "file_path": "/var/folders/cv/w32jvw6d1cl53z3qm_hjsnrc0000gn/T/week_resolver_test_2xjhod7s/textbook/chapter_2.md",
               "detection": "WeekDetection(week_number=2, confidence=0.95, source='metadata', pattern_matched='yaml_frontmatter', context='YAML frontmatter week field: 2', position=0)"
             },
             {
-              "file_path": "/var/folders/cv/w32jvw6d1cl53z3qm_hjsnrc0000gn/T/week_resolver_test_7jj4iw71/notes/week_02_notes.md",
+              "file_path": "/var/folders/cv/w32jvw6d1cl53z3qm_hjsnrc0000gn/T/week_resolver_test_2xjhod7s/notes/week_02_notes.md",
               "detection": "WeekDetection(week_number=2, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_02' in filename\", position=0)"
             },
             {
-              "file_path": "/var/folders/cv/w32jvw6d1cl53z3qm_hjsnrc0000gn/T/week_resolver_test_7jj4iw71/lectures/lecture_2.md",
+              "file_path": "/var/folders/cv/w32jvw6d1cl53z3qm_hjsnrc0000gn/T/week_resolver_test_2xjhod7s/lectures/lecture_2.md",
               "detection": "WeekDetection(week_number=2, confidence=0.95, source='metadata', pattern_matched='yaml_frontmatter', context='YAML frontmatter week field: 2', position=0)"
             }
           ],
           "1": [
             {
-              "file_path": "/var/folders/cv/w32jvw6d1cl53z3qm_hjsnrc0000gn/T/week_resolver_test_7jj4iw71/textbook/chapter_1.md",
+              "file_path": "/var/folders/cv/w32jvw6d1cl53z3qm_hjsnrc0000gn/T/week_resolver_test_2xjhod7s/textbook/chapter_1.md",
               "detection": "WeekDetection(week_number=1, confidence=0.95, source='metadata', pattern_matched='yaml_frontmatter', context='YAML frontmatter week field: 1', position=0)"
             },
             {
-              "file_path": "/var/folders/cv/w32jvw6d1cl53z3qm_hjsnrc0000gn/T/week_resolver_test_7jj4iw71/notes/week_01_notes.md",
+              "file_path": "/var/folders/cv/w32jvw6d1cl53z3qm_hjsnrc0000gn/T/week_resolver_test_2xjhod7s/notes/week_01_notes.md",
               "detection": "WeekDetection(week_number=1, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_01' in filename\", position=0)"
             },
             {
-              "file_path": "/var/folders/cv/w32jvw6d1cl53z3qm_hjsnrc0000gn/T/week_resolver_test_7jj4iw71/lectures/lecture_1.md",
+              "file_path": "/var/folders/cv/w32jvw6d1cl53z3qm_hjsnrc0000gn/T/week_resolver_test_2xjhod7s/lectures/lecture_1.md",
               "detection": "WeekDetection(week_number=1, confidence=0.95, source='metadata', pattern_matched='yaml_frontmatter', context='YAML frontmatter week field: 1', position=0)"
             }
           ],
           "14": [
             {
-              "file_path": "/var/folders/cv/w32jvw6d1cl53z3qm_hjsnrc0000gn/T/week_resolver_test_7jj4iw71/transcripts/week-14.md",
+              "file_path": "/var/folders/cv/w32jvw6d1cl53z3qm_hjsnrc0000gn/T/week_resolver_test_2xjhod7s/transcripts/week-14.md",
               "detection": "WeekDetection(week_number=14, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week-14' in filename\", position=0)"
             },
             {
-              "file_path": "/var/folders/cv/w32jvw6d1cl53z3qm_hjsnrc0000gn/T/week_resolver_test_7jj4iw71/mixed/final_lecture.md",
+              "file_path": "/var/folders/cv/w32jvw6d1cl53z3qm_hjsnrc0000gn/T/week_resolver_test_2xjhod7s/mixed/final_lecture.md",
               "detection": "WeekDetection(week_number=14, confidence=0.95, source='metadata', pattern_matched='yaml_frontmatter', context='YAML frontmatter week field: 14', position=0)"
             }
           ],
           "6": [
             {
-              "file_path": "/var/folders/cv/w32jvw6d1cl53z3qm_hjsnrc0000gn/T/week_resolver_test_7jj4iw71/transcripts/week-6.md",
+              "file_path": "/var/folders/cv/w32jvw6d1cl53z3qm_hjsnrc0000gn/T/week_resolver_test_2xjhod7s/transcripts/week-6.md",
               "detection": "WeekDetection(week_number=6, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week-6' in filename\", position=0)"
             },
             {
-              "file_path": "/var/folders/cv/w32jvw6d1cl53z3qm_hjsnrc0000gn/T/week_resolver_test_7jj4iw71/no_week_info/random_content.md",
+              "file_path": "/var/folders/cv/w32jvw6d1cl53z3qm_hjsnrc0000gn/T/week_resolver_test_2xjhod7s/no_week_info/random_content.md",
               "detection": "WeekDetection(week_number=6, confidence=0.7, source='path', pattern_matched='w(\\\\d+)', context=\"Directory name 'w32jvw6d1cl53z3qm_hjsnrc0000gn' contains week 6\", position=0)"
             }
           ],
           "3": [
             {
-              "file_path": "/var/folders/cv/w32jvw6d1cl53z3qm_hjsnrc0000gn/T/week_resolver_test_7jj4iw71/notes/w3_summary.md",
+              "file_path": "/var/folders/cv/w32jvw6d1cl53z3qm_hjsnrc0000gn/T/week_resolver_test_2xjhod7s/notes/w3_summary.md",
               "detection": "WeekDetection(week_number=3, confidence=0.95, source='filename', pattern_matched='w(\\\\d+)', context=\"Matched 'w3' in filename\", position=0)"
             },
             {
-              "file_path": "/var/folders/cv/w32jvw6d1cl53z3qm_hjsnrc0000gn/T/week_resolver_test_7jj4iw71/lectures/lecture_3.md",
+              "file_path": "/var/folders/cv/w32jvw6d1cl53z3qm_hjsnrc0000gn/T/week_resolver_test_2xjhod7s/lectures/lecture_3.md",
               "detection": "WeekDetection(week_number=3, confidence=0.95, source='metadata', pattern_matched='yaml_frontmatter', context='YAML frontmatter week field: 3', position=0)"
             }
           ]
@@ -157,6 +157,6 @@
     "total_test_categories": 4,
     "passed_categories": 3,
     "overall_success": false,
-    "test_data_location": "/var/folders/cv/w32jvw6d1cl53z3qm_hjsnrc0000gn/T/week_resolver_test_7jj4iw71"
+    "test_data_location": "/var/folders/cv/w32jvw6d1cl53z3qm_hjsnrc0000gn/T/week_resolver_test_2xjhod7s"
   }
 }
