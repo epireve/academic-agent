@@ -1,0 +1,979 @@
+{
+  "current_state": {
+    "total_files_analyzed": 54,
+    "path_analysis": {
+      "/Users/invoture/dev.local/academic-agent/output/sra/transcripts/markdown": [
+        {
+          "file": "week-10.md",
+          "week": 10,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week-14.md",
+          "week": 14,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week-11.md",
+          "week": 11,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week-12.md",
+          "week": 12,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week-6.md",
+          "week": 6,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week-9.md",
+          "week": 9,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week-8.md",
+          "week": 8,
+          "confidence": 0.95,
+          "source": "filename"
+        }
+      ],
+      "/Users/invoture/dev.local/academic-agent/output/sra/transcripts/standardized": [
+        {
+          "file": "week_06_transcript.md",
+          "week": 6,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_02_transcript.md",
+          "week": 2,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_01_transcript.md",
+          "week": 1,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_08_transcript.md",
+          "week": 8,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "transcript_discovery_report.md",
+          "week": 10,
+          "confidence": 0.85,
+          "source": "content"
+        },
+        {
+          "file": "week_09_transcript.md",
+          "week": 9,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_04_transcript.md",
+          "week": 4,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_10_transcript.md",
+          "week": 10,
+          "confidence": 0.95,
+          "source": "filename"
+        }
+      ],
+      "/Users/invoture/dev.local/academic-agent/output/sra/integrated_notes": [
+        {
+          "file": "week_05_integrated_notes.md",
+          "week": 5,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_04_integrated_notes.md",
+          "week": 4,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_07_integrated_notes.md",
+          "week": 7,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_06_integrated_notes.md",
+          "week": 6,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_01_integrated_notes.md",
+          "week": 1,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_02_integrated_notes.md",
+          "week": 2,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_03_integrated_notes.md",
+          "week": 3,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_12_integrated_notes.md",
+          "week": 12,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_13_integrated_notes.md",
+          "week": 13,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_09_integrated_notes.md",
+          "week": 9,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_10_integrated_notes.md",
+          "week": 10,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_08_integrated_notes.md",
+          "week": 8,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_11_integrated_notes.md",
+          "week": 11,
+          "confidence": 0.95,
+          "source": "filename"
+        }
+      ],
+      "/Users/invoture/dev.local/academic-agent/output/sra/enhanced_integrated_notes": [
+        {
+          "file": "week_03_enhanced_integrated_notes.md",
+          "week": 3,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_08_enhanced_integrated_notes.md",
+          "week": 8,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_06_enhanced_integrated_notes.md",
+          "week": 6,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_13_enhanced_integrated_notes.md",
+          "week": 13,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_10_enhanced_integrated_notes.md",
+          "week": 10,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_05_enhanced_integrated_notes.md",
+          "week": 5,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_04_enhanced_integrated_notes.md",
+          "week": 4,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_11_enhanced_integrated_notes.md",
+          "week": 11,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_12_enhanced_integrated_notes.md",
+          "week": 12,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_07_enhanced_integrated_notes.md",
+          "week": 7,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_09_enhanced_integrated_notes.md",
+          "week": 9,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_01_enhanced_integrated_notes.md",
+          "week": 1,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_02_enhanced_integrated_notes.md",
+          "week": 2,
+          "confidence": 0.95,
+          "source": "filename"
+        }
+      ],
+      "/Users/invoture/dev.local/academic-agent/output/sra/ai_enhanced_study_notes": [
+        {
+          "file": "week_04_comprehensive_study_notes.md",
+          "week": 4,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_11_comprehensive_study_notes.md",
+          "week": 11,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_12_comprehensive_study_notes.md",
+          "week": 12,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_07_comprehensive_study_notes.md",
+          "week": 7,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_09_comprehensive_study_notes.md",
+          "week": 9,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_01_comprehensive_study_notes.md",
+          "week": 1,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_02_comprehensive_study_notes.md",
+          "week": 2,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_03_comprehensive_study_notes.md",
+          "week": 3,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_08_comprehensive_study_notes.md",
+          "week": 8,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_06_comprehensive_study_notes.md",
+          "week": 6,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_13_comprehensive_study_notes.md",
+          "week": 13,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_10_comprehensive_study_notes.md",
+          "week": 10,
+          "confidence": 0.95,
+          "source": "filename"
+        },
+        {
+          "file": "week_05_comprehensive_study_notes.md",
+          "week": 5,
+          "confidence": 0.95,
+          "source": "filename"
+        }
+      ]
+    },
+    "discrepancies": [
+      {
+        "type": "missing_weeks",
+        "weeks": [
+          15
+        ],
+        "description": "Missing weeks: [15]",
+        "severity": "medium"
+      },
+      {
+        "type": "duplicate_weeks",
+        "weeks": {
+          "10": [
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/transcripts/markdown/week-10.md",
+              "detection": "WeekDetection(week_number=10, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week-10' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/transcripts/standardized/transcript_discovery_report.md",
+              "detection": "WeekDetection(week_number=10, confidence=0.85, source='content', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Found 'week-10' in content header\", position=293)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/transcripts/standardized/week_10_transcript.md",
+              "detection": "WeekDetection(week_number=10, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_10' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/integrated_notes/week_10_integrated_notes.md",
+              "detection": "WeekDetection(week_number=10, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_10' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/enhanced_integrated_notes/week_10_enhanced_integrated_notes.md",
+              "detection": "WeekDetection(week_number=10, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_10' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/ai_enhanced_study_notes/week_10_comprehensive_study_notes.md",
+              "detection": "WeekDetection(week_number=10, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_10' in filename\", position=0)"
+            }
+          ],
+          "11": [
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/transcripts/markdown/week-11.md",
+              "detection": "WeekDetection(week_number=11, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week-11' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/integrated_notes/week_11_integrated_notes.md",
+              "detection": "WeekDetection(week_number=11, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_11' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/enhanced_integrated_notes/week_11_enhanced_integrated_notes.md",
+              "detection": "WeekDetection(week_number=11, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_11' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/ai_enhanced_study_notes/week_11_comprehensive_study_notes.md",
+              "detection": "WeekDetection(week_number=11, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_11' in filename\", position=0)"
+            }
+          ],
+          "12": [
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/transcripts/markdown/week-12.md",
+              "detection": "WeekDetection(week_number=12, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week-12' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/integrated_notes/week_12_integrated_notes.md",
+              "detection": "WeekDetection(week_number=12, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_12' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/enhanced_integrated_notes/week_12_enhanced_integrated_notes.md",
+              "detection": "WeekDetection(week_number=12, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_12' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/ai_enhanced_study_notes/week_12_comprehensive_study_notes.md",
+              "detection": "WeekDetection(week_number=12, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_12' in filename\", position=0)"
+            }
+          ],
+          "6": [
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/transcripts/markdown/week-6.md",
+              "detection": "WeekDetection(week_number=6, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week-6' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/transcripts/standardized/week_06_transcript.md",
+              "detection": "WeekDetection(week_number=6, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_06' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/integrated_notes/week_06_integrated_notes.md",
+              "detection": "WeekDetection(week_number=6, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_06' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/enhanced_integrated_notes/week_06_enhanced_integrated_notes.md",
+              "detection": "WeekDetection(week_number=6, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_06' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/ai_enhanced_study_notes/week_06_comprehensive_study_notes.md",
+              "detection": "WeekDetection(week_number=6, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_06' in filename\", position=0)"
+            }
+          ],
+          "9": [
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/transcripts/markdown/week-9.md",
+              "detection": "WeekDetection(week_number=9, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week-9' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/transcripts/standardized/week_09_transcript.md",
+              "detection": "WeekDetection(week_number=9, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_09' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/integrated_notes/week_09_integrated_notes.md",
+              "detection": "WeekDetection(week_number=9, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_09' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/enhanced_integrated_notes/week_09_enhanced_integrated_notes.md",
+              "detection": "WeekDetection(week_number=9, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_09' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/ai_enhanced_study_notes/week_09_comprehensive_study_notes.md",
+              "detection": "WeekDetection(week_number=9, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_09' in filename\", position=0)"
+            }
+          ],
+          "8": [
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/transcripts/markdown/week-8.md",
+              "detection": "WeekDetection(week_number=8, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week-8' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/transcripts/standardized/week_08_transcript.md",
+              "detection": "WeekDetection(week_number=8, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_08' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/integrated_notes/week_08_integrated_notes.md",
+              "detection": "WeekDetection(week_number=8, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_08' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/enhanced_integrated_notes/week_08_enhanced_integrated_notes.md",
+              "detection": "WeekDetection(week_number=8, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_08' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/ai_enhanced_study_notes/week_08_comprehensive_study_notes.md",
+              "detection": "WeekDetection(week_number=8, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_08' in filename\", position=0)"
+            }
+          ],
+          "2": [
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/transcripts/standardized/week_02_transcript.md",
+              "detection": "WeekDetection(week_number=2, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_02' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/integrated_notes/week_02_integrated_notes.md",
+              "detection": "WeekDetection(week_number=2, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_02' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/enhanced_integrated_notes/week_02_enhanced_integrated_notes.md",
+              "detection": "WeekDetection(week_number=2, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_02' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/ai_enhanced_study_notes/week_02_comprehensive_study_notes.md",
+              "detection": "WeekDetection(week_number=2, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_02' in filename\", position=0)"
+            }
+          ],
+          "1": [
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/transcripts/standardized/week_01_transcript.md",
+              "detection": "WeekDetection(week_number=1, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_01' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/integrated_notes/week_01_integrated_notes.md",
+              "detection": "WeekDetection(week_number=1, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_01' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/enhanced_integrated_notes/week_01_enhanced_integrated_notes.md",
+              "detection": "WeekDetection(week_number=1, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_01' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/ai_enhanced_study_notes/week_01_comprehensive_study_notes.md",
+              "detection": "WeekDetection(week_number=1, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_01' in filename\", position=0)"
+            }
+          ],
+          "4": [
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/transcripts/standardized/week_04_transcript.md",
+              "detection": "WeekDetection(week_number=4, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_04' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/integrated_notes/week_04_integrated_notes.md",
+              "detection": "WeekDetection(week_number=4, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_04' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/enhanced_integrated_notes/week_04_enhanced_integrated_notes.md",
+              "detection": "WeekDetection(week_number=4, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_04' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/ai_enhanced_study_notes/week_04_comprehensive_study_notes.md",
+              "detection": "WeekDetection(week_number=4, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_04' in filename\", position=0)"
+            }
+          ],
+          "5": [
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/integrated_notes/week_05_integrated_notes.md",
+              "detection": "WeekDetection(week_number=5, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_05' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/enhanced_integrated_notes/week_05_enhanced_integrated_notes.md",
+              "detection": "WeekDetection(week_number=5, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_05' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/ai_enhanced_study_notes/week_05_comprehensive_study_notes.md",
+              "detection": "WeekDetection(week_number=5, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_05' in filename\", position=0)"
+            }
+          ],
+          "7": [
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/integrated_notes/week_07_integrated_notes.md",
+              "detection": "WeekDetection(week_number=7, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_07' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/enhanced_integrated_notes/week_07_enhanced_integrated_notes.md",
+              "detection": "WeekDetection(week_number=7, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_07' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/ai_enhanced_study_notes/week_07_comprehensive_study_notes.md",
+              "detection": "WeekDetection(week_number=7, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_07' in filename\", position=0)"
+            }
+          ],
+          "3": [
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/integrated_notes/week_03_integrated_notes.md",
+              "detection": "WeekDetection(week_number=3, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_03' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/enhanced_integrated_notes/week_03_enhanced_integrated_notes.md",
+              "detection": "WeekDetection(week_number=3, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_03' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/ai_enhanced_study_notes/week_03_comprehensive_study_notes.md",
+              "detection": "WeekDetection(week_number=3, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_03' in filename\", position=0)"
+            }
+          ],
+          "13": [
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/integrated_notes/week_13_integrated_notes.md",
+              "detection": "WeekDetection(week_number=13, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_13' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/enhanced_integrated_notes/week_13_enhanced_integrated_notes.md",
+              "detection": "WeekDetection(week_number=13, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_13' in filename\", position=0)"
+            },
+            {
+              "file_path": "/Users/invoture/dev.local/academic-agent/output/sra/ai_enhanced_study_notes/week_13_comprehensive_study_notes.md",
+              "detection": "WeekDetection(week_number=13, confidence=0.95, source='filename', pattern_matched='week[-_\\\\s]*(\\\\d+)', context=\"Matched 'week_13' in filename\", position=0)"
+            }
+          ]
+        },
+        "description": "Duplicate weeks found: [10, 11, 12, 6, 9, 8, 2, 1, 4, 5, 7, 3, 13]",
+        "severity": "medium"
+      }
+    ],
+    "week_distribution": {
+      "10": [
+        "week-10.md",
+        "transcript_discovery_report.md",
+        "week_10_transcript.md",
+        "week_10_integrated_notes.md",
+        "week_10_enhanced_integrated_notes.md",
+        "week_10_comprehensive_study_notes.md"
+      ],
+      "14": [
+        "week-14.md"
+      ],
+      "11": [
+        "week-11.md",
+        "week_11_integrated_notes.md",
+        "week_11_enhanced_integrated_notes.md",
+        "week_11_comprehensive_study_notes.md"
+      ],
+      "12": [
+        "week-12.md",
+        "week_12_integrated_notes.md",
+        "week_12_enhanced_integrated_notes.md",
+        "week_12_comprehensive_study_notes.md"
+      ],
+      "6": [
+        "week-6.md",
+        "week_06_transcript.md",
+        "week_06_integrated_notes.md",
+        "week_06_enhanced_integrated_notes.md",
+        "week_06_comprehensive_study_notes.md"
+      ],
+      "9": [
+        "week-9.md",
+        "week_09_transcript.md",
+        "week_09_integrated_notes.md",
+        "week_09_enhanced_integrated_notes.md",
+        "week_09_comprehensive_study_notes.md"
+      ],
+      "8": [
+        "week-8.md",
+        "week_08_transcript.md",
+        "week_08_integrated_notes.md",
+        "week_08_enhanced_integrated_notes.md",
+        "week_08_comprehensive_study_notes.md"
+      ],
+      "2": [
+        "week_02_transcript.md",
+        "week_02_integrated_notes.md",
+        "week_02_enhanced_integrated_notes.md",
+        "week_02_comprehensive_study_notes.md"
+      ],
+      "1": [
+        "week_01_transcript.md",
+        "week_01_integrated_notes.md",
+        "week_01_enhanced_integrated_notes.md",
+        "week_01_comprehensive_study_notes.md"
+      ],
+      "4": [
+        "week_04_transcript.md",
+        "week_04_integrated_notes.md",
+        "week_04_enhanced_integrated_notes.md",
+        "week_04_comprehensive_study_notes.md"
+      ],
+      "5": [
+        "week_05_integrated_notes.md",
+        "week_05_enhanced_integrated_notes.md",
+        "week_05_comprehensive_study_notes.md"
+      ],
+      "7": [
+        "week_07_integrated_notes.md",
+        "week_07_enhanced_integrated_notes.md",
+        "week_07_comprehensive_study_notes.md"
+      ],
+      "3": [
+        "week_03_integrated_notes.md",
+        "week_03_enhanced_integrated_notes.md",
+        "week_03_comprehensive_study_notes.md"
+      ],
+      "13": [
+        "week_13_integrated_notes.md",
+        "week_13_enhanced_integrated_notes.md",
+        "week_13_comprehensive_study_notes.md"
+      ]
+    },
+    "missing_weeks": [
+      15
+    ],
+    "detected_weeks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ]
+  },
+  "week_13_14_demo": {
+    "week_14_files": [
+      "/Users/invoture/dev.local/academic-agent/output/sra/transcripts/markdown/week-14.md"
+    ],
+    "resolution_applied": false,
+    "recommendation": "Use --fix-week-13-14 flag to apply automatic resolution"
+  },
+  "resolution_preview": {
+    "total_files": 54,
+    "files_to_change": 38,
+    "files_unchanged": 16,
+    "changes": [
+      {
+        "file": "week-10.md",
+        "original_week": 10,
+        "resolved_week": 11,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week-14.md",
+        "original_week": 14,
+        "resolved_week": 13,
+        "method": "manual_override",
+        "confidence": 1.0
+      },
+      {
+        "file": "week-8.md",
+        "original_week": 8,
+        "resolved_week": 9,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_06_transcript.md",
+        "original_week": 6,
+        "resolved_week": 7,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_02_transcript.md",
+        "original_week": 2,
+        "resolved_week": 3,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_01_transcript.md",
+        "original_week": 1,
+        "resolved_week": 2,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_08_transcript.md",
+        "original_week": 8,
+        "resolved_week": 9,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "transcript_discovery_report.md",
+        "original_week": 10,
+        "resolved_week": 2,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_09_transcript.md",
+        "original_week": 9,
+        "resolved_week": 10,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_04_transcript.md",
+        "original_week": 4,
+        "resolved_week": 5,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_10_transcript.md",
+        "original_week": 10,
+        "resolved_week": 11,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_05_integrated_notes.md",
+        "original_week": 5,
+        "resolved_week": 6,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_04_integrated_notes.md",
+        "original_week": 4,
+        "resolved_week": 5,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_07_integrated_notes.md",
+        "original_week": 7,
+        "resolved_week": 8,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_06_integrated_notes.md",
+        "original_week": 6,
+        "resolved_week": 7,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_01_integrated_notes.md",
+        "original_week": 1,
+        "resolved_week": 2,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_02_integrated_notes.md",
+        "original_week": 2,
+        "resolved_week": 3,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_03_integrated_notes.md",
+        "original_week": 3,
+        "resolved_week": 4,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_12_integrated_notes.md",
+        "original_week": 12,
+        "resolved_week": 13,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_13_integrated_notes.md",
+        "original_week": 13,
+        "resolved_week": 14,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_09_integrated_notes.md",
+        "original_week": 9,
+        "resolved_week": 10,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_10_integrated_notes.md",
+        "original_week": 10,
+        "resolved_week": 11,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_08_integrated_notes.md",
+        "original_week": 8,
+        "resolved_week": 9,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_11_integrated_notes.md",
+        "original_week": 11,
+        "resolved_week": 12,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_03_enhanced_integrated_notes.md",
+        "original_week": 3,
+        "resolved_week": 4,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_08_enhanced_integrated_notes.md",
+        "original_week": 8,
+        "resolved_week": 9,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_06_enhanced_integrated_notes.md",
+        "original_week": 6,
+        "resolved_week": 7,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_13_enhanced_integrated_notes.md",
+        "original_week": 13,
+        "resolved_week": 14,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_10_enhanced_integrated_notes.md",
+        "original_week": 10,
+        "resolved_week": 11,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_05_enhanced_integrated_notes.md",
+        "original_week": 5,
+        "resolved_week": 6,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_04_enhanced_integrated_notes.md",
+        "original_week": 4,
+        "resolved_week": 5,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_11_enhanced_integrated_notes.md",
+        "original_week": 11,
+        "resolved_week": 12,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_12_enhanced_integrated_notes.md",
+        "original_week": 12,
+        "resolved_week": 13,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_07_enhanced_integrated_notes.md",
+        "original_week": 7,
+        "resolved_week": 8,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_09_enhanced_integrated_notes.md",
+        "original_week": 9,
+        "resolved_week": 10,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_01_enhanced_integrated_notes.md",
+        "original_week": 1,
+        "resolved_week": 2,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_02_enhanced_integrated_notes.md",
+        "original_week": 2,
+        "resolved_week": 3,
+        "method": "content_analysis",
+        "confidence": 0.75
+      },
+      {
+        "file": "week_09_comprehensive_study_notes.md",
+        "original_week": 9,
+        "resolved_week": 10,
+        "method": "content_analysis",
+        "confidence": 0.75
+      }
+    ]
+  }
+}

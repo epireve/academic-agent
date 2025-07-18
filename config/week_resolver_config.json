@@ -1,0 +1,133 @@
+{
+  "confidence_thresholds": {
+    "high": 0.9,
+    "medium": 0.7,
+    "low": 0.5,
+    "minimum": 0.3
+  },
+  "resolution_strategies": {
+    "gap_filling": true,
+    "content_analysis": true,
+    "sequential_inference": true,
+    "manual_override": true
+  },
+  "academic_calendar": {
+    "semester_weeks": 15,
+    "valid_range": [1, 15],
+    "common_gaps": [13],
+    "holiday_weeks": [],
+    "exam_weeks": [14, 15]
+  },
+  "manual_overrides": {
+    "week-14.md": 13,
+    "week_14_transcript.md": 13,
+    "week-14_class_notes.md": 13
+  },
+  "content_mapping": {
+    "enable": true,
+    "similarity_threshold": 0.8,
+    "topic_continuity_weight": 0.3,
+    "sequential_analysis": true
+  },
+  "week_patterns": {
+    "explicit_week": {
+      "patterns": [
+        "week[-_\\s]*(\\d+)",
+        "w(\\d+)",
+        "(\\d+)[-_\\s]*week"
+      ],
+      "confidence": 0.95
+    },
+    "lecture_number": {
+      "patterns": [
+        "lecture[-_\\s]*(\\d+)",
+        "class[-_\\s]*(\\d+)",
+        "session[-_\\s]*(\\d+)"
+      ],
+      "confidence": 0.85
+    },
+    "ordinal": {
+      "patterns": [
+        "(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|eleventh|twelfth|thirteenth|fourteenth|fifteenth)",
+        "(1st|2nd|3rd|4th|5th|6th|7th|8th|9th|10th|11th|12th|13th|14th|15th)"
+      ],
+      "confidence": 0.75
+    }
+  },
+  "content_patterns": {
+    "topic_markers": [
+      "chapter[-_\\s]*(\\d+)",
+      "topic[-_\\s]*(\\d+)",
+      "part[-_\\s]*(\\d+)"
+    ],
+    "schedule_indicators": [
+      "week[-_\\s]*(\\d+)[-_\\s]*:",
+      "week[-_\\s]*(\\d+)[-_\\s]*-",
+      "week[-_\\s]*(\\d+)[-_\\s]*\\."
+    ]
+  },
+  "resolution_rules": {
+    "gap_13_14_issue": {
+      "description": "Common issue where week 13 is missing but week 14 exists",
+      "pattern": "missing_13_has_14",
+      "action": "rename_14_to_13",
+      "confidence_boost": 0.2
+    },
+    "sequential_numbering": {
+      "description": "Ensure sequential week numbering with no gaps",
+      "enabled": true,
+      "fill_gaps": false,
+      "report_only": true
+    },
+    "duplicate_resolution": {
+      "strategy": "highest_confidence",
+      "backup_duplicates": true,
+      "merge_content": false
+    }
+  },
+  "naming_conventions": {
+    "output_format": "week_{week_number:02d}_{content_type}",
+    "preserve_descriptors": true,
+    "standardize_separators": true,
+    "lowercase_extensions": true
+  },
+  "topic_mapping": {
+    "week_1": ["introduction", "overview", "course_outline"],
+    "week_2": ["risk_basics", "fundamentals", "definitions"],
+    "week_3": ["project_definition", "scope", "planning"],
+    "week_4": ["preparation", "methodology", "approach"],
+    "week_5": ["data_gathering", "collection", "sources"],
+    "week_6": ["administrative_data", "organizational", "policies"],
+    "week_7": ["technical_data", "systems", "infrastructure"],
+    "week_8": ["physical_data", "facilities", "environment"],
+    "week_9": ["risk_analysis", "assessment", "evaluation"],
+    "week_10": ["risk_mitigation", "controls", "countermeasures"],
+    "week_11": ["reporting", "documentation", "communication"],
+    "week_12": ["project_management", "coordination", "oversight"],
+    "week_13": ["approaches", "methodologies", "frameworks", "final_concepts"],
+    "week_14": ["exam_prep", "review", "final_lecture", "q_and_a"],
+    "week_15": ["exams", "assessment", "final_evaluation"]
+  },
+  "logging": {
+    "level": "INFO",
+    "log_resolutions": true,
+    "detailed_analysis": true,
+    "log_file": "logs/week_resolver.log",
+    "include_confidence_scores": true,
+    "track_pattern_matches": true
+  },
+  "validation": {
+    "check_content_continuity": true,
+    "validate_topic_progression": true,
+    "detect_content_outliers": true,
+    "minimum_content_length": 100
+  },
+  "output_options": {
+    "create_backup": true,
+    "preserve_original_structure": false,
+    "organize_by_content_type": true,
+    "generate_index_files": true,
+    "create_resolution_report": true,
+    "include_metadata_headers": true
+  }
+}
