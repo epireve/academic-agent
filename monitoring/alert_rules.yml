@@ -1,0 +1,280 @@
+# Prometheus alert rules for Academic Agent monitoring
+
+groups:
+  - name: academic_agent_system
+    rules:
+      # High memory usage alert
+      - alert: HighMemoryUsage
+        expr: academic_agent_memory_usage_bytes{type="rss"} / 1024 / 1024 > 1000
+        for: 2m
+        labels:
+          severity: warning
+          component: system
+        annotations:
+          summary: "High memory usage detected"
+          description: "Academic Agent is using {{ $value }}MB of memory, which is above the 1000MB threshold"
+
+      # Critical memory usage alert
+      - alert: CriticalMemoryUsage
+        expr: academic_agent_memory_usage_bytes{type="rss"} / 1024 / 1024 > 2000
+        for: 1m
+        labels:
+          severity: critical
+          component: system
+        annotations:
+          summary: "Critical memory usage detected"
+          description: "Academic Agent is using {{ $value }}MB of memory, which is critically high"
+
+      # High CPU usage alert
+      - alert: HighCPUUsage
+        expr: academic_agent_cpu_usage_percent > 80
+        for: 5m
+        labels:
+          severity: warning
+          component: system
+        annotations:
+          summary: "High CPU usage detected"
+          description: "Academic Agent CPU usage is {{ $value }}%, which is above the 80% threshold"
+
+      # Disk space low alert
+      - alert: LowDiskSpace
+        expr: (academic_agent_disk_usage_bytes{type="free"} / academic_agent_disk_usage_bytes{type="total"}) * 100 < 20
+        for: 5m
+        labels:
+          severity: warning
+          component: system
+        annotations:
+          summary: "Low disk space"
+          description: "Available disk space is {{ $value }}%, which is below 20%"
+
+      # Critical disk space alert
+      - alert: CriticalDiskSpace
+        expr: (academic_agent_disk_usage_bytes{type="free"} / academic_agent_disk_usage_bytes{type="total"}) * 100 < 5
+        for: 1m
+        labels:
+          severity: critical
+          component: system
+        annotations:
+          summary: "Critical disk space"
+          description: "Available disk space is {{ $value }}%, which is critically low"
+
+  - name: academic_agent_performance
+    rules:
+      # Slow operation alert
+      - alert: SlowOperation
+        expr: rate(academic_agent_operation_duration_seconds_sum[5m]) / rate(academic_agent_operation_duration_seconds_count[5m]) > 300
+        for: 2m
+        labels:
+          severity: warning
+          component: performance
+        annotations:
+          summary: "Slow operations detected"
+          description: "Average operation time is {{ $value }}s, which is above the 300s threshold"
+
+      # High error rate alert
+      - alert: HighErrorRate
+        expr: rate(academic_agent_operations_total{status="error"}[5m]) / rate(academic_agent_operations_total[5m]) > 0.1
+        for: 3m
+        labels:
+          severity: warning
+          component: performance
+        annotations:
+          summary: "High error rate detected"
+          description: "Error rate is {{ $value }}, which is above the 10% threshold"
+
+      # Critical error rate alert
+      - alert: CriticalErrorRate
+        expr: rate(academic_agent_operations_total{status="error"}[5m]) / rate(academic_agent_operations_total[5m]) > 0.25
+        for: 1m
+        labels:
+          severity: critical
+          component: performance
+        annotations:
+          summary: "Critical error rate detected"
+          description: "Error rate is {{ $value }}, which is critically high (>25%)"
+
+      # No operations alert
+      - alert: NoOperations
+        expr: rate(academic_agent_operations_total[10m]) == 0
+        for: 10m
+        labels:
+          severity: warning
+          component: performance
+        annotations:
+          summary: "No operations detected"
+          description: "No operations have been recorded in the last 10 minutes"
+
+  - name: academic_agent_quality
+    rules:
+      # Low quality scores alert
+      - alert: LowQualityScores
+        expr: rate(academic_agent_quality_score_sum[10m]) / rate(academic_agent_quality_score_count[10m]) < 0.7
+        for: 5m
+        labels:
+          severity: warning
+          component: quality
+        annotations:
+          summary: "Low quality scores detected"
+          description: "Average quality score is {{ $value }}, which is below the 0.7 threshold"
+
+      # Quality violations alert
+      - alert: QualityViolations
+        expr: rate(academic_agent_quality_violations_total[5m]) > 0
+        for: 2m
+        labels:
+          severity: warning
+          component: quality
+        annotations:
+          summary: "Quality violations detected"
+          description: "Quality violations are occurring at a rate of {{ $value }} per second"
+
+      # Excessive improvement cycles alert
+      - alert: ExcessiveImprovementCycles
+        expr: rate(academic_agent_improvement_cycles_total[10m]) > 0.5
+        for: 5m
+        labels:
+          severity: warning
+          component: quality
+        annotations:
+          summary: "Excessive improvement cycles"
+          description: "Improvement cycles are occurring at a rate of {{ $value }} per second, indicating potential quality issues"
+
+  - name: academic_agent_pdf_processing
+    rules:
+      # Slow PDF processing alert
+      - alert: SlowPDFProcessing
+        expr: rate(academic_agent_pdf_processing_duration_seconds_sum[5m]) / rate(academic_agent_pdf_processing_duration_seconds_count[5m]) > 300
+        for: 3m
+        labels:
+          severity: warning
+          component: pdf_processing
+        annotations:
+          summary: "Slow PDF processing detected"
+          description: "Average PDF processing time is {{ $value }}s, which is above the 300s threshold"
+
+      # PDF processing errors alert
+      - alert: PDFProcessingErrors
+        expr: rate(academic_agent_pdf_processing_duration_seconds_count{status="error"}[5m]) > 0
+        for: 2m
+        labels:
+          severity: warning
+          component: pdf_processing
+        annotations:
+          summary: "PDF processing errors detected"
+          description: "PDF processing errors are occurring at a rate of {{ $value }} per second"
+
+      # No PDF processing alert
+      - alert: NoPDFProcessing
+        expr: rate(academic_agent_pdf_processing_duration_seconds_count[15m]) == 0
+        for: 15m
+        labels:
+          severity: info
+          component: pdf_processing
+        annotations:
+          summary: "No PDF processing activity"
+          description: "No PDF processing has occurred in the last 15 minutes"
+
+  - name: academic_agent_communication
+    rules:
+      # High message latency alert
+      - alert: HighMessageLatency
+        expr: rate(academic_agent_message_latency_seconds_sum[5m]) / rate(academic_agent_message_latency_seconds_count[5m]) > 5
+        for: 3m
+        labels:
+          severity: warning
+          component: communication
+        annotations:
+          summary: "High message latency detected"
+          description: "Average message latency is {{ $value }}s, which is above the 5s threshold"
+
+      # Agent communication failure alert
+      - alert: AgentCommunicationFailure
+        expr: rate(academic_agent_messages_total{message_type="error"}[5m]) > 0
+        for: 2m
+        labels:
+          severity: warning
+          component: communication
+        annotations:
+          summary: "Agent communication failures detected"
+          description: "Agent communication failures are occurring at a rate of {{ $value }} per second"
+
+      # Inactive agent alert
+      - alert: InactiveAgent
+        expr: academic_agent_status == 0
+        for: 5m
+        labels:
+          severity: warning
+          component: communication
+        annotations:
+          summary: "Agent is inactive"
+          description: "Agent {{ $labels.agent_name }} of type {{ $labels.agent_type }} has been inactive for more than 5 minutes"
+
+  - name: academic_agent_errors
+    rules:
+      # High error count alert
+      - alert: HighErrorCount
+        expr: rate(academic_agent_errors_total[5m]) > 0.1
+        for: 3m
+        labels:
+          severity: warning
+          component: errors
+        annotations:
+          summary: "High error rate detected"
+          description: "Errors are occurring at a rate of {{ $value }} per second in component {{ $labels.component }}"
+
+      # Critical errors alert
+      - alert: CriticalErrors
+        expr: rate(academic_agent_errors_total{severity="critical"}[2m]) > 0
+        for: 1m
+        labels:
+          severity: critical
+          component: errors
+        annotations:
+          summary: "Critical errors detected"
+          description: "Critical errors are occurring in component {{ $labels.component }}"
+
+      # Component error rate alert
+      - alert: ComponentErrorRate
+        expr: academic_agent_error_rate > 1.0
+        for: 2m
+        labels:
+          severity: warning
+          component: errors
+        annotations:
+          summary: "High component error rate"
+          description: "Component {{ $labels.component }} has an error rate of {{ $value }} errors per minute"
+
+  - name: academic_agent_health
+    rules:
+      # Service down alert
+      - alert: ServiceDown
+        expr: up{job="academic-agent"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          component: system
+        annotations:
+          summary: "Academic Agent service is down"
+          description: "Academic Agent service has been down for more than 1 minute"
+
+      # Health check failure alert
+      - alert: HealthCheckFailure
+        expr: up{job="academic-agent-health"} == 0
+        for: 2m
+        labels:
+          severity: warning
+          component: system
+        annotations:
+          summary: "Health check failing"
+          description: "Academic Agent health check has been failing for more than 2 minutes"
+
+      # Scrape duration high alert
+      - alert: ScrapeTimeHigh
+        expr: scrape_duration_seconds{job="academic-agent"} > 5
+        for: 5m
+        labels:
+          severity: warning
+          component: monitoring
+        annotations:
+          summary: "Metrics scrape time is high"
+          description: "Metrics scraping is taking {{ $value }}s, which is above the 5s threshold"

@@ -1,0 +1,233 @@
+# Docker Compose configuration for Academic Agent monitoring stack
+
+version: '3.8'
+
+services:
+  # Prometheus monitoring server
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: academic-agent-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./alert_rules.yml:/etc/prometheus/alert_rules.yml
+      - ./recording_rules.yml:/etc/prometheus/recording_rules.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=15d'
+      - '--web.enable-lifecycle'
+      - '--web.enable-admin-api'
+    networks:
+      - monitoring
+    restart: unless-stopped
+
+  # Grafana dashboard server
+  grafana:
+    image: grafana/grafana:latest
+    container_name: academic-agent-grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./dashboards:/var/lib/grafana/dashboards
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_INSTALL_PLUGINS=grafana-piechart-panel,grafana-worldmap-panel
+      - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/var/lib/grafana/dashboards/overview_dashboard.json
+    networks:
+      - monitoring
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+  # Alertmanager for handling alerts
+  alertmanager:
+    image: prom/alertmanager:latest
+    container_name: academic-agent-alertmanager
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml
+      - alertmanager_data:/alertmanager
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--storage.path=/alertmanager'
+      - '--web.external-url=http://localhost:9093'
+    networks:
+      - monitoring
+    restart: unless-stopped
+
+  # Node exporter for system metrics
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: academic-agent-node-exporter
+    ports:
+      - "9100:9100"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    networks:
+      - monitoring
+    restart: unless-stopped
+
+  # Process exporter for process-specific metrics
+  process-exporter:
+    image: ncabatoff/process-exporter:latest
+    container_name: academic-agent-process-exporter
+    ports:
+      - "9256:9256"
+    volumes:
+      - /proc:/host/proc:ro
+      - ./process_exporter.yml:/config/process_exporter.yml
+    command:
+      - '--procfs=/host/proc'
+      - '--config.path=/config/process_exporter.yml'
+    networks:
+      - monitoring
+    privileged: true
+    restart: unless-stopped
+
+  # VictoriaMetrics for long-term storage (optional)
+  victoriametrics:
+    image: victoriametrics/victoria-metrics:latest
+    container_name: academic-agent-victoriametrics
+    ports:
+      - "8428:8428"
+    volumes:
+      - victoriametrics_data:/victoria-metrics-data
+    command:
+      - '--storageDataPath=/victoria-metrics-data'
+      - '--retentionPeriod=1y'
+      - '--httpListenAddr=:8428'
+    networks:
+      - monitoring
+    restart: unless-stopped
+
+  # Loki for log aggregation (optional)
+  loki:
+    image: grafana/loki:latest
+    container_name: academic-agent-loki
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./loki.yml:/etc/loki/local-config.yaml
+      - loki_data:/loki
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - monitoring
+    restart: unless-stopped
+
+  # Promtail for log collection (optional)
+  promtail:
+    image: grafana/promtail:latest
+    container_name: academic-agent-promtail
+    volumes:
+      - ./promtail.yml:/etc/promtail/config.yml
+      - ../logs:/var/log/academic-agent:ro
+    command: -config.file=/etc/promtail/config.yml
+    networks:
+      - monitoring
+    depends_on:
+      - loki
+    restart: unless-stopped
+
+  # Academic Agent application (for reference)
+  academic-agent:
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    container_name: academic-agent-app
+    ports:
+      - "8080:8080"  # Health check endpoint
+      - "9091:9090"  # Metrics endpoint
+    volumes:
+      - ../config:/app/config:ro
+      - ../logs:/app/logs
+      - ../input:/app/input:ro
+      - ../output:/app/output
+    environment:
+      - PYTHONPATH=/app
+      - LOG_LEVEL=INFO
+      - METRICS_ENABLED=true
+      - PROMETHEUS_PORT=9090
+    networks:
+      - monitoring
+      - app
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Redis for caching (optional)
+  redis:
+    image: redis:alpine
+    container_name: academic-agent-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - app
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+
+  # PostgreSQL for metrics storage (optional)
+  postgres:
+    image: postgres:13
+    container_name: academic-agent-postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - POSTGRES_DB=academic_agent
+      - POSTGRES_USER=academic_agent
+      - POSTGRES_PASSWORD=academic_agent_password
+    networks:
+      - app
+    restart: unless-stopped
+
+volumes:
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  alertmanager_data:
+    driver: local
+  victoriametrics_data:
+    driver: local
+  loki_data:
+    driver: local
+  redis_data:
+    driver: local
+  postgres_data:
+    driver: local
+
+networks:
+  monitoring:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+  app:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16

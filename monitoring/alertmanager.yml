@@ -1,0 +1,235 @@
+# Alertmanager configuration for Academic Agent
+
+global:
+  smtp_smarthost: 'localhost:587'
+  smtp_from: 'alerts@academic-agent.local'
+  smtp_auth_username: 'alerts@academic-agent.local'
+  smtp_auth_password: 'alert_password'
+
+# Route tree for alert distribution
+route:
+  group_by: ['alertname', 'cluster', 'service']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1h
+  receiver: 'default-receiver'
+  
+  # Specific routes for different alert types
+  routes:
+    # Critical alerts - immediate notification
+    - match:
+        severity: critical
+      receiver: 'critical-alerts'
+      group_wait: 0s
+      repeat_interval: 5m
+    
+    # System alerts
+    - match:
+        component: system
+      receiver: 'system-alerts'
+      group_interval: 30s
+      repeat_interval: 30m
+    
+    # Performance alerts
+    - match:
+        component: performance
+      receiver: 'performance-alerts'
+      group_interval: 5m
+      repeat_interval: 1h
+    
+    # Quality alerts
+    - match:
+        component: quality
+      receiver: 'quality-alerts'
+      group_interval: 10m
+      repeat_interval: 2h
+    
+    # PDF processing alerts
+    - match:
+        component: pdf_processing
+      receiver: 'pdf-processing-alerts'
+      group_interval: 5m
+      repeat_interval: 1h
+    
+    # Communication alerts
+    - match:
+        component: communication
+      receiver: 'communication-alerts'
+      group_interval: 2m
+      repeat_interval: 30m
+    
+    # Error alerts
+    - match:
+        component: errors
+      receiver: 'error-alerts'
+      group_interval: 1m
+      repeat_interval: 15m
+
+# Inhibition rules to prevent spam
+inhibit_rules:
+  # Inhibit warning alerts if critical alert is firing
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'cluster', 'service']
+  
+  # Inhibit individual component alerts if service is down
+  - source_match:
+      alertname: 'ServiceDown'
+    target_match_re:
+      alertname: '.*'
+    equal: ['instance']
+
+# Receivers define how to send notifications
+receivers:
+  # Default receiver for general alerts
+  - name: 'default-receiver'
+    email_configs:
+      - to: 'admin@academic-agent.local'
+        subject: '[Academic Agent] Alert: {{ .GroupLabels.alertname }}'
+        body: |
+          {{ range .Alerts }}
+          Alert: {{ .Annotations.summary }}
+          Description: {{ .Annotations.description }}
+          Labels: {{ range .Labels.SortedPairs }}{{ .Name }}={{ .Value }} {{ end }}
+          Started: {{ .StartsAt }}
+          {{ end }}
+        html: |
+          <h2>Academic Agent Alert</h2>
+          <table border="1">
+            <tr><th>Alert</th><th>Summary</th><th>Description</th><th>Started</th></tr>
+            {{ range .Alerts }}
+            <tr>
+              <td>{{ .Labels.alertname }}</td>
+              <td>{{ .Annotations.summary }}</td>
+              <td>{{ .Annotations.description }}</td>
+              <td>{{ .StartsAt }}</td>
+            </tr>
+            {{ end }}
+          </table>
+
+  # Critical alerts receiver
+  - name: 'critical-alerts'
+    email_configs:
+      - to: 'admin@academic-agent.local,devops@academic-agent.local'
+        subject: '[CRITICAL] Academic Agent Alert: {{ .GroupLabels.alertname }}'
+        body: |
+          CRITICAL ALERT - IMMEDIATE ACTION REQUIRED
+          
+          {{ range .Alerts }}
+          Alert: {{ .Annotations.summary }}
+          Description: {{ .Annotations.description }}
+          Severity: {{ .Labels.severity }}
+          Component: {{ .Labels.component }}
+          Started: {{ .StartsAt }}
+          {{ end }}
+    
+    # Slack notification for critical alerts
+    slack_configs:
+      - api_url: 'https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK'
+        channel: '#alerts-critical'
+        title: 'Critical Academic Agent Alert'
+        text: |
+          {{ range .Alerts }}
+          🚨 *{{ .Annotations.summary }}*
+          
+          *Description:* {{ .Annotations.description }}
+          *Component:* {{ .Labels.component }}
+          *Started:* {{ .StartsAt }}
+          {{ end }}
+        color: 'danger'
+
+  # System alerts receiver
+  - name: 'system-alerts'
+    email_configs:
+      - to: 'sysadmin@academic-agent.local'
+        subject: '[System] Academic Agent Alert: {{ .GroupLabels.alertname }}'
+        body: |
+          System Alert for Academic Agent
+          
+          {{ range .Alerts }}
+          Alert: {{ .Annotations.summary }}
+          Description: {{ .Annotations.description }}
+          System Component: {{ .Labels.component }}
+          Started: {{ .StartsAt }}
+          {{ end }}
+
+  # Performance alerts receiver
+  - name: 'performance-alerts'
+    email_configs:
+      - to: 'performance@academic-agent.local'
+        subject: '[Performance] Academic Agent Alert: {{ .GroupLabels.alertname }}'
+        body: |
+          Performance Alert for Academic Agent
+          
+          {{ range .Alerts }}
+          Alert: {{ .Annotations.summary }}
+          Description: {{ .Annotations.description }}
+          Performance Issue: {{ .Labels.component }}
+          Started: {{ .StartsAt }}
+          {{ end }}
+
+  # Quality alerts receiver
+  - name: 'quality-alerts'
+    email_configs:
+      - to: 'quality@academic-agent.local'
+        subject: '[Quality] Academic Agent Alert: {{ .GroupLabels.alertname }}'
+        body: |
+          Quality Alert for Academic Agent
+          
+          {{ range .Alerts }}
+          Alert: {{ .Annotations.summary }}
+          Description: {{ .Annotations.description }}
+          Quality Component: {{ .Labels.component }}
+          Started: {{ .StartsAt }}
+          {{ end }}
+
+  # PDF processing alerts receiver
+  - name: 'pdf-processing-alerts'
+    email_configs:
+      - to: 'pdf-processing@academic-agent.local'
+        subject: '[PDF Processing] Academic Agent Alert: {{ .GroupLabels.alertname }}'
+        body: |
+          PDF Processing Alert for Academic Agent
+          
+          {{ range .Alerts }}
+          Alert: {{ .Annotations.summary }}
+          Description: {{ .Annotations.description }}
+          Processing Component: {{ .Labels.component }}
+          Started: {{ .StartsAt }}
+          {{ end }}
+
+  # Communication alerts receiver
+  - name: 'communication-alerts'
+    email_configs:
+      - to: 'communication@academic-agent.local'
+        subject: '[Communication] Academic Agent Alert: {{ .GroupLabels.alertname }}'
+        body: |
+          Communication Alert for Academic Agent
+          
+          {{ range .Alerts }}
+          Alert: {{ .Annotations.summary }}
+          Description: {{ .Annotations.description }}
+          Communication Issue: {{ .Labels.component }}
+          Started: {{ .StartsAt }}
+          {{ end }}
+
+  # Error alerts receiver
+  - name: 'error-alerts'
+    email_configs:
+      - to: 'errors@academic-agent.local'
+        subject: '[Errors] Academic Agent Alert: {{ .GroupLabels.alertname }}'
+        body: |
+          Error Alert for Academic Agent
+          
+          {{ range .Alerts }}
+          Alert: {{ .Annotations.summary }}
+          Description: {{ .Annotations.description }}
+          Error Component: {{ .Labels.component }}
+          Started: {{ .StartsAt }}
+          {{ end }}
+
+# Templates for custom alert formatting
+templates:
+  - '/etc/alertmanager/templates/*.tmpl'

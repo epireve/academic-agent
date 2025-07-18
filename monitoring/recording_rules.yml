@@ -1,0 +1,281 @@
+# Prometheus recording rules for Academic Agent monitoring
+
+groups:
+  - name: academic_agent_performance_aggregations
+    interval: 30s
+    rules:
+      # Operation rate aggregations
+      - record: academic_agent:operation_rate
+        expr: rate(academic_agent_operations_total[5m])
+      
+      - record: academic_agent:operation_rate_by_type
+        expr: rate(academic_agent_operations_total[5m]) by (operation_type)
+      
+      - record: academic_agent:operation_success_rate
+        expr: |
+          rate(academic_agent_operations_total{status="success"}[5m]) /
+          rate(academic_agent_operations_total[5m])
+      
+      - record: academic_agent:operation_error_rate
+        expr: |
+          rate(academic_agent_operations_total{status="error"}[5m]) /
+          rate(academic_agent_operations_total[5m])
+
+      # Duration aggregations
+      - record: academic_agent:operation_duration_avg
+        expr: |
+          rate(academic_agent_operation_duration_seconds_sum[5m]) /
+          rate(academic_agent_operation_duration_seconds_count[5m])
+      
+      - record: academic_agent:operation_duration_avg_by_type
+        expr: |
+          rate(academic_agent_operation_duration_seconds_sum[5m]) /
+          rate(academic_agent_operation_duration_seconds_count[5m]) by (operation_type)
+      
+      - record: academic_agent:operation_duration_p95
+        expr: histogram_quantile(0.95, rate(academic_agent_operation_duration_seconds_bucket[5m]))
+      
+      - record: academic_agent:operation_duration_p99
+        expr: histogram_quantile(0.99, rate(academic_agent_operation_duration_seconds_bucket[5m]))
+
+  - name: academic_agent_quality_aggregations
+    interval: 60s
+    rules:
+      # Quality score aggregations
+      - record: academic_agent:quality_score_avg
+        expr: |
+          rate(academic_agent_quality_score_sum[10m]) /
+          rate(academic_agent_quality_score_count[10m])
+      
+      - record: academic_agent:quality_score_avg_by_type
+        expr: |
+          rate(academic_agent_quality_score_sum[10m]) /
+          rate(academic_agent_quality_score_count[10m]) by (content_type)
+      
+      - record: academic_agent:quality_score_avg_by_agent
+        expr: |
+          rate(academic_agent_quality_score_sum[10m]) /
+          rate(academic_agent_quality_score_count[10m]) by (agent)
+      
+      - record: academic_agent:quality_score_p50
+        expr: histogram_quantile(0.5, rate(academic_agent_quality_score_bucket[10m]))
+      
+      - record: academic_agent:quality_score_p95
+        expr: histogram_quantile(0.95, rate(academic_agent_quality_score_bucket[10m]))
+
+      # Improvement cycle aggregations
+      - record: academic_agent:improvement_cycle_rate
+        expr: rate(academic_agent_improvement_cycles_total[10m])
+      
+      - record: academic_agent:improvement_cycle_success_rate
+        expr: |
+          rate(academic_agent_improvement_cycles_total{success="true"}[10m]) /
+          rate(academic_agent_improvement_cycles_total[10m])
+
+      # Quality violation rate
+      - record: academic_agent:quality_violation_rate
+        expr: rate(academic_agent_quality_violations_total[10m])
+
+  - name: academic_agent_pdf_aggregations
+    interval: 60s
+    rules:
+      # PDF processing aggregations
+      - record: academic_agent:pdf_processing_rate
+        expr: rate(academic_agent_pdf_processing_duration_seconds_count[5m])
+      
+      - record: academic_agent:pdf_processing_success_rate
+        expr: |
+          rate(academic_agent_pdf_processing_duration_seconds_count{status="success"}[5m]) /
+          rate(academic_agent_pdf_processing_duration_seconds_count[5m])
+      
+      - record: academic_agent:pdf_processing_duration_avg
+        expr: |
+          rate(academic_agent_pdf_processing_duration_seconds_sum[5m]) /
+          rate(academic_agent_pdf_processing_duration_seconds_count[5m])
+      
+      - record: academic_agent:pdf_processing_duration_p95
+        expr: histogram_quantile(0.95, rate(academic_agent_pdf_processing_duration_seconds_bucket[5m]))
+
+      # PDF pages processing rate
+      - record: academic_agent:pdf_pages_per_second
+        expr: rate(academic_agent_pdf_pages_processed_total[5m])
+      
+      - record: academic_agent:pdf_pages_per_document
+        expr: |
+          rate(academic_agent_pdf_pages_processed_total[5m]) /
+          rate(academic_agent_pdf_processing_duration_seconds_count[5m])
+
+      # Image extraction rate
+      - record: academic_agent:images_extracted_rate
+        expr: rate(academic_agent_images_extracted_total[5m])
+
+  - name: academic_agent_system_aggregations
+    interval: 30s
+    rules:
+      # Memory usage aggregations
+      - record: academic_agent:memory_usage_mb
+        expr: academic_agent_memory_usage_bytes / 1024 / 1024
+      
+      - record: academic_agent:memory_usage_rss_mb
+        expr: academic_agent_memory_usage_bytes{type="rss"} / 1024 / 1024
+      
+      - record: academic_agent:memory_usage_vms_mb
+        expr: academic_agent_memory_usage_bytes{type="vms"} / 1024 / 1024
+
+      # Disk usage aggregations
+      - record: academic_agent:disk_usage_percent
+        expr: |
+          (academic_agent_disk_usage_bytes{type="used"} /
+           academic_agent_disk_usage_bytes{type="total"}) * 100
+      
+      - record: academic_agent:disk_free_percent
+        expr: |
+          (academic_agent_disk_usage_bytes{type="free"} /
+           academic_agent_disk_usage_bytes{type="total"}) * 100
+      
+      - record: academic_agent:disk_usage_gb
+        expr: academic_agent_disk_usage_bytes / 1024 / 1024 / 1024
+
+  - name: academic_agent_communication_aggregations
+    interval: 30s
+    rules:
+      # Message rate aggregations
+      - record: academic_agent:message_rate
+        expr: rate(academic_agent_messages_total[5m])
+      
+      - record: academic_agent:message_rate_by_sender
+        expr: rate(academic_agent_messages_total[5m]) by (sender)
+      
+      - record: academic_agent:message_rate_by_receiver
+        expr: rate(academic_agent_messages_total[5m]) by (receiver)
+      
+      - record: academic_agent:message_rate_by_type
+        expr: rate(academic_agent_messages_total[5m]) by (message_type)
+
+      # Message latency aggregations
+      - record: academic_agent:message_latency_avg
+        expr: |
+          rate(academic_agent_message_latency_seconds_sum[5m]) /
+          rate(academic_agent_message_latency_seconds_count[5m])
+      
+      - record: academic_agent:message_latency_p95
+        expr: histogram_quantile(0.95, rate(academic_agent_message_latency_seconds_bucket[5m]))
+      
+      - record: academic_agent:message_latency_p99
+        expr: histogram_quantile(0.99, rate(academic_agent_message_latency_seconds_bucket[5m]))
+
+      # Active agents count
+      - record: academic_agent:active_agents_count
+        expr: sum(academic_agent_status)
+      
+      - record: academic_agent:active_agents_by_type
+        expr: sum(academic_agent_status) by (agent_type)
+
+  - name: academic_agent_error_aggregations
+    interval: 30s
+    rules:
+      # Error rate aggregations
+      - record: academic_agent:error_rate
+        expr: rate(academic_agent_errors_total[5m])
+      
+      - record: academic_agent:error_rate_by_component
+        expr: rate(academic_agent_errors_total[5m]) by (component)
+      
+      - record: academic_agent:error_rate_by_type
+        expr: rate(academic_agent_errors_total[5m]) by (error_type)
+      
+      - record: academic_agent:error_rate_by_severity
+        expr: rate(academic_agent_errors_total[5m]) by (severity)
+
+      # Critical error rate
+      - record: academic_agent:critical_error_rate
+        expr: rate(academic_agent_errors_total{severity="critical"}[5m])
+
+      # Recovery rate
+      - record: academic_agent:recovery_rate
+        expr: rate(academic_agent_recoveries_total[5m])
+      
+      - record: academic_agent:recovery_rate_by_component
+        expr: rate(academic_agent_recoveries_total[5m]) by (component)
+
+  - name: academic_agent_throughput_aggregations
+    interval: 60s
+    rules:
+      # Overall throughput metrics
+      - record: academic_agent:overall_throughput
+        expr: |
+          sum(academic_agent_throughput_items_per_second)
+      
+      - record: academic_agent:throughput_by_operation
+        expr: |
+          academic_agent_throughput_items_per_second by (operation_type)
+
+      # Processing efficiency
+      - record: academic_agent:processing_efficiency
+        expr: |
+          academic_agent:overall_throughput /
+          sum(academic_agent_concurrent_operations)
+
+  - name: academic_agent_health_aggregations
+    interval: 30s
+    rules:
+      # Service availability
+      - record: academic_agent:service_availability
+        expr: up{job="academic-agent"}
+      
+      - record: academic_agent:health_check_availability
+        expr: up{job="academic-agent-health"}
+
+      # Scrape metrics
+      - record: academic_agent:scrape_duration_avg
+        expr: avg(scrape_duration_seconds{job="academic-agent"})
+      
+      - record: academic_agent:scrape_samples_avg
+        expr: avg(scrape_samples_scraped{job="academic-agent"})
+
+  - name: academic_agent_sla_metrics
+    interval: 300s  # 5 minutes
+    rules:
+      # SLA compliance metrics (calculated over longer periods)
+      - record: academic_agent:sla_operation_success_rate_5m
+        expr: |
+          avg_over_time(academic_agent:operation_success_rate[5m])
+      
+      - record: academic_agent:sla_operation_success_rate_1h
+        expr: |
+          avg_over_time(academic_agent:operation_success_rate[1h])
+      
+      - record: academic_agent:sla_operation_success_rate_24h
+        expr: |
+          avg_over_time(academic_agent:operation_success_rate[24h])
+
+      # Availability SLA
+      - record: academic_agent:sla_availability_5m
+        expr: |
+          avg_over_time(academic_agent:service_availability[5m])
+      
+      - record: academic_agent:sla_availability_1h
+        expr: |
+          avg_over_time(academic_agent:service_availability[1h])
+      
+      - record: academic_agent:sla_availability_24h
+        expr: |
+          avg_over_time(academic_agent:service_availability[24h])
+
+      # Quality SLA
+      - record: academic_agent:sla_quality_score_1h
+        expr: |
+          avg_over_time(academic_agent:quality_score_avg[1h])
+      
+      - record: academic_agent:sla_quality_score_24h
+        expr: |
+          avg_over_time(academic_agent:quality_score_avg[24h])
+
+      # Performance SLA
+      - record: academic_agent:sla_response_time_p95_1h
+        expr: |
+          avg_over_time(academic_agent:operation_duration_p95[1h])
+      
+      - record: academic_agent:sla_response_time_p95_24h
+        expr: |
+          avg_over_time(academic_agent:operation_duration_p95[24h])

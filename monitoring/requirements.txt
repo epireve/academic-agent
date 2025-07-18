@@ -1,0 +1,18 @@
+# Monitoring system requirements for Academic Agent
+
+# Prometheus client for metrics collection
+prometheus-client>=0.17.0
+
+# System monitoring
+psutil>=5.9.0
+
+# HTTP requests for API interactions
+requests>=2.28.0
+
+# Optional: Enhanced metrics and monitoring
+# grafana-api>=1.0.3
+# influxdb-client>=1.36.0
+
+# Development and testing
+pytest>=7.0.0
+pytest-asyncio>=0.21.0
