@@ -865,11 +865,30 @@
         ],
         "status": "pending",
         "subtasks": []
+      },
+      {
+        "id": 31,
+        "title": "Consolidate Dual Agent Architectures",
+        "description": "Refactor the codebase to eliminate duplication between v2 and legacy agent systems, creating a unified architecture that maintains functionality while reducing maintenance overhead.",
+        "details": "1. Analyze existing code structure in both v2 and legacy agent systems to identify duplication patterns\n2. Create a unified agent interface in src/agents/base_agent.py that both systems can implement\n3. Refactor shared functionality into common utility modules in src/utils/\n4. Implement adapter pattern for legacy components to work with new architecture\n5. Consolidate duplicate processing logic in src/processors/ directory\n6. Standardize configuration handling across both agent implementations\n7. Create migration path for legacy agent users to transition to unified architecture\n8. Update documentation to reflect new architecture and migration guidelines\n9. Implement feature flags to enable/disable specific behaviors during transition\n10. Ensure backward compatibility for existing API consumers\n11. Optimize performance by eliminating redundant code paths\n12. Implement comprehensive logging throughout refactored components",
+        "testStrategy": "1. Create unit tests for all refactored components to ensure functionality matches original implementations\n2. Develop integration tests that verify both legacy and v2 agent workflows function correctly\n3. Implement regression test suite comparing outputs of original vs. refactored implementations\n4. Test migration paths to ensure smooth transition for existing users\n5. Perform load testing to verify performance improvements\n6. Validate configuration handling across different environments\n7. Test feature flags to ensure proper functionality toggling\n8. Verify backward compatibility with existing API consumers\n9. Conduct code coverage analysis to ensure refactored code is thoroughly tested\n10. Create documentation tests to verify accuracy of migration guidelines",
+        "status": "pending",
+        "dependencies": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          18
+        ],
+        "priority": "high",
+        "subtasks": []
       }
     ],
     "metadata": {
       "created": "2025-07-17T19:37:43.698Z",
-      "updated": "2025-07-18T14:03:37.345Z",
+      "updated": "2025-07-18T14:04:16.227Z",
       "description": "Tasks for master context"
     }
   }
