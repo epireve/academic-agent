@@ -21,7 +21,7 @@ try:
     from .study_notes_generator import StudyNotesGeneratorTool
     from .notes_agent import NotesAgent  
     from .content_templates import ContentTemplateManager, CrossReferenceManager, ContentType
-    from .quality_manager import QualityManager
+    from ...src.agents.quality_manager import QualityManager
 except ImportError:
     print("Warning: Some imports failed. This demo may have limited functionality.")
     # Create mock classes for demonstration

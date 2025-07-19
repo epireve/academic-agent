@@ -16,37 +16,12 @@ from typing import Dict, List, Optional, Any, Tuple
 from datetime import datetime
 from dataclasses import dataclass, asdict
 
-# Add parent directory to path for imports
-sys.path.append(str(Path(__file__).parent.parent.parent))
-
-try:
-    from .base_agent import BaseAgent
-    from .quality_manager import QualityManager
-    from .study_notes_generator import StudyNotesGeneratorTool, StudyNote, StudySection
-except ImportError:
-    # Fallback for direct execution
-    class BaseAgent:
-        def __init__(self, name, config_path=None):
-            self.agent_name = name
-            self.base_dir = Path.cwd()
-            self.logger = self._setup_logger()
-        
-        def _setup_logger(self):
-            import logging
-            logging.basicConfig(level=logging.INFO)
-            return logging.getLogger(self.agent_name)
-        
-        def sanitize_filename(self, filename):
-            import re
-            return re.sub(r'[^\w\-_\.]', '_', filename)
-        
-        def ai_request(self, prompt):
-            # Mock AI request for testing
-            return "Mock AI response"
-    
-    class QualityManager:
-        def assess_notes_quality(self, notes):
-            return 0.8  # Mock quality score
+# Import from unified architecture - no more path manipulation!
+# Use unified BaseAgent for standardized interface  
+from ...src.agents.base_agent import BaseAgent
+from ...src.agents.quality_manager import QualityManager
+from .study_notes_generator import StudyNotesGeneratorTool, StudyNote, StudySection
+from ...src.core.output_manager import get_output_manager, OutputCategory, ContentType
 
 
 @dataclass
@@ -100,6 +75,7 @@ class NotesAgent(BaseAgent):
         super().__init__("notes_agent", config_path)
         
         # Initialize components
+        self.output_manager = None
         self.quality_manager = QualityManager()
         
         try:
@@ -109,10 +85,6 @@ class NotesAgent(BaseAgent):
             self.study_notes_generator = None
             self.logger.warning("Study notes generator not available")
         
-        # Output directory setup
-        self.notes_output_dir = self.base_dir / "processed" / "notes"
-        self.notes_output_dir.mkdir(parents=True, exist_ok=True)
-        
         # AI configuration
         self.ai_config = {
             "model": "groq/llama-3.3-70b-versatile",
@@ -120,7 +92,114 @@ class NotesAgent(BaseAgent):
             "max_tokens": 4096
         }
         
+        # Note: Output directory setup moved to initialize method
+        self.notes_output_dir = None
+        
         self.logger.info("NotesAgent initialized successfully with study notes generation")
+    
+    async def initialize(self):
+        """Initialize agent-specific resources."""
+        try:
+            # Initialize output manager
+            self.output_manager = get_output_manager()
+            
+            # Setup output directories for notes
+            self.notes_output_dir = self.output_manager.get_output_path(
+                OutputCategory.PROCESSED, 
+                ContentType.MARKDOWN, 
+                subdirectory="notes"
+            )
+            self.notes_output_dir.mkdir(parents=True, exist_ok=True)
+            
+            # Setup study notes directory
+            study_notes_dir = self.output_manager.get_output_path(
+                OutputCategory.PROCESSED,
+                ContentType.MARKDOWN,
+                subdirectory="study_notes"
+            )
+            study_notes_dir.mkdir(parents=True, exist_ok=True)
+            
+            # Initialize quality manager if needed
+            if hasattr(self.quality_manager, 'initialize'):
+                await self.quality_manager.initialize()
+                
+            # Initialize study notes generator if available
+            if self.study_notes_generator and hasattr(self.study_notes_generator, 'initialize'):
+                await self.study_notes_generator.initialize()
+            
+            self.logger.info(f"{self.agent_id} initialized successfully")
+            
+        except Exception as e:
+            self.logger.error(f"Failed to initialize {self.agent_id}: {e}")
+            raise
+
+    async def cleanup(self):
+        """Cleanup agent resources."""
+        try:
+            # Cleanup quality manager
+            if hasattr(self.quality_manager, 'cleanup'):
+                await self.quality_manager.cleanup()
+                
+            # Cleanup study notes generator
+            if self.study_notes_generator and hasattr(self.study_notes_generator, 'cleanup'):
+                await self.study_notes_generator.cleanup()
+            
+            self.logger.info(f"{self.agent_id} cleanup completed")
+            
+        except Exception as e:
+            self.logger.error(f"Error during {self.agent_id} cleanup: {e}")
+    
+    def validate_input(self, input_data: Any) -> bool:
+        """Validate input data for notes generation."""
+        if isinstance(input_data, str):
+            # String input (file path or content)
+            return len(input_data.strip()) > 0
+        elif isinstance(input_data, dict):
+            # Dict input should have required fields
+            required_fields = ["content", "output_path"]
+            return all(field in input_data for field in required_fields)
+        return False
+
+    def validate_output(self, output_data: Any) -> bool:
+        """Validate output data from notes generation."""
+        if isinstance(output_data, dict):
+            required_fields = ["success", "notes_path", "quality_score"]
+            return all(field in output_data for field in required_fields)
+        return False
+
+    def check_quality(self, content: Any) -> float:
+        """Check quality of generated notes."""
+        if isinstance(content, dict) and "notes_content" in content:
+            notes_content = content["notes_content"]
+        elif isinstance(content, str):
+            notes_content = content
+        else:
+            return 0.0
+        
+        # Basic quality checks
+        quality_score = 1.0
+        
+        # Check content length
+        if len(notes_content) < 100:
+            quality_score -= 0.3
+        
+        # Check for proper markdown structure
+        if not any(line.startswith("#") for line in notes_content.split("\n")):
+            quality_score -= 0.2
+            
+        # Check for empty content
+        if not notes_content.strip():
+            quality_score = 0.0
+            
+        # Use quality manager if available
+        if hasattr(self, 'quality_manager') and self.quality_manager:
+            try:
+                manager_score = self.quality_manager.assess_notes_quality(notes_content)
+                quality_score = (quality_score + manager_score) / 2
+            except:
+                pass
+        
+        return max(0.0, min(1.0, quality_score))
     
     def extract_sections_from_markdown(self, content: str) -> List[NotesSection]:
         """Extract structured sections from markdown content"""

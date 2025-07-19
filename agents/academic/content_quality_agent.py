@@ -25,8 +25,12 @@ from collections import defaultdict, Counter
 import hashlib
 import difflib
 
-from .base_agent import BaseAgent, AgentMessage
-from .quality_manager import QualityManager, QualityMetrics, QualityEvaluation
+# Use unified BaseAgent for standardized interface
+from ...src.agents.base_agent import BaseAgent, AgentMessage
+from ...src.agents.quality_manager import QualityManager, QualityMetrics, QualityEvaluation
+
+# Import from unified architecture
+from ...src.core.output_manager import get_output_manager, OutputCategory, ContentType
 
 
 @dataclass
@@ -153,6 +157,7 @@ class ContentQualityAgent(BaseAgent):
         
         # Initialize quality manager
         self.quality_manager = QualityManager(quality_threshold=0.7)
+        self.output_manager = None
         
         # Quality assessment configuration
         self.quality_config = {
@@ -210,6 +215,58 @@ class ContentQualityAgent(BaseAgent):
         self.quality_analytics: Optional[QualityAnalytics] = None
         
         self.logger.info("Content Quality Agent initialized with comprehensive validation rules")
+
+    async def initialize(self):
+        """Initialize agent-specific resources."""
+        try:
+            # Initialize output manager
+            self.output_manager = get_output_manager()
+            
+            # Setup output directories for quality reports
+            quality_dir = self.output_manager.get_output_path(
+                OutputCategory.REPORTS, 
+                ContentType.JSON, 
+                subdirectory="quality_reports"
+            )
+            quality_dir.mkdir(parents=True, exist_ok=True)
+            
+            # Setup analytics directory
+            analytics_dir = self.output_manager.get_output_path(
+                OutputCategory.REPORTS,
+                ContentType.JSON,
+                subdirectory="quality_analytics"
+            )
+            analytics_dir.mkdir(parents=True, exist_ok=True)
+            
+            # Initialize quality manager if needed
+            if hasattr(self.quality_manager, 'initialize'):
+                await self.quality_manager.initialize()
+            
+            self.logger.info(f"{self.agent_id} initialized successfully")
+            
+        except Exception as e:
+            self.logger.error(f"Failed to initialize {self.agent_id}: {e}")
+            raise
+
+    async def cleanup(self):
+        """Cleanup agent resources."""
+        try:
+            # Save any pending assessment history
+            if self.assessment_history:
+                self.logger.info(f"Saving {len(self.assessment_history)} quality assessments")
+                # In a real implementation, we would save to persistent storage
+            
+            # Cleanup quality manager
+            if hasattr(self.quality_manager, 'cleanup'):
+                await self.quality_manager.cleanup()
+            
+            # Clear assessment history to free memory
+            self.assessment_history.clear()
+            
+            self.logger.info(f"{self.agent_id} cleanup completed")
+            
+        except Exception as e:
+            self.logger.error(f"Error during {self.agent_id} cleanup: {e}")
 
     def assess_content_quality(self, file_path: str, content: str = None, 
                              content_type: str = None, week_number: int = None) -> QualityReport:

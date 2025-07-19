@@ -15,7 +15,11 @@ from datetime import datetime
 from dataclasses import dataclass, asdict
 from collections import defaultdict
 
-from .base_agent import BaseAgent, AgentMessage
+# Use unified BaseAgent for standardized interface
+from ...src.agents.base_agent import BaseAgent, AgentMessage
+
+# Import from unified architecture
+from ...src.core.output_manager import get_output_manager, OutputCategory, ContentType
 
 
 @dataclass
@@ -45,6 +49,7 @@ class ContentConsolidationAgent(BaseAgent):
 
     def __init__(self):
         super().__init__("consolidation_agent")
+        self.output_manager = None
         self.search_patterns = {
             "week": [
                 r"week[-_]?(\d+)",
@@ -84,6 +89,53 @@ class ContentConsolidationAgent(BaseAgent):
             "medium": 0.6,
             "low": 0.4
         }
+
+    async def initialize(self):
+        """Initialize agent-specific resources."""
+        try:
+            # Initialize output manager
+            self.output_manager = get_output_manager()
+            
+            # Setup output directories for consolidation
+            consolidation_dir = self.output_manager.get_output_path(
+                OutputCategory.PROCESSED, 
+                ContentType.MARKDOWN, 
+                subdirectory="consolidation"
+            )
+            consolidation_dir.mkdir(parents=True, exist_ok=True)
+            
+            # Setup unified structure directories
+            for content_type, relative_path in self.unified_structure.items():
+                unified_dir = self.output_manager.get_output_path(
+                    OutputCategory.PROCESSED,
+                    ContentType.MARKDOWN,
+                    subdirectory=f"unified/{content_type}"
+                )
+                unified_dir.mkdir(parents=True, exist_ok=True)
+            
+            self.logger.info(f"{self.agent_id} initialized successfully")
+            
+        except Exception as e:
+            self.logger.error(f"Failed to initialize {self.agent_id}: {e}")
+            raise
+
+    async def cleanup(self):
+        """Cleanup agent resources."""
+        try:
+            # Clear any cached data
+            if hasattr(self, 'search_patterns'):
+                # No cleanup needed for search patterns
+                pass
+            
+            # Clear confidence thresholds cache
+            if hasattr(self, 'confidence_thresholds'):
+                # No cleanup needed for static data
+                pass
+            
+            self.logger.info(f"{self.agent_id} cleanup completed")
+            
+        except Exception as e:
+            self.logger.error(f"Error during {self.agent_id} cleanup: {e}")
 
     def scan_locations(self, base_paths: List[str]) -> List[Dict[str, Any]]:
         """

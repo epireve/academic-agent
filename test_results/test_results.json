@@ -1,0 +1,314 @@
+{
+  "syntax": {
+    "suite_name": "syntax_validation",
+    "total_tests": 14,
+    "passed_tests": 14,
+    "failed_tests": 0,
+    "skipped_tests": 0,
+    "error_tests": 0,
+    "duration": 0.39605093002319336,
+    "coverage_percentage": 0.0,
+    "test_results": [
+      {
+        "test_name": "syntax_test_analysis_agent.py",
+        "status": "passed",
+        "duration": 0.07659602165222168,
+        "output": "Syntax validation passed",
+        "error_message": ""
+      },
+      {
+        "test_name": "syntax_test_consolidation_agent.py",
+        "status": "passed",
+        "duration": 0.025053977966308594,
+        "output": "Syntax validation passed",
+        "error_message": ""
+      },
+      {
+        "test_name": "syntax_test_academic_agent.py",
+        "status": "passed",
+        "duration": 0.02528095245361328,
+        "output": "Syntax validation passed",
+        "error_message": ""
+      },
+      {
+        "test_name": "syntax_test_study_notes_generator.py",
+        "status": "passed",
+        "duration": 0.025557994842529297,
+        "output": "Syntax validation passed",
+        "error_message": ""
+      },
+      {
+        "test_name": "syntax_test_content_quality_agent.py",
+        "status": "passed",
+        "duration": 0.026240110397338867,
+        "output": "Syntax validation passed",
+        "error_message": ""
+      },
+      {
+        "test_name": "syntax_test_notes_agent.py",
+        "status": "passed",
+        "duration": 0.024441003799438477,
+        "output": "Syntax validation passed",
+        "error_message": ""
+      },
+      {
+        "test_name": "syntax_test_quality_validation_system.py",
+        "status": "passed",
+        "duration": 0.023214101791381836,
+        "output": "Syntax validation passed",
+        "error_message": ""
+      },
+      {
+        "test_name": "syntax_test_base_agent.py",
+        "status": "passed",
+        "duration": 0.02338886260986328,
+        "output": "Syntax validation passed",
+        "error_message": ""
+      },
+      {
+        "test_name": "syntax_test_ingestion_agent.py",
+        "status": "passed",
+        "duration": 0.0250399112701416,
+        "output": "Syntax validation passed",
+        "error_message": ""
+      },
+      {
+        "test_name": "syntax_test_pdf_processing.py",
+        "status": "passed",
+        "duration": 0.024847984313964844,
+        "output": "Syntax validation passed",
+        "error_message": ""
+      },
+      {
+        "test_name": "syntax_test_end_to_end_workflow.py",
+        "status": "passed",
+        "duration": 0.02376699447631836,
+        "output": "Syntax validation passed",
+        "error_message": ""
+      },
+      {
+        "test_name": "syntax_test_quality_consolidation_integration.py",
+        "status": "passed",
+        "duration": 0.02289104461669922,
+        "output": "Syntax validation passed",
+        "error_message": ""
+      },
+      {
+        "test_name": "syntax_test_multi_agent_workflows.py",
+        "status": "passed",
+        "duration": 0.024235963821411133,
+        "output": "Syntax validation passed",
+        "error_message": ""
+      },
+      {
+        "test_name": "syntax_test_agent_communication.py",
+        "status": "passed",
+        "duration": 0.024853944778442383,
+        "output": "Syntax validation passed",
+        "error_message": ""
+      }
+    ]
+  },
+  "imports": {
+    "suite_name": "import_validation",
+    "total_tests": 14,
+    "passed_tests": 1,
+    "failed_tests": 12,
+    "skipped_tests": 0,
+    "error_tests": 1,
+    "duration": 0.4650239944458008,
+    "coverage_percentage": 0.0,
+    "test_results": [
+      {
+        "test_name": "import_test_analysis_agent",
+        "status": "failed",
+        "duration": 0.0004248619079589844,
+        "output": "",
+        "error_message": "Import error: No module named 'pytest'"
+      },
+      {
+        "test_name": "import_test_consolidation_agent",
+        "status": "failed",
+        "duration": 0.00019598007202148438,
+        "output": "",
+        "error_message": "Import error: No module named 'pytest'"
+      },
+      {
+        "test_name": "import_test_academic_agent",
+        "status": "failed",
+        "duration": 0.0002830028533935547,
+        "output": "",
+        "error_message": "Import error: No module named 'pytest'"
+      },
+      {
+        "test_name": "import_test_study_notes_generator",
+        "status": "failed",
+        "duration": 0.0001678466796875,
+        "output": "",
+        "error_message": "Import error: No module named 'pytest'"
+      },
+      {
+        "test_name": "import_test_content_quality_agent",
+        "status": "passed",
+        "duration": 0.4549541473388672,
+        "output": "Import validation passed",
+        "error_message": ""
+      },
+      {
+        "test_name": "import_test_notes_agent",
+        "status": "error",
+        "duration": 0.0,
+        "output": "",
+        "error_message": "name 'pytest' is not defined"
+      },
+      {
+        "test_name": "import_test_quality_validation_system",
+        "status": "failed",
+        "duration": 0.0004570484161376953,
+        "output": "",
+        "error_message": "Import error: No module named 'pytest'"
+      },
+      {
+        "test_name": "import_test_base_agent",
+        "status": "failed",
+        "duration": 0.00030732154846191406,
+        "output": "",
+        "error_message": "Import error: No module named 'pytest'"
+      },
+      {
+        "test_name": "import_test_ingestion_agent",
+        "status": "failed",
+        "duration": 0.0002818107604980469,
+        "output": "",
+        "error_message": "Import error: No module named 'pytest'"
+      },
+      {
+        "test_name": "import_test_pdf_processing",
+        "status": "failed",
+        "duration": 0.00022983551025390625,
+        "output": "",
+        "error_message": "Import error: No module named 'pytest'"
+      },
+      {
+        "test_name": "import_test_end_to_end_workflow",
+        "status": "failed",
+        "duration": 0.00025010108947753906,
+        "output": "",
+        "error_message": "Import error: No module named 'pytest'"
+      },
+      {
+        "test_name": "import_test_quality_consolidation_integration",
+        "status": "failed",
+        "duration": 0.004891157150268555,
+        "output": "",
+        "error_message": "Import error: No module named 'frontmatter'"
+      },
+      {
+        "test_name": "import_test_multi_agent_workflows",
+        "status": "failed",
+        "duration": 0.0002689361572265625,
+        "output": "",
+        "error_message": "Import error: No module named 'pytest'"
+      },
+      {
+        "test_name": "import_test_agent_communication",
+        "status": "failed",
+        "duration": 0.00021457672119140625,
+        "output": "",
+        "error_message": "Import error: No module named 'pytest'"
+      }
+    ]
+  },
+  "agents": {
+    "suite_name": "agent_validation",
+    "total_tests": 6,
+    "passed_tests": 1,
+    "failed_tests": 5,
+    "skipped_tests": 0,
+    "error_tests": 0,
+    "duration": 0.0011639595031738281,
+    "coverage_percentage": 0.0,
+    "test_results": [
+      {
+        "test_name": "agent_validation_analysis_agent",
+        "status": "failed",
+        "duration": 0.00032711029052734375,
+        "output": "",
+        "error_message": "Import error: No module named 'frontmatter'"
+      },
+      {
+        "test_name": "agent_validation_notes_agent",
+        "status": "failed",
+        "duration": 0.0001800060272216797,
+        "output": "",
+        "error_message": "Import error: No module named 'frontmatter'"
+      },
+      {
+        "test_name": "agent_validation_consolidation_agent",
+        "status": "failed",
+        "duration": 0.00015401840209960938,
+        "output": "",
+        "error_message": "Import error: No module named 'frontmatter'"
+      },
+      {
+        "test_name": "agent_validation_quality_validation_system",
+        "status": "failed",
+        "duration": 0.00015282630920410156,
+        "output": "",
+        "error_message": "Import error: No module named 'frontmatter'"
+      },
+      {
+        "test_name": "agent_validation_study_notes_generator",
+        "status": "failed",
+        "duration": 0.0002541542053222656,
+        "output": "",
+        "error_message": "Import error: No module named 'frontmatter'"
+      },
+      {
+        "test_name": "agent_validation_quality_manager",
+        "status": "passed",
+        "duration": 3.981590270996094e-05,
+        "output": "Successfully imported and instantiated QualityManager",
+        "error_message": ""
+      }
+    ]
+  },
+  "unit": {
+    "suite_name": "pytest_unit",
+    "total_tests": 10,
+    "passed_tests": 0,
+    "failed_tests": 0,
+    "skipped_tests": 10,
+    "error_tests": 0,
+    "duration": 0.014979124069213867,
+    "coverage_percentage": 0.0,
+    "test_results": [
+      {
+        "test_name": "pytest_unit",
+        "status": "skipped",
+        "duration": 0.0,
+        "output": "pytest not available",
+        "error_message": "pytest module not installed"
+      }
+    ]
+  },
+  "integration": {
+    "suite_name": "pytest_integration",
+    "total_tests": 4,
+    "passed_tests": 0,
+    "failed_tests": 0,
+    "skipped_tests": 4,
+    "error_tests": 0,
+    "duration": 0.012919902801513672,
+    "coverage_percentage": 0.0,
+    "test_results": [
+      {
+        "test_name": "pytest_integration",
+        "status": "skipped",
+        "duration": 0.0,
+        "output": "pytest not available",
+        "error_message": "pytest module not installed"
+      }
+    ]
+  }
+}

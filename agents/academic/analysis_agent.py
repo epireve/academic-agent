@@ -25,19 +25,25 @@ except ImportError:
 from dotenv import load_dotenv
 load_dotenv()
 
+# Import from unified architecture
+from ...src.core.output_manager import get_output_manager, OutputCategory, ContentType
+# Use unified BaseAgent for standardized interface
+from ...src.agents.base_agent import BaseAgent
+
 # Define base paths
 BASE_DIR = Path(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-OUTPUT_DIR = BASE_DIR / str(get_output_manager().outputs_dir)
-ANALYSIS_DIR = BASE_DIR / "processed" / "analysis"
+# Don't call get_output_manager() at module level - will be called in __init__
 
 
-class AnalysisAgent:
+class AnalysisAgent(BaseAgent):
     """
     Agent specialized in analyzing academic content, identifying structure,
     themes, topics, and key concepts
     """
     
     def __init__(self, api_key: Optional[str] = None):
+        super().__init__("analysis_agent")
+        self.output_manager = None
         # Get API key from environment if not provided
         self.api_key = api_key or os.getenv("GROQ_API_KEY")
         if not self.api_key:
@@ -56,8 +62,100 @@ class AnalysisAgent:
             model=self.model
         )
         
-        # Ensure analysis directory exists
-        os.makedirs(ANALYSIS_DIR, exist_ok=True)
+        # Note: Analysis directory setup moved to initialize method
+        
+    async def initialize(self):
+        """Initialize agent-specific resources."""
+        try:
+            # Initialize output manager
+            self.output_manager = get_output_manager()
+            
+            # Setup output directories for analysis results
+            analysis_dir = self.output_manager.get_output_path(
+                OutputCategory.PROCESSED, 
+                ContentType.JSON, 
+                subdirectory="analysis"
+            )
+            analysis_dir.mkdir(parents=True, exist_ok=True)
+            
+            # Setup markdown analysis directory
+            markdown_analysis_dir = self.output_manager.get_output_path(
+                OutputCategory.PROCESSED,
+                ContentType.MARKDOWN,
+                subdirectory="analysis_reports"
+            )
+            markdown_analysis_dir.mkdir(parents=True, exist_ok=True)
+            
+            self.logger.info(f"{self.agent_id} initialized successfully")
+            
+        except Exception as e:
+            self.logger.error(f"Failed to initialize {self.agent_id}: {e}")
+            raise
+
+    async def cleanup(self):
+        """Cleanup agent resources."""
+        try:
+            # Cleanup AI model resources
+            if hasattr(self, 'agent'):
+                # CodeAgent doesn't need explicit cleanup in current version
+                pass
+            
+            if hasattr(self, 'model'):
+                # HfApiModel doesn't need explicit cleanup in current version
+                pass
+            
+            self.logger.info(f"{self.agent_id} cleanup completed")
+            
+        except Exception as e:
+            self.logger.error(f"Error during {self.agent_id} cleanup: {e}")
+        
+    def validate_input(self, input_data: Any) -> bool:
+        """Validate input data for analysis."""
+        if isinstance(input_data, str):
+            # File path input
+            return input_data.endswith(('.md', '.txt')) and len(input_data.strip()) > 0
+        elif isinstance(input_data, dict):
+            # Dict input should have content or file path
+            return "markdown_path" in input_data or "content" in input_data
+        return False
+
+    def validate_output(self, output_data: Any) -> bool:
+        """Validate output data from analysis."""
+        if isinstance(output_data, dict):
+            required_fields = ["success", "analysis_results"]
+            return all(field in output_data for field in required_fields)
+        return False
+
+    def check_quality(self, content: Any) -> float:
+        """Check quality of analysis results."""
+        if isinstance(content, dict):
+            analysis_results = content.get("analysis_results", {})
+        else:
+            return 0.0
+        
+        quality_score = 1.0
+        
+        # Check if key analysis components are present
+        expected_components = ["concepts", "structure", "themes", "key_points"]
+        missing_components = 0
+        
+        for component in expected_components:
+            if component not in analysis_results or not analysis_results[component]:
+                missing_components += 1
+        
+        # Reduce score based on missing components
+        quality_score -= (missing_components / len(expected_components)) * 0.5
+        
+        # Check for empty analysis
+        if not analysis_results:
+            quality_score = 0.0
+        
+        # Check for reasonable content depth
+        total_items = sum(len(analysis_results.get(comp, [])) for comp in expected_components)
+        if total_items < 3:
+            quality_score -= 0.3
+        
+        return max(0.0, min(1.0, quality_score))
         
     def analyze_document(self, markdown_path: str) -> Dict[str, Any]:
         """

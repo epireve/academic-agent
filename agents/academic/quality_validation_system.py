@@ -30,10 +30,10 @@ import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import asyncio
 
-from .base_agent import BaseAgent
+from ...src.agents.base_agent import BaseAgent
 from .content_quality_agent import ContentQualityAgent, QualityReport
-from .quality_manager import QualityManager, QualityMetrics
-from .communication_manager import CommunicationManager
+from ...src.agents.quality_manager import QualityManager, QualityMetrics
+from ...src.agents.communication_manager import CommunicationManager
 
 
 @dataclass

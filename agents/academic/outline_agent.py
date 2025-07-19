@@ -13,7 +13,11 @@ from datetime import datetime
 from pathlib import Path
 import networkx as nx
 from groq import Groq
-from .base_agent import BaseAgent
+# Use unified BaseAgent for standardized interface
+from ...src.agents.base_agent import BaseAgent
+
+# Import from unified architecture
+from ...src.core.output_manager import get_output_manager, OutputCategory, ContentType
 
 try:
     from smolagents import CodeAgent
@@ -30,10 +34,7 @@ except ImportError:
 BASE_DIR = Path(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 )
-OUTPUT_DIR = BASE_DIR / str(get_output_manager().outputs_dir)
-PROCESSED_DIR = BASE_DIR / "processed"
-OUTLINES_DIR = PROCESSED_DIR / "outlines"
-ANALYSIS_DIR = PROCESSED_DIR / "analysis"
+# Note: Output directories will be set up in initialize method using output manager
 
 
 class OutlineAgent(BaseAgent):
@@ -41,9 +42,52 @@ class OutlineAgent(BaseAgent):
 
     def __init__(self, groq_api_key: str):
         super().__init__("outline_agent")
+        self.output_manager = None
         self.groq = Groq(api_key=groq_api_key)
         self.concept_graph = nx.DiGraph()
         self.min_concepts_per_section = 5
+
+    async def initialize(self):
+        """Initialize agent-specific resources."""
+        try:
+            # Initialize output manager
+            self.output_manager = get_output_manager()
+            
+            # Setup output directories for outlines
+            outlines_dir = self.output_manager.get_output_path(
+                OutputCategory.PROCESSED, 
+                ContentType.MARKDOWN, 
+                subdirectory="outlines"
+            )
+            outlines_dir.mkdir(parents=True, exist_ok=True)
+            
+            # Setup analysis directory  
+            analysis_dir = self.output_manager.get_output_path(
+                OutputCategory.PROCESSED,
+                ContentType.JSON,
+                subdirectory="analysis"
+            )
+            analysis_dir.mkdir(parents=True, exist_ok=True)
+            
+            self.logger.info(f"{self.agent_id} initialized successfully")
+            
+        except Exception as e:
+            self.logger.error(f"Failed to initialize {self.agent_id}: {e}")
+            raise
+
+    async def cleanup(self):
+        """Cleanup agent resources."""
+        try:
+            # Clear concept graph
+            if hasattr(self, 'concept_graph'):
+                self.concept_graph.clear()
+            
+            # Cleanup Groq client (no explicit cleanup needed)
+            
+            self.logger.info(f"{self.agent_id} cleanup completed")
+            
+        except Exception as e:
+            self.logger.error(f"Error during {self.agent_id} cleanup: {e}")
 
     def create_unified_outline(self, markdown_files: List[str]) -> Dict[str, Any]:
         """Create a unified outline from multiple markdown files"""

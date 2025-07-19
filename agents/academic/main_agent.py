@@ -2,11 +2,15 @@ from typing import Dict, List, Any
 import time
 import psutil
 from datetime import datetime
-from .base_agent import BaseAgent, AgentMessage
-from .communication_manager import get_communication_manager
+# Use unified BaseAgent for standardized interface
+from ...src.agents.base_agent import BaseAgent, AgentMessage
+from ...src.agents.communication_manager import get_communication_manager
 import json
 import os
 import logging
+
+# Import from unified architecture
+from ...src.core.output_manager import get_output_manager, OutputCategory, ContentType
 
 
 class MainAcademicAgent(BaseAgent):
@@ -14,6 +18,7 @@ class MainAcademicAgent(BaseAgent):
 
     def __init__(self, config_path: str = None):
         super().__init__("main_academic_agent")
+        self.output_manager = None
         self.active_processes: Dict[str, Dict] = {}
         self.performance_metrics: Dict[str, List[float]] = {
             "processing_times": [],
@@ -41,6 +46,95 @@ class MainAcademicAgent(BaseAgent):
 
         # Setup feedback loops
         self._setup_feedback_loops()
+
+    async def initialize(self):
+        """Initialize agent-specific resources."""
+        try:
+            # Initialize output manager
+            self.output_manager = get_output_manager()
+            
+            # Setup output directories for main agent operations
+            workflow_dir = self.output_manager.get_output_path(
+                OutputCategory.LOGS, 
+                ContentType.JSON, 
+                subdirectory="workflow_status"
+            )
+            workflow_dir.mkdir(parents=True, exist_ok=True)
+            
+            # Setup performance metrics directory
+            metrics_dir = self.output_manager.get_output_path(
+                OutputCategory.REPORTS,
+                ContentType.JSON,
+                subdirectory="performance_metrics"
+            )
+            metrics_dir.mkdir(parents=True, exist_ok=True)
+            
+            # Initialize communication manager if needed
+            if hasattr(self.comm_manager, 'initialize'):
+                await self.comm_manager.initialize()
+            
+            self.logger.info(f"{self.agent_id} initialized successfully")
+            
+        except Exception as e:
+            self.logger.error(f"Failed to initialize {self.agent_id}: {e}")
+            raise
+
+    async def cleanup(self):
+        """Cleanup agent resources."""
+        try:
+            # Save final performance metrics
+            if self.performance_metrics:
+                self.logger.info("Saving final performance metrics")
+                # In a real implementation, we would save to persistent storage
+            
+            # Cleanup communication manager
+            if hasattr(self.comm_manager, 'cleanup'):
+                await self.comm_manager.cleanup()
+            
+            # Clear active processes
+            self.active_processes.clear()
+            
+            # Clear performance metrics to free memory
+            for metric_list in self.performance_metrics.values():
+                metric_list.clear()
+            
+            self.logger.info(f"{self.agent_id} cleanup completed")
+            
+        except Exception as e:
+            self.logger.error(f"Error during {self.agent_id} cleanup: {e}")
+
+    def check_quality(self, content: Any) -> float:
+        """Check quality of main agent workflow results."""
+        if isinstance(content, dict):
+            workflow_data = content
+        else:
+            return 0.0
+        
+        quality_score = 1.0
+        
+        # Check overall workflow success
+        success = workflow_data.get("success", False)
+        if not success:
+            quality_score -= 0.4
+        
+        # Check quality scores from sub-agents
+        sub_agent_scores = workflow_data.get("agent_quality_scores", {})
+        if sub_agent_scores:
+            avg_score = sum(sub_agent_scores.values()) / len(sub_agent_scores)
+            quality_score = (quality_score + avg_score) / 2
+        
+        # Check for errors
+        errors = workflow_data.get("errors", [])
+        if errors:
+            error_penalty = min(0.3, len(errors) * 0.1)
+            quality_score -= error_penalty
+        
+        # Check improvement cycles efficiency
+        improvement_cycles = workflow_data.get("improvement_cycles", 0)
+        if improvement_cycles > self.max_improvement_cycles:
+            quality_score -= 0.2
+        
+        return max(0.0, min(1.0, quality_score))
 
     def _load_config(self, config_path: str) -> Dict[str, Any]:
         """Load configuration from file or use defaults"""

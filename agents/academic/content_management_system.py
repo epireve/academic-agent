@@ -24,9 +24,9 @@ import logging
 from enum import Enum
 import uuid
 
-from .base_agent import BaseAgent, AgentMessage
+from ...src.agents.base_agent import BaseAgent, AgentMessage
 from .consolidation_agent import ContentConsolidationAgent, ConsolidationResult, FileMapping
-from .quality_manager import QualityManager, QualityEvaluation
+from ...src.agents.quality_manager import QualityManager, QualityEvaluation
 
 
 class ContentType(Enum):

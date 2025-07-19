@@ -29,7 +29,7 @@ from .export_system import (
     ImageConsolidator, ReferenceResolver, ExportQualityValidator
 )
 from .study_notes_generator import StudyNotesGeneratorTool
-from .base_agent import BaseAgent
+from ...src.agents.base_agent import BaseAgent
 
 
 @dataclass

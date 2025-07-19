@@ -19,13 +19,14 @@ from collections import defaultdict
 
 # Import base consolidation functionality
 from .consolidation_agent import ContentConsolidationAgent, FileMapping, ConsolidationResult
-from .base_agent import BaseAgent, AgentMessage
+# Use unified BaseAgent for standardized interface
+from ...src.agents.base_agent import BaseAgent, AgentMessage
 
-# Add week resolver to path
-sys.path.append(str(Path(__file__).parent.parent.parent / "academic-agent-v2" / "src"))
+# Import from unified architecture - no more path manipulation!
+from ...src.core.output_manager import get_output_manager, OutputCategory, ContentType
 
 try:
-    from processors.week_resolver import WeekResolver, WeekMapping, WeekResolutionResult
+    from ...src.processors.week_resolver import WeekResolver, WeekMapping, WeekResolutionResult
 except ImportError as e:
     print(f"Warning: WeekResolver not available: {e}")
     WeekResolver = None
@@ -88,6 +89,88 @@ class EnhancedContentConsolidationAgent(ContentConsolidationAgent):
         except Exception as e:
             self.logger.error(f"Failed to initialize week resolver: {e}")
             self.enable_week_resolution = False
+    
+    async def initialize(self):
+        """Initialize agent-specific resources, including parent initialization."""
+        try:
+            # Initialize parent (ContentConsolidationAgent)
+            await super().initialize()
+            
+            # Setup enhanced consolidation directories
+            enhanced_dir = self.output_manager.get_output_path(
+                OutputCategory.PROCESSED,
+                ContentType.JSON,
+                subdirectory="enhanced_consolidation"
+            )
+            enhanced_dir.mkdir(parents=True, exist_ok=True)
+            
+            # Setup week resolution reports directory
+            week_reports_dir = self.output_manager.get_output_path(
+                OutputCategory.REPORTS,
+                ContentType.JSON,
+                subdirectory="week_resolution"
+            )
+            week_reports_dir.mkdir(parents=True, exist_ok=True)
+            
+            # Re-initialize week resolver if needed after output manager is available
+            if self.enable_week_resolution and self.week_resolver:
+                # Week resolver is already initialized in __init__
+                pass
+            
+            self.logger.info(f"{self.agent_id} initialized successfully")
+            
+        except Exception as e:
+            self.logger.error(f"Failed to initialize {self.agent_id}: {e}")
+            raise
+
+    async def cleanup(self):
+        """Cleanup agent resources, including parent cleanup."""
+        try:
+            # Cleanup week resolver
+            if hasattr(self, 'week_resolver') and self.week_resolver:
+                # WeekResolver doesn't need explicit cleanup in current version
+                pass
+            
+            # Cleanup parent (ContentConsolidationAgent)
+            await super().cleanup()
+            
+            self.logger.info(f"{self.agent_id} cleanup completed")
+            
+        except Exception as e:
+            self.logger.error(f"Error during {self.agent_id} cleanup: {e}")
+    
+    def validate_input(self, input_data: Any) -> bool:
+        """Validate input data for enhanced consolidation."""
+        # Use parent validation and add enhanced checks
+        if hasattr(super(), 'validate_input'):
+            parent_valid = super().validate_input(input_data)
+        else:
+            parent_valid = True  # Fallback if parent doesn't have method
+        
+        if isinstance(input_data, dict):
+            # Check for enhanced consolidation specific fields
+            enhanced_fields = ["search_paths", "output_path"]
+            enhanced_valid = all(field in input_data for field in enhanced_fields)
+            return parent_valid and enhanced_valid
+        
+        return parent_valid
+
+    def validate_output(self, output_data: Any) -> bool:
+        """Validate output data from enhanced consolidation."""
+        # Use parent validation and add enhanced checks
+        if hasattr(super(), 'validate_output'):
+            parent_valid = super().validate_output(output_data)
+        else:
+            parent_valid = True  # Fallback if parent doesn't have method
+        
+        if isinstance(output_data, EnhancedConsolidationResult):
+            enhanced_valid = (
+                hasattr(output_data, 'consolidation_result') and
+                hasattr(output_data, 'integration_success')
+            )
+            return parent_valid and enhanced_valid
+        
+        return parent_valid
     
     def consolidate_with_week_resolution(self, search_paths: List[str], output_path: str,
                                        resolve_weeks_first: bool = True) -> EnhancedConsolidationResult:

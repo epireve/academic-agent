@@ -1,4 +1,3 @@
-import sys
 import os
 from dataclasses import dataclass
 from datetime import datetime
@@ -6,72 +5,32 @@ from typing import Dict, Optional, List, Any
 import uuid
 from pathlib import Path
 
-# Add the v2 core modules to the path
-sys.path.append(str(Path(__file__).parent.parent.parent / "academic-agent-v2" / "src"))
+# Import from unified architecture - no more path manipulation!
+from ...src.core.logging import get_logger
+from ...src.core.exceptions import (
+    AcademicAgentError,
+    CommunicationError,
+    ValidationError,
+    ProcessingError,
+)
+from ...src.core.simple_monitoring import get_system_monitor
+from ...src.core.simple_config import get_config
 
-try:
-    from core.logging import get_logger
-    from core.exceptions import (
-        AcademicAgentError,
-        CommunicationError,
-        ValidationError,
-        ProcessingError,
-        handle_exception
-    )
-    from core.error_handling import with_error_handling, error_context
-    from core.monitoring import get_system_monitor
-    from core.config_manager import get_config
-except ImportError as e:
-    # Fallback to basic logging if enhanced system is not available
-    import logging
-    print(f"Warning: Enhanced logging/error handling not available: {e}")
-    print("Falling back to basic logging")
-    
-    def get_logger(name):
-        return logging.getLogger(name)
-    
-    class AcademicAgentError(Exception):
-        pass
-    
-    class CommunicationError(AcademicAgentError):
-        pass
-    
-    class ValidationError(AcademicAgentError):
-        pass
-    
-    class ProcessingError(AcademicAgentError):
-        pass
-    
-    def handle_exception(exc, logger, operation, context=None):
-        return AcademicAgentError(str(exc))
-    
-    def with_error_handling(operation_name, **kwargs):
-        def decorator(func):
-            return func
-        return decorator
-    
-    def error_context(operation_name, context=None):
-        from contextlib import contextmanager
-        @contextmanager
-        def ctx():
-            yield get_logger("error_context")
-        return ctx()
-    
-    def get_system_monitor():
-        class MockMonitor:
-            def __init__(self):
-                self.metrics_collector = self
-            def collect_metric(self, metric):
-                pass
-        return MockMonitor()
-    
-    def get_config():
-        class MockConfig:
-            def __init__(self):
-                self.quality_threshold = 0.7
-                self.max_improvement_cycles = 3
-                self.communication_interval = 30
-        return MockConfig()
+# Define error handling decorators for backward compatibility
+def handle_exception(exc, logger, operation, context=None):
+    """Handle exceptions with proper logging."""
+    logger.error(f"Error in {operation}: {exc}", extra=context or {})
+    return AcademicAgentError(str(exc))
+
+def with_error_handling(operation_name, **kwargs):
+    """Decorator for error handling."""
+    def decorator(func):
+        return func
+    return decorator
+
+def error_context(**context):
+    """Create error context - simplified implementation."""
+    return context
 
 
 @dataclass

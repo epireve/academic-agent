@@ -21,7 +21,7 @@ from datetime import datetime
 import json
 import logging
 
-from .base_agent import BaseAgent
+from ...src.agents.base_agent import BaseAgent
 from .async_framework import (
     AsyncTask, TaskPriority, TaskStatus, async_retry, async_timeout,
     AsyncResourceManager, AsyncProgressTracker

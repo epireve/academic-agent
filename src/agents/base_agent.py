@@ -231,6 +231,21 @@ class BaseAgent(ABC):
         """Cleanup agent resources."""
         pass
     
+    @abstractmethod
+    def validate_input(self, input_data: Any) -> bool:
+        """Validate input data for agent operations."""
+        pass
+    
+    @abstractmethod
+    def validate_output(self, output_data: Any) -> bool:
+        """Validate output data from agent operations."""
+        pass
+    
+    @abstractmethod
+    def check_quality(self, content: Any) -> float:
+        """Check quality of processed content and return score (0.0-1.0)."""
+        pass
+    
     # Capability management
     
     def register_capability(self, capability: AgentCapability):
@@ -479,6 +494,24 @@ class SyncAgentAdapter(BaseAgent):
             *args,
             **kwargs
         )
+    
+    def validate_input(self, input_data: Any) -> bool:
+        """Validate input data using sync agent method."""
+        if hasattr(self.sync_agent, 'validate_input'):
+            return self.sync_agent.validate_input(input_data)
+        return True  # Default to valid if method not implemented
+    
+    def validate_output(self, output_data: Any) -> bool:
+        """Validate output data using sync agent method."""
+        if hasattr(self.sync_agent, 'validate_output'):
+            return self.sync_agent.validate_output(output_data)
+        return True  # Default to valid if method not implemented
+    
+    def check_quality(self, content: Any) -> float:
+        """Check quality using sync agent method."""
+        if hasattr(self.sync_agent, 'check_quality'):
+            return self.sync_agent.check_quality(content)
+        return 0.8  # Default quality score if method not implemented
 
 
 # Convenience functions

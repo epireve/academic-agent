@@ -19,12 +19,16 @@ from datetime import datetime, timedelta
 from pathlib import Path
 import logging
 
-from .base_agent import BaseAgent, AgentMessage
+# Use unified BaseAgent for standardized interface
+from ...src.agents.base_agent import BaseAgent, AgentMessage
 from .async_framework import (
     AsyncTask, TaskPriority, TaskStatus, WorkerPool, 
     AsyncCommunicationManager, AsyncProgressTracker, AsyncResourceManager,
     create_async_framework, async_retry, async_timeout
 )
+
+# Import from unified architecture
+from ...src.core.output_manager import get_output_manager, OutputCategory, ContentType
 
 try:
     from ..monitoring.integration import get_monitoring_integration
@@ -38,6 +42,9 @@ class AsyncMainAcademicAgent(BaseAgent):
     
     def __init__(self, config_path: Optional[str] = None):
         super().__init__("async_main_academic_agent")
+        
+        # Initialize output manager placeholder
+        self.output_manager = None
         
         # Load configuration
         self.config = self._load_config(config_path)
@@ -107,6 +114,101 @@ class AsyncMainAcademicAgent(BaseAgent):
                 self.logger.error(f"Error loading config: {e}")
         
         return default_config
+    
+    async def initialize(self):
+        """Initialize agent-specific resources."""
+        try:
+            # Initialize output manager
+            self.output_manager = get_output_manager()
+            
+            # Setup output directories for async workflows
+            async_workflows_dir = self.output_manager.get_output_path(
+                OutputCategory.LOGS, 
+                ContentType.JSON, 
+                subdirectory="async_workflows"
+            )
+            async_workflows_dir.mkdir(parents=True, exist_ok=True)
+            
+            # Setup async performance metrics directory
+            async_metrics_dir = self.output_manager.get_output_path(
+                OutputCategory.REPORTS,
+                ContentType.JSON,
+                subdirectory="async_performance"
+            )
+            async_metrics_dir.mkdir(parents=True, exist_ok=True)
+            
+            # Call the existing start method for framework initialization
+            await self.start()
+            
+            self.logger.info(f"{self.agent_id} initialized successfully")
+            
+        except Exception as e:
+            self.logger.error(f"Failed to initialize {self.agent_id}: {e}")
+            raise
+
+    async def cleanup(self):
+        """Cleanup agent resources."""
+        try:
+            # Call the existing stop method for framework cleanup
+            await self.stop()
+            
+            self.logger.info(f"{self.agent_id} cleanup completed")
+            
+        except Exception as e:
+            self.logger.error(f"Error during {self.agent_id} cleanup: {e}")
+    
+    def validate_input(self, input_data: Any) -> bool:
+        """Validate input data for async workflows."""
+        if isinstance(input_data, dict):
+            # Workflow input should have required fields
+            required_fields = ["workflow_type"]
+            return all(field in input_data for field in required_fields)
+        elif isinstance(input_data, list):
+            # List of tasks - each should be valid
+            return all(isinstance(task, dict) and "task_type" in task for task in input_data)
+        return False
+
+    def validate_output(self, output_data: Any) -> bool:
+        """Validate output data from async workflows."""
+        if isinstance(output_data, dict):
+            required_fields = ["success", "workflow_id", "results"]
+            return all(field in output_data for field in required_fields)
+        return False
+
+    def check_quality(self, content: Any) -> float:
+        """Check quality of async workflow results."""
+        if isinstance(content, dict):
+            workflow_results = content.get("results", {})
+        else:
+            return 0.0
+        
+        quality_score = 1.0
+        
+        # Check workflow completion rate
+        total_tasks = workflow_results.get("total_tasks", 0)
+        completed_tasks = workflow_results.get("completed_tasks", 0)
+        
+        if total_tasks > 0:
+            completion_rate = completed_tasks / total_tasks
+            quality_score *= completion_rate
+        else:
+            quality_score = 0.0
+        
+        # Check for errors
+        errors = workflow_results.get("errors", [])
+        if errors:
+            error_penalty = min(0.5, len(errors) * 0.1)
+            quality_score -= error_penalty
+        
+        # Check processing efficiency
+        processing_time = workflow_results.get("processing_time", 0)
+        target_time = workflow_results.get("target_time", 300)  # 5 minutes default
+        
+        if processing_time > target_time:
+            efficiency_penalty = min(0.3, (processing_time - target_time) / target_time * 0.3)
+            quality_score -= efficiency_penalty
+        
+        return max(0.0, min(1.0, quality_score))
     
     async def start(self):
         """Start the async agent and all components."""

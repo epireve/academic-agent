@@ -28,7 +28,7 @@ from concurrent.futures import ThreadPoolExecutor
 import psutil
 import gc
 
-from .base_agent import AgentMessage, BaseAgent
+from ...src.agents.base_agent import AgentMessage, BaseAgent
 
 
 T = TypeVar('T')

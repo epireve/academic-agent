@@ -5,7 +5,6 @@ Part of the Academic Agent system
 """
 
 import os
-import sys
 import argparse
 import json
 from typing import List, Dict, Any, Optional, Tuple
@@ -15,34 +14,24 @@ from datetime import datetime
 from PIL import Image
 import magic
 from docling.document_converter import DocumentConverter
-from .base_agent import BaseAgent
+# Use unified BaseAgent for standardized interface
+from ...src.agents.base_agent import BaseAgent
 
-try:
-    from smolagents import CodeAgent
-    from smolagents import HfApiModel
-except ImportError:
-    print("Installing smolagents...")
-    import subprocess
-
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "smolagents"])
-    from smolagents import CodeAgent
-    from smolagents import HfApiModel
+# Import from unified architecture
+from ...src.core.output_manager import get_output_manager, OutputCategory, ContentType
+from ...src.processors.pdf_processor import PDFProcessor
 
 # Load environment variables
 load_dotenv()
 
-# Add parent directory to path for importing the pdf_processor
-sys.path.append(
-    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-)
-from tools.pdf_processor import DoclingProcessor
-
-# Define base paths
-BASE_DIR = Path(
-    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-)
-OUTPUT_DIR = BASE_DIR / "processed" / "ingestion"
-ANALYSIS_DIR = BASE_DIR / "processed" / "analysis"
+# Optional AI agents - only import if available
+try:
+    from smolagents import CodeAgent, HfApiModel
+    AI_AGENTS_AVAILABLE = True
+except ImportError:
+    AI_AGENTS_AVAILABLE = False
+    CodeAgent = None
+    HfApiModel = None
 
 
 class IngestionAgent(BaseAgent):
@@ -54,6 +43,66 @@ class IngestionAgent(BaseAgent):
         self.supported_formats = ["application/pdf", "text/plain"]
         self.image_formats = ["jpg", "jpeg", "png", "gif"]
         self.min_processing_speed = 10  # pages per second
+        self.output_manager = None
+        self.pdf_processor = None
+
+    async def initialize(self):
+        """Initialize agent-specific resources."""
+        try:
+            # Initialize output manager
+            self.output_manager = get_output_manager()
+            
+            # Setup output directories
+            ingestion_dir = self.output_manager.get_output_path(
+                OutputCategory.PROCESSED, 
+                ContentType.MARKDOWN, 
+                subdirectory="ingestion"
+            )
+            ingestion_dir.mkdir(parents=True, exist_ok=True)
+            
+            # Initialize PDF processor if available
+            if hasattr(self, 'pdf_processor'):
+                self.pdf_processor = PDFProcessor()
+                await self.pdf_processor.initialize()
+            
+            # Setup AI agents if available
+            if AI_AGENTS_AVAILABLE:
+                try:
+                    self.ai_model = HfApiModel()
+                    self.code_agent = CodeAgent(tools=[], model=self.ai_model)
+                except Exception as e:
+                    self.logger.warning(f"Could not initialize AI agents: {e}")
+                    self.ai_model = None
+                    self.code_agent = None
+            
+            self.logger.info(f"{self.agent_id} initialized successfully")
+            
+        except Exception as e:
+            self.logger.error(f"Failed to initialize {self.agent_id}: {e}")
+            raise
+
+    async def cleanup(self):
+        """Cleanup agent resources."""
+        try:
+            # Cleanup PDF processor
+            if hasattr(self, 'pdf_processor') and self.pdf_processor:
+                await self.pdf_processor.cleanup()
+            
+            # Close any open file handles
+            if hasattr(self, 'converter'):
+                # DocumentConverter doesn't need explicit cleanup
+                pass
+            
+            # Clear AI agents
+            if hasattr(self, 'code_agent'):
+                self.code_agent = None
+            if hasattr(self, 'ai_model'):
+                self.ai_model = None
+            
+            self.logger.info(f"{self.agent_id} cleanup completed")
+            
+        except Exception as e:
+            self.logger.error(f"Error during {self.agent_id} cleanup: {e}")
 
     def process_pdf(self, pdf_path: str) -> Dict[str, Any]:
         """Process a single PDF file"""

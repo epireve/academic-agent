@@ -11,7 +11,11 @@ from datetime import datetime
 import json
 from pathlib import Path
 from groq import Groq
-from .base_agent import BaseAgent, AgentMessage
+# Use unified BaseAgent for standardized interface
+from ...src.agents.base_agent import BaseAgent, AgentMessage
+
+# Import from unified architecture
+from ...src.core.output_manager import get_output_manager, OutputCategory, ContentType
 
 
 class UpdateAgent(BaseAgent):
@@ -19,6 +23,7 @@ class UpdateAgent(BaseAgent):
 
     def __init__(self, groq_api_key: str):
         super().__init__("update_agent")
+        self.output_manager = None
         self.groq = Groq(api_key=groq_api_key)
         self.improvement_threshold = 0.3  # Minimum improvement required
 
@@ -79,6 +84,87 @@ class UpdateAgent(BaseAgent):
             Return the restructured notes in markdown format.
             """,
         }
+
+    async def initialize(self):
+        """Initialize agent-specific resources."""
+        try:
+            # Initialize output manager
+            self.output_manager = get_output_manager()
+            
+            # Setup output directories for improved notes
+            improved_dir = self.output_manager.get_output_path(
+                OutputCategory.PROCESSED, 
+                ContentType.MARKDOWN, 
+                subdirectory="improved_notes"
+            )
+            improved_dir.mkdir(parents=True, exist_ok=True)
+            
+            # Setup improvement reports directory
+            reports_dir = self.output_manager.get_output_path(
+                OutputCategory.REPORTS,
+                ContentType.JSON,
+                subdirectory="improvement_reports"
+            )
+            reports_dir.mkdir(parents=True, exist_ok=True)
+            
+            self.logger.info(f"{self.agent_id} initialized successfully")
+            
+        except Exception as e:
+            self.logger.error(f"Failed to initialize {self.agent_id}: {e}")
+            raise
+
+    async def cleanup(self):
+        """Cleanup agent resources."""
+        try:
+            # Cleanup Groq client (no explicit cleanup needed)
+            
+            self.logger.info(f"{self.agent_id} cleanup completed")
+            
+        except Exception as e:
+            self.logger.error(f"Error during {self.agent_id} cleanup: {e}")
+
+    def check_quality(self, content: Any) -> float:
+        """Check quality of improved notes."""
+        if isinstance(content, dict):
+            # Check improvement results
+            improvement_data = content
+            quality_score = 1.0
+            
+            # Check improvement metrics
+            improvement_metrics = improvement_data.get("improvement_metrics", {})
+            if improvement_metrics:
+                quality_improvement = improvement_metrics.get("quality_improvement", 0)
+                if quality_improvement >= self.improvement_threshold:
+                    quality_score = quality_improvement
+                else:
+                    quality_score -= 0.3  # Penalty for insufficient improvement
+            
+            # Check verification score
+            verification_score = improvement_data.get("verification_score", 0.8)
+            quality_score = (quality_score + verification_score) / 2
+            
+            # Check for successful improvements
+            improvements_applied = improvement_data.get("improvements_applied", [])
+            if not improvements_applied:
+                quality_score -= 0.4
+            
+            return max(0.0, min(1.0, quality_score))
+            
+        elif isinstance(content, str):
+            # Check content string quality
+            quality_score = 1.0
+            
+            # Basic content checks
+            if len(content) < 100:
+                quality_score -= 0.3
+            if not content.strip():
+                quality_score = 0.0
+            if not any(line.startswith("#") for line in content.split("\n")):
+                quality_score -= 0.2
+                
+            return max(0.0, min(1.0, quality_score))
+        
+        return 0.0
 
     def improve_notes(
         self,
