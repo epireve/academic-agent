@@ -6,104 +6,104 @@
     "failed_tests": 0,
     "skipped_tests": 0,
     "error_tests": 0,
-    "duration": 0.39605093002319336,
+    "duration": 0.3714630603790283,
     "coverage_percentage": 0.0,
     "test_results": [
       {
         "test_name": "syntax_test_analysis_agent.py",
         "status": "passed",
-        "duration": 0.07659602165222168,
+        "duration": 0.028200149536132812,
         "output": "Syntax validation passed",
         "error_message": ""
       },
       {
         "test_name": "syntax_test_consolidation_agent.py",
         "status": "passed",
-        "duration": 0.025053977966308594,
+        "duration": 0.026149988174438477,
         "output": "Syntax validation passed",
         "error_message": ""
       },
       {
         "test_name": "syntax_test_academic_agent.py",
         "status": "passed",
-        "duration": 0.02528095245361328,
+        "duration": 0.027664899826049805,
         "output": "Syntax validation passed",
         "error_message": ""
       },
       {
         "test_name": "syntax_test_study_notes_generator.py",
         "status": "passed",
-        "duration": 0.025557994842529297,
+        "duration": 0.02657008171081543,
         "output": "Syntax validation passed",
         "error_message": ""
       },
       {
         "test_name": "syntax_test_content_quality_agent.py",
         "status": "passed",
-        "duration": 0.026240110397338867,
+        "duration": 0.02633976936340332,
         "output": "Syntax validation passed",
         "error_message": ""
       },
       {
         "test_name": "syntax_test_notes_agent.py",
         "status": "passed",
-        "duration": 0.024441003799438477,
+        "duration": 0.026430130004882812,
         "output": "Syntax validation passed",
         "error_message": ""
       },
       {
         "test_name": "syntax_test_quality_validation_system.py",
         "status": "passed",
-        "duration": 0.023214101791381836,
+        "duration": 0.02535080909729004,
         "output": "Syntax validation passed",
         "error_message": ""
       },
       {
         "test_name": "syntax_test_base_agent.py",
         "status": "passed",
-        "duration": 0.02338886260986328,
+        "duration": 0.026234865188598633,
         "output": "Syntax validation passed",
         "error_message": ""
       },
       {
         "test_name": "syntax_test_ingestion_agent.py",
         "status": "passed",
-        "duration": 0.0250399112701416,
+        "duration": 0.026502132415771484,
         "output": "Syntax validation passed",
         "error_message": ""
       },
       {
         "test_name": "syntax_test_pdf_processing.py",
         "status": "passed",
-        "duration": 0.024847984313964844,
+        "duration": 0.0269010066986084,
         "output": "Syntax validation passed",
         "error_message": ""
       },
       {
         "test_name": "syntax_test_end_to_end_workflow.py",
         "status": "passed",
-        "duration": 0.02376699447631836,
+        "duration": 0.026866912841796875,
         "output": "Syntax validation passed",
         "error_message": ""
       },
       {
         "test_name": "syntax_test_quality_consolidation_integration.py",
         "status": "passed",
-        "duration": 0.02289104461669922,
+        "duration": 0.025829792022705078,
         "output": "Syntax validation passed",
         "error_message": ""
       },
       {
         "test_name": "syntax_test_multi_agent_workflows.py",
         "status": "passed",
-        "duration": 0.024235963821411133,
+        "duration": 0.025778770446777344,
         "output": "Syntax validation passed",
         "error_message": ""
       },
       {
         "test_name": "syntax_test_agent_communication.py",
         "status": "passed",
-        "duration": 0.024853944778442383,
+        "duration": 0.02590632438659668,
         "output": "Syntax validation passed",
         "error_message": ""
       }
@@ -116,41 +116,41 @@
     "failed_tests": 12,
     "skipped_tests": 0,
     "error_tests": 1,
-    "duration": 0.4650239944458008,
+    "duration": 16.128862857818604,
     "coverage_percentage": 0.0,
     "test_results": [
       {
         "test_name": "import_test_analysis_agent",
         "status": "failed",
-        "duration": 0.0004248619079589844,
+        "duration": 15.431002855300903,
         "output": "",
-        "error_message": "Import error: No module named 'pytest'"
+        "error_message": "Import error: attempted relative import beyond top-level package"
       },
       {
         "test_name": "import_test_consolidation_agent",
         "status": "failed",
-        "duration": 0.00019598007202148438,
+        "duration": 0.016835927963256836,
         "output": "",
-        "error_message": "Import error: No module named 'pytest'"
+        "error_message": "Import error: cannot import name 'ConsolidationAgent' from 'src.agents.consolidation_agent' (/Users/invoture/dev.local/academic-agent/src/agents/consolidation_agent.py)"
       },
       {
         "test_name": "import_test_academic_agent",
         "status": "failed",
-        "duration": 0.0002830028533935547,
+        "duration": 0.0002949237823486328,
         "output": "",
-        "error_message": "Import error: No module named 'pytest'"
+        "error_message": "Import error: No module named 'tests'"
       },
       {
         "test_name": "import_test_study_notes_generator",
         "status": "failed",
-        "duration": 0.0001678466796875,
+        "duration": 0.0005099773406982422,
         "output": "",
-        "error_message": "Import error: No module named 'pytest'"
+        "error_message": "Import error: attempted relative import beyond top-level package"
       },
       {
         "test_name": "import_test_content_quality_agent",
         "status": "passed",
-        "duration": 0.4549541473388672,
+        "duration": 0.007071018218994141,
         "output": "Import validation passed",
         "error_message": ""
       },
@@ -164,58 +164,58 @@
       {
         "test_name": "import_test_quality_validation_system",
         "status": "failed",
-        "duration": 0.0004570484161376953,
+        "duration": 0.00033473968505859375,
         "output": "",
-        "error_message": "Import error: No module named 'pytest'"
+        "error_message": "Import error: attempted relative import beyond top-level package"
       },
       {
         "test_name": "import_test_base_agent",
         "status": "failed",
-        "duration": 0.00030732154846191406,
+        "duration": 0.00033211708068847656,
         "output": "",
-        "error_message": "Import error: No module named 'pytest'"
+        "error_message": "Import error: attempted relative import beyond top-level package"
       },
       {
         "test_name": "import_test_ingestion_agent",
         "status": "failed",
-        "duration": 0.0002818107604980469,
+        "duration": 0.6679601669311523,
         "output": "",
-        "error_message": "Import error: No module named 'pytest'"
+        "error_message": "Import error: cannot import name 'PDFProcessor' from 'src.processors.pdf_processor' (/Users/invoture/dev.local/academic-agent/src/processors/pdf_processor.py)"
       },
       {
         "test_name": "import_test_pdf_processing",
         "status": "failed",
-        "duration": 0.00022983551025390625,
+        "duration": 0.00030112266540527344,
         "output": "",
-        "error_message": "Import error: No module named 'pytest'"
+        "error_message": "Import error: No module named 'tests'"
       },
       {
         "test_name": "import_test_end_to_end_workflow",
         "status": "failed",
-        "duration": 0.00025010108947753906,
+        "duration": 0.00031113624572753906,
         "output": "",
-        "error_message": "Import error: No module named 'pytest'"
+        "error_message": "Import error: No module named 'tests'"
       },
       {
         "test_name": "import_test_quality_consolidation_integration",
         "status": "failed",
-        "duration": 0.004891157150268555,
+        "duration": 0.0007312297821044922,
         "output": "",
-        "error_message": "Import error: No module named 'frontmatter'"
+        "error_message": "Import error: attempted relative import beyond top-level package"
       },
       {
         "test_name": "import_test_multi_agent_workflows",
         "status": "failed",
-        "duration": 0.0002689361572265625,
+        "duration": 0.0003662109375,
         "output": "",
-        "error_message": "Import error: No module named 'pytest'"
+        "error_message": "Import error: attempted relative import beyond top-level package"
       },
       {
         "test_name": "import_test_agent_communication",
         "status": "failed",
-        "duration": 0.00021457672119140625,
+        "duration": 0.0003352165222167969,
         "output": "",
-        "error_message": "Import error: No module named 'pytest'"
+        "error_message": "Import error: attempted relative import beyond top-level package"
       }
     ]
   },
@@ -226,48 +226,48 @@
     "failed_tests": 5,
     "skipped_tests": 0,
     "error_tests": 0,
-    "duration": 0.0011639595031738281,
+    "duration": 0.0006988048553466797,
     "coverage_percentage": 0.0,
     "test_results": [
       {
         "test_name": "agent_validation_analysis_agent",
         "status": "failed",
-        "duration": 0.00032711029052734375,
+        "duration": 0.00014781951904296875,
         "output": "",
-        "error_message": "Import error: No module named 'frontmatter'"
+        "error_message": "Import error: attempted relative import beyond top-level package"
       },
       {
         "test_name": "agent_validation_notes_agent",
         "status": "failed",
-        "duration": 0.0001800060272216797,
+        "duration": 0.00010609626770019531,
         "output": "",
-        "error_message": "Import error: No module named 'frontmatter'"
+        "error_message": "Import error: attempted relative import beyond top-level package"
       },
       {
         "test_name": "agent_validation_consolidation_agent",
         "status": "failed",
-        "duration": 0.00015401840209960938,
+        "duration": 0.00010395050048828125,
         "output": "",
-        "error_message": "Import error: No module named 'frontmatter'"
+        "error_message": "Import error: attempted relative import beyond top-level package"
       },
       {
         "test_name": "agent_validation_quality_validation_system",
         "status": "failed",
-        "duration": 0.00015282630920410156,
+        "duration": 9.799003601074219e-05,
         "output": "",
-        "error_message": "Import error: No module named 'frontmatter'"
+        "error_message": "Import error: attempted relative import beyond top-level package"
       },
       {
         "test_name": "agent_validation_study_notes_generator",
         "status": "failed",
-        "duration": 0.0002541542053222656,
+        "duration": 9.870529174804688e-05,
         "output": "",
-        "error_message": "Import error: No module named 'frontmatter'"
+        "error_message": "Import error: attempted relative import beyond top-level package"
       },
       {
         "test_name": "agent_validation_quality_manager",
         "status": "passed",
-        "duration": 3.981590270996094e-05,
+        "duration": 0.00010895729064941406,
         "output": "Successfully imported and instantiated QualityManager",
         "error_message": ""
       }
@@ -280,7 +280,7 @@
     "failed_tests": 0,
     "skipped_tests": 10,
     "error_tests": 0,
-    "duration": 0.014979124069213867,
+    "duration": 0.21114492416381836,
     "coverage_percentage": 0.0,
     "test_results": [
       {
@@ -299,7 +299,7 @@
     "failed_tests": 0,
     "skipped_tests": 4,
     "error_tests": 0,
-    "duration": 0.012919902801513672,
+    "duration": 0.15636897087097168,
     "coverage_percentage": 0.0,
     "test_results": [
       {

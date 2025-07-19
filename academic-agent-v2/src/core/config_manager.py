@@ -241,4 +241,185 @@ class ConfigManager:
                 current[key] = {}
             current = current[key]
         
-        current[keys[-1]] = value\n    \n    def get_config(self) -> AcademicAgentConfig:\n        """Get the current configuration."""\n        if self.config is None:\n            raise ConfigurationError("Configuration not loaded")\n        return self.config\n    \n    def get_logging_config(self) -> LoggingConfig:\n        """Get logging configuration."""\n        return self.get_config().logging\n    \n    def get_error_handling_config(self) -> ErrorHandlingConfig:\n        """Get error handling configuration."""\n        return self.get_config().error_handling\n    \n    def get_metrics_config(self) -> MetricsConfig:\n        """Get metrics configuration."""\n        return self.get_config().metrics\n    \n    def get_operation_config(self, operation_name: str) -> Dict[str, Any]:\n        """Get configuration for a specific operation."""\n        operations_config = self.get_config().error_handling.operations\n        return operations_config.get(operation_name, {})\n    \n    def get_agent_prompt(self, agent_name: str) -> Optional[str]:\n        """Get specialized prompt for an agent."""\n        return self.get_config().agent_specialized_prompts.get(agent_name)\n    \n    def reload_configuration(self):\n        """Reload configuration from files."""\n        logger.info("Reloading configuration")\n        self._load_configuration()\n    \n    def validate_configuration(self) -> bool:\n        """Validate the current configuration."""\n        try:\n            if self.config is None:\n                return False\n            \n            # Validate logging configuration\n            log_dir = Path(self.config.logging.log_dir)\n            if not log_dir.exists():\n                log_dir.mkdir(parents=True, exist_ok=True)\n            \n            # Validate error handling configuration\n            if self.config.error_handling.max_retries < 0:\n                raise ConfigurationError("max_retries must be non-negative")\n            \n            if self.config.error_handling.retry_delay < 0:\n                raise ConfigurationError("retry_delay must be non-negative")\n            \n            # Validate quality thresholds\n            if not 0 <= self.config.quality_threshold <= 1:\n                raise ConfigurationError("quality_threshold must be between 0 and 1")\n            \n            logger.info("Configuration validation successful")\n            return True\n            \n        except Exception as e:\n            logger.error(f"Configuration validation failed: {e}")\n            return False\n    \n    def export_merged_config(self, output_path: Union[str, Path], format: str = "yaml") -> None:\n        """Export the merged configuration to a file.\n        \n        Args:\n            output_path: Path to save the configuration\n            format: Output format ('yaml' or 'json')\n        \"\"\"\n        if self.config is None:\n            raise ConfigurationError("Configuration not loaded")\n        \n        output_path = Path(output_path)\n        output_path.parent.mkdir(parents=True, exist_ok=True)\n        \n        config_dict = self.config.dict()\n        \n        if format.lower() == "yaml":\n            with open(output_path, 'w', encoding='utf-8') as f:\n                yaml.dump(config_dict, f, default_flow_style=False, indent=2)\n        elif format.lower() == "json":\n            with open(output_path, 'w', encoding='utf-8') as f:\n                json.dump(config_dict, f, indent=2, ensure_ascii=False)\n        else:\n            raise ConfigurationError(f"Unsupported format: {format}")\n        \n        logger.info(f"Configuration exported to {output_path}")\n    \n    def get_environment_overrides(self) -> Dict[str, Any]:\n        """Get configuration overrides from environment variables."""\n        overrides = {}\n        \n        # Environment variable mappings\n        env_mappings = {\n            "ACADEMIC_AGENT_LOG_LEVEL": "logging.level",\n            "ACADEMIC_AGENT_LOG_DIR": "logging.log_dir",\n            "ACADEMIC_AGENT_MAX_RETRIES": ("error_handling.max_retries", int),\n            "ACADEMIC_AGENT_RETRY_DELAY": ("error_handling.retry_delay", float),\n            "ACADEMIC_AGENT_QUALITY_THRESHOLD": ("quality_threshold", float),\n            "ACADEMIC_AGENT_IMPROVEMENT_THRESHOLD": ("improvement_threshold", float),\n            "ACADEMIC_AGENT_MAX_IMPROVEMENT_CYCLES": ("max_improvement_cycles", int),\n            "ACADEMIC_AGENT_COMMUNICATION_INTERVAL": ("communication_interval", int),\n        }\n        \n        for env_var, config_path in env_mappings.items():\n            value = os.getenv(env_var)\n            if value is not None:\n                if isinstance(config_path, tuple):\n                    path, converter = config_path\n                    try:\n                        value = converter(value)\n                    except (ValueError, TypeError) as e:\n                        logger.warning(f"Invalid value for {env_var}: {value}. Error: {e}")\n                        continue\n                else:\n                    path = config_path\n                \n                self._set_nested_value(overrides, path, value)\n        \n        return overrides\n    \n    def apply_environment_overrides(self):\n        """Apply environment variable overrides to the configuration."""\n        if self.config is None:\n            raise ConfigurationError("Configuration not loaded")\n        \n        overrides = self.get_environment_overrides()\n        if overrides:\n            logger.info(f"Applying environment overrides: {overrides}")\n            \n            # Update configuration with overrides\n            config_dict = self.config.dict()\n            for path, value in overrides.items():\n                self._set_nested_value(config_dict, path, value)\n            \n            # Recreate configuration with overrides\n            self.config = AcademicAgentConfig(**config_dict)\n\n\n# Global configuration manager instance\n_config_manager: Optional[ConfigManager] = None\n\n\ndef get_config_manager(\n    yaml_config_path: Optional[Union[str, Path]] = None,\n    reload: bool = False\n) -> ConfigManager:\n    """Get the global configuration manager instance.\n    \n    Args:\n        yaml_config_path: Path to YAML configuration file\n        reload: Whether to reload the configuration\n    \n    Returns:\n        ConfigManager instance\n    \"\"\"\n    global _config_manager\n    \n    if _config_manager is None or reload:\n        if yaml_config_path is None:\n            # Default path\n            yaml_config_path = Path("config/logging_config.yaml")\n        \n        _config_manager = ConfigManager(yaml_config_path)\n        _config_manager.apply_environment_overrides()\n    \n    return _config_manager\n\n\ndef get_config() -> AcademicAgentConfig:\n    """Get the current configuration.\n    \n    Returns:\n        AcademicAgentConfig instance\n    \"\"\"\n    return get_config_manager().get_config()\n\n\ndef reload_config():\n    """Reload the configuration from files.\"\"\"\n    get_config_manager(reload=True)
+        current[keys[-1]] = value
+
+    def get_config(self) -> AcademicAgentConfig:
+        """Get the current configuration."""
+        if self.config is None:
+            raise ConfigurationError("Configuration not loaded")
+        return self.config
+
+    def get_logging_config(self) -> LoggingConfig:
+        """Get logging configuration."""
+        return self.get_config().logging
+
+    def get_error_handling_config(self) -> ErrorHandlingConfig:
+        """Get error handling configuration."""
+        return self.get_config().error_handling
+
+    def get_metrics_config(self) -> MetricsConfig:
+        """Get metrics configuration."""
+        return self.get_config().metrics
+
+    def get_operation_config(self, operation_name: str) -> Dict[str, Any]:
+        """Get configuration for a specific operation."""
+        operations_config = self.get_config().error_handling.operations
+        return operations_config.get(operation_name, {})
+
+    def get_agent_prompt(self, agent_name: str) -> Optional[str]:
+        """Get specialized prompt for an agent."""
+        return self.get_config().agent_specialized_prompts.get(agent_name)
+
+    def reload_configuration(self):
+        """Reload configuration from files."""
+        logger.info("Reloading configuration")
+        self._load_configuration()
+
+    def validate_configuration(self) -> bool:
+        """Validate the current configuration."""
+        try:
+            if self.config is None:
+                return False
+
+            # Validate logging configuration
+            log_dir = Path(self.config.logging.log_dir)
+            if not log_dir.exists():
+                log_dir.mkdir(parents=True, exist_ok=True)
+
+            # Validate error handling configuration
+            if self.config.error_handling.max_retries < 0:
+                raise ConfigurationError("max_retries must be non-negative")
+
+            if self.config.error_handling.retry_delay < 0:
+                raise ConfigurationError("retry_delay must be non-negative")
+
+            # Validate quality thresholds
+            if not 0 <= self.config.quality_threshold <= 1:
+                raise ConfigurationError("quality_threshold must be between 0 and 1")
+
+            logger.info("Configuration validation successful")
+            return True
+
+        except Exception as e:
+            logger.error(f"Configuration validation failed: {e}")
+            return False
+
+    def export_merged_config(self, output_path: Union[str, Path], format: str = "yaml") -> None:
+        """Export the merged configuration to a file.
+        
+        Args:
+            output_path: Path to save the configuration
+            format: Output format ('yaml' or 'json')
+        """
+        if self.config is None:
+            raise ConfigurationError("Configuration not loaded")
+
+        output_path = Path(output_path)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+
+        config_dict = self.config.dict()
+
+        if format.lower() == "yaml":
+            with open(output_path, 'w', encoding='utf-8') as f:
+                yaml.dump(config_dict, f, default_flow_style=False, indent=2)
+        elif format.lower() == "json":
+            with open(output_path, 'w', encoding='utf-8') as f:
+                json.dump(config_dict, f, indent=2, ensure_ascii=False)
+        else:
+            raise ConfigurationError(f"Unsupported format: {format}")
+
+        logger.info(f"Configuration exported to {output_path}")
+
+    def get_environment_overrides(self) -> Dict[str, Any]:
+        """Get configuration overrides from environment variables."""
+        overrides = {}
+
+        # Environment variable mappings
+        env_mappings = {
+            "ACADEMIC_AGENT_LOG_LEVEL": "logging.level",
+            "ACADEMIC_AGENT_LOG_DIR": "logging.log_dir",
+            "ACADEMIC_AGENT_MAX_RETRIES": ("error_handling.max_retries", int),
+            "ACADEMIC_AGENT_RETRY_DELAY": ("error_handling.retry_delay", float),
+            "ACADEMIC_AGENT_QUALITY_THRESHOLD": ("quality_threshold", float),
+            "ACADEMIC_AGENT_IMPROVEMENT_THRESHOLD": ("improvement_threshold", float),
+            "ACADEMIC_AGENT_MAX_IMPROVEMENT_CYCLES": ("max_improvement_cycles", int),
+            "ACADEMIC_AGENT_COMMUNICATION_INTERVAL": ("communication_interval", int),
+        }
+
+        for env_var, config_path in env_mappings.items():
+            value = os.getenv(env_var)
+            if value is not None:
+                if isinstance(config_path, tuple):
+                    path, converter = config_path
+                    try:
+                        value = converter(value)
+                    except (ValueError, TypeError) as e:
+                        logger.warning(f"Invalid value for {env_var}: {value}. Error: {e}")
+                        continue
+                else:
+                    path = config_path
+
+                self._set_nested_value(overrides, path, value)
+
+        return overrides
+
+    def apply_environment_overrides(self):
+        """Apply environment variable overrides to the configuration."""
+        if self.config is None:
+            raise ConfigurationError("Configuration not loaded")
+
+        overrides = self.get_environment_overrides()
+        if overrides:
+            logger.info(f"Applying environment overrides: {overrides}")
+
+            # Update configuration with overrides
+            config_dict = self.config.dict()
+            for path, value in overrides.items():
+                self._set_nested_value(config_dict, path, value)
+
+            # Recreate configuration with overrides
+            self.config = AcademicAgentConfig(**config_dict)
+
+
+# Global configuration manager instance
+_config_manager: Optional[ConfigManager] = None
+
+
+def get_config_manager(
+    yaml_config_path: Optional[Union[str, Path]] = None,
+    reload: bool = False
+) -> ConfigManager:
+    """Get the global configuration manager instance.
+    
+    Args:
+        yaml_config_path: Path to YAML configuration file
+        reload: Whether to reload the configuration
+    
+    Returns:
+        ConfigManager instance
+    """
+    global _config_manager
+    
+    if _config_manager is None or reload:
+        if yaml_config_path is None:
+            # Default path
+            yaml_config_path = Path("config/logging_config.yaml")
+        
+        _config_manager = ConfigManager(yaml_config_path)
+        _config_manager.apply_environment_overrides()
+    
+    return _config_manager
+
+
+def get_config() -> AcademicAgentConfig:
+    """Get the current configuration.
+    
+    Returns:
+        AcademicAgentConfig instance
+    """
+    return get_config_manager().get_config()
+
+
+def reload_config():
+    """Reload the configuration from files."""
+    get_config_manager(reload=True)

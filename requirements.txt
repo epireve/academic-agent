@@ -1,5 +1,5 @@
 # Core dependencies
-smolagents>=0.1.0  # Agent framework
+smolagents>=0.3.0  # Agent framework (updated)
 docling>=1.2.0  # PDF processing
 python-frontmatter>=1.0.0  # Metadata handling
 litellm>=1.0.0  # LLM interface
@@ -7,6 +7,28 @@ python-dotenv>=1.0.0  # Environment variables
 pydantic>=2.5.0  # Data validation
 pydantic-settings>=2.0.0  # Settings management
 pyyaml>=6.0  # YAML parsing
+toml>=0.10.2  # TOML configuration parsing
+requests>=2.31.0  # HTTP client
+aiofiles>=23.2.1  # Async file operations
+typing-extensions>=4.8.0  # Extended typing support
+
+# Optional AI/ML dependencies
+marker-pdf>=0.2.14  # Advanced PDF processing backend
+openai>=1.3.0  # OpenAI API client (for AI functionality)
+
+# Web framework dependencies (if using FastAPI features)
+fastapi>=0.104.1  # Web framework
+uvicorn>=0.24.0  # ASGI server
+python-multipart>=0.0.6  # Multipart form data
+
+# Document processing
+markdown>=3.5.0  # Markdown processing
+weasyprint>=60.0  # PDF generation
+pillow>=9.0.0  # Image processing
+
+# System monitoring
+psutil>=5.9.0  # System monitoring
+prometheus-client>=0.17.0  # Metrics collection
 
 # Development and Testing
 black>=22.0.0  # Code formatting
