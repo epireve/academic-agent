@@ -10,8 +10,8 @@ def extract_mermaid_diagrams():
     """Extract all Mermaid diagrams from study notes"""
     
     # Paths
-    input_dir = Path("/Users/invoture/dev.local/academic-agent/output/sra/ai_enhanced_study_notes")
-    output_dir = Path("/Users/invoture/dev.local/academic-agent/output/sra/mermaid_diagrams")
+    input_dir = Path(get_final_output_path(ContentType.STUDY_NOTES))
+    output_dir = Path(get_output_manager().get_output_path(OutputCategory.ASSETS, ContentType.DIAGRAMS, subdirectory="mermaid"))
     output_dir.mkdir(parents=True, exist_ok=True)
     
     # Pattern to find Mermaid diagrams

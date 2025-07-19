@@ -10,6 +10,10 @@ import json
 from pathlib import Path
 from datetime import datetime
 
+from src.core.output_manager import get_output_manager, get_final_output_path, get_processed_output_path, get_analysis_output_path
+from src.core.output_manager import OutputCategory, ContentType
+
+
 # Add the agents directory to the Python path
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'agents'))
 
@@ -26,8 +30,8 @@ def main():
         "--search-paths", 
         nargs='+', 
         default=[
-            "/Users/invoture/dev.local/academic-agent/output/sra/transcripts/markdown",
-            "/Users/invoture/dev.local/academic-agent/markdown", 
+            get_processed_output_path(ContentType.MARKDOWN, subdirectory="transcripts"),
+            get_processed_output_path(ContentType.MARKDOWN), 
             "/Users/invoture/dev.local/mse-st/sra"
         ],
         help="Paths to search for content files"
@@ -35,7 +39,7 @@ def main():
     
     parser.add_argument(
         "--output-path", 
-        default="/Users/invoture/dev.local/academic-agent/output/consolidated",
+        default=get_final_output_path(ContentType.REPORTS, subdirectory="consolidated"),
         help="Path for consolidated output"
     )
     

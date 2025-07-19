@@ -174,9 +174,9 @@ class AIEnhancedStudyNotesGenerator:
         ]
         
         # Define paths
-        self.textbook_path = self.project_root / "output" / "sra" / "textbook" / "markdown"
-        self.lecture_path = self.project_root / "output" / "sra" / "lectures" / "markdown"
-        self.output_path = self.project_root / "output" / "sra" / "ai_enhanced_study_notes"
+        self.textbook_path = self.project_root / str(get_output_manager().outputs_dir) / "sra" / "textbook" / get_processed_output_path(ContentType.MARKDOWN)
+        self.lecture_path = self.project_root / str(get_output_manager().outputs_dir) / "sra" / "lectures" / get_processed_output_path(ContentType.MARKDOWN)
+        self.output_path = self.project_root / str(get_output_manager().outputs_dir) / "sra" / "ai_enhanced_study_notes"
         
         # Create output directory
         self.output_path.mkdir(parents=True, exist_ok=True)

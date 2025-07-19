@@ -92,7 +92,7 @@ class SystemConfig(BaseModel):
     
     # Storage paths
     data_dir: Path = Field(default_factory=lambda: Path("data"))
-    output_dir: Path = Field(default_factory=lambda: Path("output"))
+    output_dir: Path = Field(default_factory=lambda: Path(str(get_output_manager().outputs_dir)))
     cache_dir: Path = Field(default_factory=lambda: Path(".cache"))
     
     @field_validator("log_level")
