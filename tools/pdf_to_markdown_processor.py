@@ -21,7 +21,7 @@ class PDFToMarkdownProcessor:
         
         # Define input and output paths
         self.input_dir = self.project_root / "Split_Chapters"
-        self.output_dir = self.project_root / "output" / "sra" / "textbook" / "markdown"
+        self.output_dir = self.project_root / str(get_output_manager().outputs_dir) / "sra" / "textbook" / get_processed_output_path(ContentType.MARKDOWN)
         
         # Create output directory
         self.output_dir.mkdir(parents=True, exist_ok=True)
@@ -32,7 +32,7 @@ class PDFToMarkdownProcessor:
         
         # Processing parameters
         self.marker_params = [
-            "--output_format", "markdown",
+            "--output_format", get_processed_output_path(ContentType.MARKDOWN),
             "--use_llm"
         ]
         

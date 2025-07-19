@@ -136,7 +136,7 @@ class AgentConfig(BaseModel):
     
     # File paths
     working_directory: Path = Field(default=Path.cwd(), description="Agent working directory")
-    output_directory: Path = Field(default=Path("output"), description="Default output directory")
+    output_directory: Path = Field(default=Path(str(get_output_manager().outputs_dir)), description="Default output directory")
     temp_directory: Path = Field(default=Path("temp"), description="Temporary files directory")
     state_file: Optional[Path] = Field(default=None, description="Agent state persistence file")
     

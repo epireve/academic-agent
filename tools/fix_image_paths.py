@@ -11,8 +11,8 @@ def fix_image_paths():
     """Fix image paths in all study notes files"""
     
     project_root = Path.cwd()
-    notes_dir = project_root / "output" / "sra" / "ai_enhanced_study_notes"
-    textbook_dir = project_root / "output" / "sra" / "textbook" / "markdown"
+    notes_dir = project_root / str(get_output_manager().outputs_dir) / "sra" / "ai_enhanced_study_notes"
+    textbook_dir = project_root / str(get_output_manager().outputs_dir) / "sra" / "textbook" / get_processed_output_path(ContentType.MARKDOWN)
     
     # Chapter titles mapping
     chapters = {

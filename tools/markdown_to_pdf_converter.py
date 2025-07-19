@@ -428,7 +428,7 @@ class MarkdownToPDFConverter:
 async def main():
     """Main function to run the PDF conversion"""
     project_root = Path.cwd()
-    input_dir = project_root / "output" / "sra" / "ai_enhanced_study_notes"
+    input_dir = project_root / str(get_output_manager().outputs_dir) / "sra" / "ai_enhanced_study_notes"
     output_dir = input_dir  # Same folder as markdown files
     
     converter = MarkdownToPDFConverter(input_dir, output_dir)

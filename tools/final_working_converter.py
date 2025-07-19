@@ -474,7 +474,7 @@ class FinalWorkingConverter:
 def main():
     """Main function"""
     project_root = Path.cwd()
-    input_dir = project_root / "output" / "sra" / "ai_enhanced_study_notes"
+    input_dir = project_root / str(get_output_manager().outputs_dir) / "sra" / "ai_enhanced_study_notes"
     output_dir = input_dir
     
     converter = FinalWorkingConverter(input_dir, output_dir)

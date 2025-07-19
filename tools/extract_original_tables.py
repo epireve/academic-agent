@@ -8,6 +8,10 @@ from pathlib import Path
 import textwrap
 import re
 
+from src.core.output_manager import get_output_manager, get_final_output_path, get_processed_output_path, get_analysis_output_path
+from src.core.output_manager import OutputCategory, ContentType
+
+
 def create_table_image_from_markdown(table_markdown, title, filename, width=900, height=700):
     """Create a table image from markdown table format"""
     
@@ -85,7 +89,7 @@ def create_table_image_from_markdown(table_markdown, title, filename, width=900,
                 draw.text((x + 5, y + 8), clean_text, fill='black', font=font)
     
     # Save image
-    output_path = Path("/Users/invoture/dev.local/academic-agent/output/sra/ai_enhanced_study_notes") / filename
+    output_path = Path(get_final_output_path(ContentType.STUDY_NOTES)) / filename
     img.save(output_path)
     print(f"Created: {output_path}")
     return output_path

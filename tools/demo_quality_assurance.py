@@ -549,7 +549,7 @@ Incomplete content with missing sections.
         try:
             # Create mock consolidation scenario
             input_dir = os.path.join(self.temp_dir, "input")
-            output_dir = os.path.join(self.temp_dir, "output")
+            output_dir = os.path.join(self.temp_dir, str(get_output_manager().outputs_dir))
             os.makedirs(input_dir, exist_ok=True)
             os.makedirs(output_dir, exist_ok=True)
             
@@ -609,7 +609,7 @@ Incomplete content with missing sections.
                     "total_files_processed": len(processed_files),
                     "processing_date": datetime.now().isoformat()
                 },
-                unified_structure={"output": output_dir}
+                unified_structure={str(get_output_manager().outputs_dir): output_dir}
             )
             
             print(f"Consolidation completed: {len(processed_files)} files processed")

@@ -73,16 +73,16 @@ class EnhancedThreeSourceProcessor:
         ]
         
         # Define paths
-        self.lecture_notes_path = self.project_root / "output" / "sra" / "lectures" / "markdown"
-        self.textbook_markdown_path = self.project_root / "output" / "sra" / "textbook" / "markdown"
+        self.lecture_notes_path = self.project_root / str(get_output_manager().outputs_dir) / "sra" / "lectures" / get_processed_output_path(ContentType.MARKDOWN)
+        self.textbook_markdown_path = self.project_root / str(get_output_manager().outputs_dir) / "sra" / "textbook" / get_processed_output_path(ContentType.MARKDOWN)
         
         # Multiple transcript directories as mentioned by user
         self.transcript_directories = [
-            self.project_root / "output" / "sra" / "transcripts" / "markdown",
+            self.project_root / str(get_output_manager().outputs_dir) / "sra" / "transcripts" / get_processed_output_path(ContentType.MARKDOWN),
             Path("/Users/invoture/dev.local/mse-st/sra")
         ]
         
-        self.output_path = self.project_root / "output" / "sra" / "enhanced_integrated_notes"
+        self.output_path = self.project_root / str(get_output_manager().outputs_dir) / "sra" / "enhanced_integrated_notes"
         
         # Create directories
         for transcript_dir in self.transcript_directories:

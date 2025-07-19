@@ -12,7 +12,7 @@ def generate_final_master_index():
     """Generate comprehensive master index"""
     
     project_root = Path.cwd()
-    output_path = project_root / "output" / "sra" / "ai_enhanced_study_notes"
+    output_path = project_root / str(get_output_manager().outputs_dir) / "sra" / "ai_enhanced_study_notes"
     
     # Chapter titles
     chapters = [

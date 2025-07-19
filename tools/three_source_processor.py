@@ -63,10 +63,10 @@ class ThreeSourceProcessor:
         ]
         
         # Define paths
-        self.lecture_notes_path = self.project_root / "output" / "sra" / "lectures" / "markdown"
+        self.lecture_notes_path = self.project_root / str(get_output_manager().outputs_dir) / "sra" / "lectures" / get_processed_output_path(ContentType.MARKDOWN)
         self.textbook_chapters_path = self.project_root / "Split_Chapters"
-        self.transcripts_path = self.project_root / "output" / "sra" / "transcripts"  # To be created
-        self.output_path = self.project_root / "output" / "sra" / "integrated_notes"
+        self.transcripts_path = self.project_root / str(get_output_manager().outputs_dir) / "sra" / "transcripts"  # To be created
+        self.output_path = self.project_root / str(get_output_manager().outputs_dir) / "sra" / "integrated_notes"
         
         # Create directories
         self.transcripts_path.mkdir(parents=True, exist_ok=True)

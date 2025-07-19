@@ -153,7 +153,7 @@ class PDFProcessorPlugin(BasePlugin):
                 raise ValidationError("Invalid input data for PDF processing")
             
             input_path = Path(task_data["input_path"])
-            output_dir = Path(task_data.get("output_dir", "output"))
+            output_dir = Path(task_data.get("output_dir", str(get_output_manager().outputs_dir)))
             
             # Ensure output directory exists
             ensure_directory(output_dir)

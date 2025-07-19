@@ -10,7 +10,7 @@ def add_chapter_titles():
     """Add chapter titles to all study notes files"""
     
     project_root = Path.cwd()
-    notes_dir = project_root / "output" / "sra" / "ai_enhanced_study_notes"
+    notes_dir = project_root / str(get_output_manager().outputs_dir) / "sra" / "ai_enhanced_study_notes"
     
     # Chapter titles mapping
     chapters = {
