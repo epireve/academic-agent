@@ -1,0 +1,393 @@
+{
+  "files_processed": 55,
+  "files_modified": 49,
+  "total_replacements": 126,
+  "files_with_errors": 0,
+  "results": [
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/final_pdf_converter.py",
+      "replacements": 2,
+      "import_added": true,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/simplified_final_converter.py",
+      "replacements": 1,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/simple_code_block_converter.py",
+      "replacements": 1,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/three_source_processor.py",
+      "replacements": 4,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/demo_week_resolver.py",
+      "replacements": 4,
+      "import_added": true,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/migrate_output_structure.py",
+      "replacements": 13,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/convert_all_diagrams_to_png.py",
+      "replacements": 1,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/final_pdf_converter_no_mermaid.py",
+      "replacements": 1,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/demo_quality_assurance.py",
+      "replacements": 2,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/quick_alignment_check.py",
+      "replacements": 3,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/fix_image_paths.py",
+      "replacements": 3,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/add_chapter_titles.py",
+      "replacements": 1,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/tutorial_pdf_converter_full.py",
+      "replacements": 0,
+      "import_added": false,
+      "success": false,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/demo_consolidation.py",
+      "replacements": 4,
+      "import_added": true,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/markdown_to_pdf_with_images.py",
+      "replacements": 2,
+      "import_added": true,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/markdown_to_pdf_custom_sizing.py",
+      "replacements": 2,
+      "import_added": true,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/png_based_pdf_converter.py",
+      "replacements": 1,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/enhanced_three_source_processor.py",
+      "replacements": 7,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/fixed_markdown_to_pdf.py",
+      "replacements": 1,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/simple_markdown_to_pdf.py",
+      "replacements": 1,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/final_markdown_to_pdf.py",
+      "replacements": 1,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/generate_final_master_index.py",
+      "replacements": 1,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/consolidate_all_images.py",
+      "replacements": 5,
+      "import_added": true,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/batch_consolidation.py",
+      "replacements": 0,
+      "import_added": false,
+      "success": false,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/sra_pandoc_converter.py",
+      "replacements": 0,
+      "import_added": false,
+      "success": false,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/enhanced_markdown_to_pdf.py",
+      "replacements": 1,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/markdown_to_pdf_local_images.py",
+      "replacements": 2,
+      "import_added": true,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/comprehensive_fixed_converter.py",
+      "replacements": 1,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/extract_mermaid_diagrams.py",
+      "replacements": 2,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/tutorial_pdf_converter.py",
+      "replacements": 0,
+      "import_added": false,
+      "success": false,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/alignment_analyzer.py",
+      "replacements": 3,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/create_missing_table_images.py",
+      "replacements": 1,
+      "import_added": true,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/markdown_to_pdf_converter.py",
+      "replacements": 1,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/ai_enhanced_study_notes_generator.py",
+      "replacements": 5,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/replace_hardcoded_paths.py",
+      "replacements": 2,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/test_converter.py",
+      "replacements": 1,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/final_working_converter.py",
+      "replacements": 1,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/exams_pdf_converter.py",
+      "replacements": 0,
+      "import_added": false,
+      "success": false,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/pdf_to_markdown_processor.py",
+      "replacements": 3,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/content_consolidation_tool.py",
+      "replacements": 3,
+      "import_added": true,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/convert_all_png.py",
+      "replacements": 1,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/sra_pdf_converter.py",
+      "replacements": 0,
+      "import_added": false,
+      "success": false,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/extract_original_tables.py",
+      "replacements": 1,
+      "import_added": true,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/markdown_to_pdf_fixed_bullets.py",
+      "replacements": 2,
+      "import_added": true,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/test_mermaid_rendering.py",
+      "replacements": 1,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/transcript_integration_helper.py",
+      "replacements": 3,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/tools/pdf_splitter/venv/lib/python3.12/site-packages/pip/_vendor/pygments/lexers/_mapping.py",
+      "replacements": 2,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/agents/academic/outline_agent.py",
+      "replacements": 1,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/agents/academic/study_notes_integration_demo.py",
+      "replacements": 3,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/agents/academic/study_notes_generator.py",
+      "replacements": 5,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/agents/academic/analysis_agent.py",
+      "replacements": 1,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/src/core/output_manager.py",
+      "replacements": 16,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/src/config/unified_config.py",
+      "replacements": 1,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/academic-agent-v2/src/agents/agent_config.py",
+      "replacements": 1,
+      "import_added": false,
+      "success": true,
+      "error": null
+    },
+    {
+      "file": "/Users/invoture/dev.local/academic-agent/academic-agent-v2/src/agents/academic_agent.py",
+      "replacements": 1,
+      "import_added": false,
+      "success": true,
+      "error": null
+    }
+  ]
+}
