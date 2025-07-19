@@ -9,6 +9,10 @@ from pathlib import Path
 import subprocess
 from urllib.parse import quote
 
+from src.core.output_manager import get_output_manager, get_final_output_path, get_processed_output_path, get_analysis_output_path
+from src.core.output_manager import OutputCategory, ContentType
+
+
 def ensure_dependencies():
     """Ensure all required dependencies are installed"""
     try:
@@ -16,7 +20,7 @@ def ensure_dependencies():
         import weasyprint
     except ImportError:
         print("Installing required dependencies...")
-        subprocess.run(['.venv/bin/python', '-m', 'pip', 'install', 'markdown', 'weasyprint'], check=True)
+        subprocess.run(['.venv/bin/python', '-m', 'pip', 'install', get_processed_output_path(ContentType.MARKDOWN), 'weasyprint'], check=True)
         print("Dependencies installed successfully!")
 
 def image_to_base64(image_path):
@@ -274,7 +278,7 @@ def convert_all_to_pdf():
     ensure_dependencies()
     
     # Paths
-    input_dir = Path("/Users/invoture/dev.local/academic-agent/output/sra/ai_enhanced_study_notes")
+    input_dir = Path(get_final_output_path(ContentType.STUDY_NOTES))
     output_dir = input_dir  # Same directory as requested
     
     # Find all markdown files

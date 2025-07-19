@@ -12,6 +12,10 @@ import json
 from pathlib import Path
 from typing import Dict, List, Any
 
+from src.core.output_manager import get_output_manager, get_final_output_path, get_processed_output_path, get_analysis_output_path
+from src.core.output_manager import OutputCategory, ContentType
+
+
 # Add the processors module to the path
 sys.path.append(str(Path(__file__).parent.parent / "academic-agent-v2" / "src"))
 
@@ -28,11 +32,11 @@ class WeekResolverDemo:
     def __init__(self, project_root: str):
         self.project_root = project_root
         self.search_paths = [
-            os.path.join(project_root, "output/sra/transcripts/markdown"),
+            os.path.join(project_root, get_processed_output_path(ContentType.MARKDOWN, subdirectory="transcripts")),
             os.path.join(project_root, "output/sra/transcripts/standardized"),
-            os.path.join(project_root, "output/sra/integrated_notes"),
-            os.path.join(project_root, "output/sra/enhanced_integrated_notes"),
-            os.path.join(project_root, "output/sra/ai_enhanced_study_notes"),
+            os.path.join(project_root, get_processed_output_path(ContentType.INTEGRATED)),
+            os.path.join(project_root, get_processed_output_path(ContentType.ENHANCED)),
+            os.path.join(project_root, get_final_output_path(ContentType.STUDY_NOTES)),
         ]
         
         # Configuration path

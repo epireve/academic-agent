@@ -11,6 +11,10 @@ from datetime import datetime
 from typing import Dict, List, Any, Optional
 from collections import defaultdict
 
+from src.core.output_manager import get_output_manager, get_final_output_path, get_processed_output_path, get_analysis_output_path
+from src.core.output_manager import OutputCategory, ContentType
+
+
 
 class ConsolidationDemo:
     """Demonstration of consolidation logic without dependencies"""
@@ -155,11 +159,11 @@ class ConsolidationDemo:
     def analyze_current_structure(self, base_path: str) -> Dict[str, Any]:
         """Analyze the current project structure"""
         search_paths = [
-            os.path.join(base_path, "output/sra/transcripts/markdown"),
+            os.path.join(base_path, get_processed_output_path(ContentType.MARKDOWN, subdirectory="transcripts")),
             os.path.join(base_path, "output/sra/transcripts/standardized"),
-            os.path.join(base_path, "markdown"),
-            os.path.join(base_path, "output/sra/textbook/markdown"),
-            os.path.join(base_path, "output/sra/lectures/markdown"),
+            os.path.join(base_path, get_processed_output_path(ContentType.MARKDOWN)),
+            os.path.join(base_path, get_processed_output_path(ContentType.MARKDOWN, subdirectory="textbook")),
+            os.path.join(base_path, get_processed_output_path(ContentType.MARKDOWN, subdirectory="lectures")),
             os.path.join(base_path, "output/sra/notes/markdown")
         ]
         

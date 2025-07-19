@@ -7,12 +7,16 @@ import shutil
 from pathlib import Path
 import re
 
+from src.core.output_manager import get_output_manager, get_final_output_path, get_processed_output_path, get_analysis_output_path
+from src.core.output_manager import OutputCategory, ContentType
+
+
 def copy_textbook_images():
     """Copy all textbook images with new naming convention"""
     
     # Source and destination directories
-    textbook_base = Path("/Users/invoture/dev.local/academic-agent/output/sra/textbook/markdown")
-    dest_dir = Path("/Users/invoture/dev.local/academic-agent/output/sra/ai_enhanced_study_notes")
+    textbook_base = Path(get_processed_output_path(ContentType.MARKDOWN, subdirectory="textbook"))
+    dest_dir = Path(get_final_output_path(ContentType.STUDY_NOTES))
     
     # Mapping of original paths to new names
     image_mappings = {
@@ -62,7 +66,7 @@ def copy_mermaid_diagrams():
     """Copy all Mermaid PNG diagrams to study notes folder"""
     
     source_dir = Path("/Users/invoture/dev.local/academic-agent/output/sra/mermaid_diagrams/png_output")
-    dest_dir = Path("/Users/invoture/dev.local/academic-agent/output/sra/ai_enhanced_study_notes")
+    dest_dir = Path(get_final_output_path(ContentType.STUDY_NOTES))
     
     # Copy all week_*.png files
     copied_count = 0
@@ -78,7 +82,7 @@ def copy_mermaid_diagrams():
 def update_markdown_references():
     """Update all image references in markdown files to use local paths"""
     
-    md_dir = Path("/Users/invoture/dev.local/academic-agent/output/sra/ai_enhanced_study_notes")
+    md_dir = Path(get_final_output_path(ContentType.STUDY_NOTES))
     
     # Mapping for textbook image replacements
     replacements = {
@@ -166,7 +170,7 @@ def main():
     print(f"📁 All images now in: /Users/invoture/dev.local/academic-agent/output/sra/ai_enhanced_study_notes/")
     
     # List final contents
-    dest_dir = Path("/Users/invoture/dev.local/academic-agent/output/sra/ai_enhanced_study_notes")
+    dest_dir = Path(get_final_output_path(ContentType.STUDY_NOTES))
     total_files = len(list(dest_dir.glob("*")))
     md_files = len(list(dest_dir.glob("*.md")))
     pdf_files = len(list(dest_dir.glob("*.pdf")))
