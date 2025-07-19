@@ -1,0 +1,26 @@
+graph TD
+    subgraph Project_Definition
+        A[Budget]
+        B[Objective]
+        C[Scope]
+        D[Rigor]
+    end
+
+    subgraph Project_Success
+        S1[Customer Satisfaction]
+        S2[Quality Technical Work]
+        S3[On-Time & On-Budget Completion]
+    end
+
+    subgraph Stakeholders
+        P[Project Sponsor]
+        SO[Security Officer]
+        BM[Business Managers]
+        CO[Compliance/Legal]
+        T[Technicians/Admins]
+    end
+
+    Project_Definition -- Forms the basis of --> SOW[Statement of Work]
+    SOW -- Governs --> Project_Success
+    Stakeholders -- Define --> S1
+    S1 -- Is a key component of --> Project_Success

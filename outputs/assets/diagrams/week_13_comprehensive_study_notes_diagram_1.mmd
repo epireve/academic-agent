@@ -1,0 +1,32 @@
+graph TD
+    A[Security Risk Assessment] --> B{Assessment Approach Selection};
+    B --> C[Quantitative Analysis];
+    B --> D[Qualitative Analysis];
+
+    subgraph "Core Decision Variables"
+        V1[Asset Value]
+        V2[Threat Likelihood]
+        V3[Impact Severity]
+    end
+
+    A -- Defines & Measures --> V1;
+    A -- Defines & Measures --> V2;
+    A -- Defines & Measures --> V3;
+
+    C -- uses --> F1[Mathematical Formulas];
+    C -- produces --> F2[Monetary Values - e.g., Dollar, Euro];
+    F1 --> G["SLE = Asset Value x Exposure Factor"];
+    F1 --> H["ALE = SLE x Annual Rate of Occurrence"];
+    F1 --> I["Safeguard Value = ALE_before - ALE_after - Cost"];
+
+    D -- uses --> K1[Subjective Judgment];
+    D -- produces --> K2[Ordinal Scales - High, Med, Low];
+    K2 --> L[Prioritized Risk List];
+
+
+    A -- is supported by --> M[Tools & Checklists];
+    A -- is implemented via --> N{Specific Methodologies};
+    N --> O[OCTAVE];
+    N --> P[CRAMM];
+    N --> Q[FRAP];
+    N --> R[...and others];

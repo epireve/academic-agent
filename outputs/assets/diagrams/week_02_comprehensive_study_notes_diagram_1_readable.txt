@@ -1,0 +1,34 @@
+# Mermaid Diagram from week_02_comprehensive_study_notes.md
+# Diagram 1 of 1
+# ==================================================
+
+graph TD
+    subgraph Information Security Risk Assessment Process
+        A[Phase 1: Project Definition] --> B[Phase 2: Project Preparation];
+        B --> C[Phase 3: Data Gathering];
+        C --> D[Phase 4: Risk Analysis];
+        D --> E[Phase 5: Risk Mitigation];
+        E --> F[Phase 6: Risk Reporting & Resolution];
+    end
+
+    subgraph Core Concepts
+        Asset --valued by--> Organization;
+        Threat --exploits--> Vulnerability;
+        Vulnerability --exists in--> Asset;
+        Threat --causes--> Loss;
+        Risk{Security Risk} --is the potential for--> Loss;
+    end
+
+    D --identifies & calculates--> Risk;
+    E --applies--> Safeguards;
+    Safeguards --reduce--> Risk;
+    F --communicates--> Risk;
+    F --documents--> Decision[Risk Treatment Decision: Reduce, Accept, or Delegate];
+
+    style Risk fill:#f9f,stroke:#333,stroke-width:2px
+
+# ==================================================
+# To render this diagram:
+# 1. Copy the code above (without these comments)
+# 2. Paste into https://mermaid.live/
+# 3. Or use any Mermaid-compatible tool

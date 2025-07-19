@@ -1,0 +1,32 @@
+graph TD
+    subgraph Pre-Assessment
+        A[Project Definition]
+        B[Project Preparation]
+    end
+
+    subgraph Data Gathering Phase
+        direction LR
+        D{RIIOT Method}
+        E[Sampling Techniques]
+    end
+    
+    F[Professional Experience &<br>Security Principles]
+
+    A & B --> C(Initiate Data Gathering)
+    C --> D
+    C --> E
+    
+    subgraph D
+    R[Review Documents]
+    I[Interview Personnel]
+    IN[Inspect Controls]
+    O[Observe Behavior]
+    T[Test Controls]
+    end
+
+    E -- Informs selection for --> IN
+    E -- Informs selection for --> T
+    
+    F -- Underpins all activities --> C
+
+    D --> G[Findings &<br>Identified Vulnerabilities]

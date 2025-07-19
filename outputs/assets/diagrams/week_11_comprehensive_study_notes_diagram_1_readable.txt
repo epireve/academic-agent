@@ -1,0 +1,26 @@
+# Mermaid Diagram from week_11_comprehensive_study_notes.md
+# Diagram 1 of 1
+# ==================================================
+
+graph TD
+    A[Security Risk Assessment] --> B{Data & Findings};
+    B --> C[Report Creation Process];
+    C --> D[Executive Summary];
+    C --> E[Base Report & Appendices];
+    D --> F[Audience: Senior Management];
+    E --> G[Audience: Technical & Operational Staff];
+    subgraph "Communication & Action"
+        F & G --> H(Assessment Briefing);
+        H --> I[Organizational Action Plan];
+        I --> J{Risk Disposition: Reduce, Accept, Assign, Reject};
+    end
+
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style I fill:#ccf,stroke:#333,stroke-width:2px
+    style J fill:#ccf,stroke:#333,stroke-width:2px
+
+# ==================================================
+# To render this diagram:
+# 1. Copy the code above (without these comments)
+# 2. Paste into https://mermaid.live/
+# 3. Or use any Mermaid-compatible tool

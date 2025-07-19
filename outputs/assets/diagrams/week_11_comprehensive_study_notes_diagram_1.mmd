@@ -1,0 +1,16 @@
+graph TD
+    A[Security Risk Assessment] --> B{Data & Findings};
+    B --> C[Report Creation Process];
+    C --> D[Executive Summary];
+    C --> E[Base Report & Appendices];
+    D --> F[Audience: Senior Management];
+    E --> G[Audience: Technical & Operational Staff];
+    subgraph "Communication & Action"
+        F & G --> H(Assessment Briefing);
+        H --> I[Organizational Action Plan];
+        I --> J{Risk Disposition: Reduce, Accept, Assign, Reject};
+    end
+
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style I fill:#ccf,stroke:#333,stroke-width:2px
+    style J fill:#ccf,stroke:#333,stroke-width:2px

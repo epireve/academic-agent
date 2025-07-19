@@ -1,0 +1,28 @@
+graph TD
+    A[Identified Security Risk] --> B{Select Safeguards};
+    
+    subgraph "Selection Methods"
+        B1[Missing Control]
+        B2[People, Process, Technology]
+        B3[Admin, Physical, Technical]
+        B4[Preventive, Detective, Corrective]
+        B5[Available Technology]
+    end
+
+    B1 & B2 & B3 & B4 & B5 --> C[Develop Safeguard Solution Set];
+    C --> D{Justify Implementation};
+    
+    subgraph "Justification Methods"
+        D1[Judgment-Based]
+        D2[Cost-Benefit Analysis]
+    end
+
+    D1 & D2 --> E{Establish Risk Parameters / Final Decision};
+
+    E --> F[Reduce Risk - Implement Safeguard];
+    E --> G[Assign Risk - Transfer via Insurance];
+    E --> H[Accept Risk - Conscious Business Decision];
+    E --> I[Avoid Risk - Eliminate Cause];
+
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style E fill:#ccf,stroke:#333,stroke-width:2px

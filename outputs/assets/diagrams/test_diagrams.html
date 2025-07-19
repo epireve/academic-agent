@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mermaid Diagram Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: {
+                htmlLabels: true,
+                curve: 'basis'
+            }
+        });
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .diagram-container {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ccc;
+            background: #f5f5f5;
+        }
+        h2 {
+            color: #333;
+        }
+        .mermaid {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Mermaid Diagrams Test Page</h1>
+    <p>This page tests rendering of all extracted Mermaid diagrams.</p>
+
+    <div class="diagram-container">
+        <h2>week_01_comprehensive_study_notes.md - Diagram 1</h2>
+        <div class="mermaid">
+graph TD
+    subgraph Security Management
+        A[Security Manager] --> B{Prioritize Initiatives};
+    end
+
+    subgraph Initiative Drivers
+        C[Audit Findings] -.-> D{Security Strategy};
+        E[New Technology] -.-> D;
+        F[Compliance Mandates] -.-> D;
+        G[Security Risk Assessment] --> D;
+    end
+
+    subgraph Risk Assessment Process & Outcomes
+        G --> H[Analyzes Assets, Threats & Controls];
+        H --> I[Identifies & Quantifies Risk];
+        I --> J[Informs Risk-Based Decisions];
+        J --> B;
+    end
+
+    subgraph Related Tactical Activities
+        K[Gap Assessment] --> G;
+        L[Penetration Testing] --> G;
+        M[Audits] --> G;
+        N[Vulnerability Scanning] --> G;
+    end
+
+    style G fill:#cde4ff,stroke:#004a99,stroke-width:2px
+    style D fill:#e1e1e1,stroke:#333,stroke-width:2px
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>week_02_comprehensive_study_notes.md - Diagram 1</h2>
+        <div class="mermaid">
+graph TD
+    subgraph Information Security Risk Assessment Process
+        A[Phase 1: Project Definition] --> B[Phase 2: Project Preparation];
+        B --> C[Phase 3: Data Gathering];
+        C --> D[Phase 4: Risk Analysis];
+        D --> E[Phase 5: Risk Mitigation];
+        E --> F[Phase 6: Risk Reporting & Resolution];
+    end
+
+    subgraph Core Concepts
+        Asset --valued by--> Organization;
+        Threat --exploits--> Vulnerability;
+        Vulnerability --exists in--> Asset;
+        Threat --causes--> Loss;
+        Risk{Security Risk} --is the potential for--> Loss;
+    end
+
+    D --identifies & calculates--> Risk;
+    E --applies--> Safeguards;
+    Safeguards --reduce--> Risk;
+    F --communicates--> Risk;
+    F --documents--> Decision[Risk Treatment Decision: Reduce, Accept, or Delegate];
+
+    style Risk fill:#f9f,stroke:#333,stroke-width:2px
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>week_03_comprehensive_study_notes.md - Diagram 1</h2>
+        <div class="mermaid">
+graph TD
+    subgraph Project_Definition
+        A[Budget]
+        B[Objective]
+        C[Scope]
+        D[Rigor]
+    end
+
+    subgraph Project_Success
+        S1[Customer Satisfaction]
+        S2[Quality Technical Work]
+        S3[On-Time & On-Budget Completion]
+    end
+
+    subgraph Stakeholders
+        P[Project Sponsor]
+        SO[Security Officer]
+        BM[Business Managers]
+        CO[Compliance/Legal]
+        T[Technicians/Admins]
+    end
+
+    Project_Definition -- Forms the basis of --> SOW[Statement of Work]
+    SOW -- Governs --> Project_Success
+    Stakeholders -- Define --> S1
+    S1 -- Is a key component of --> Project_Success
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>week_04_comprehensive_study_notes.md - Diagram 1</h2>
+        <div class="mermaid">
+graph TD
+    subgraph A[Phase 1: Project & Team Logistics]
+        A1(Project Kickoff) --> A2(Introductory Letter & Briefing);
+        A2 --> A3(Obtain Permissions & Access);
+    end
+
+    subgraph B[Phase 2: Analytical Groundwork]
+        B1(Review Business Mission) --> B2(Identify Critical Systems);
+        B2 --> B3(Identify & Value Assets);
+        B3 --> B4(Identify Threats);
+    end
+    
+    subgraph C[Phase 3: Scoping & Expectation Setting]
+        C1(Determine Expected Controls);
+    end
+
+    A --> B;
+    B --> C;
+
+    style A fill:#e6f3ff,stroke:#333,stroke-width:2px
+    style B fill:#e6ffe6,stroke:#333,stroke-width:2px
+    style C fill:#fff2e6,stroke:#333,stroke-width:2px
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>week_05_comprehensive_study_notes.md - Diagram 1</h2>
+        <div class="mermaid">
+graph TD
+    subgraph Pre-Assessment
+        A[Project Definition]
+        B[Project Preparation]
+    end
+
+    subgraph Data Gathering Phase
+        direction LR
+        D{RIIOT Method}
+        E[Sampling Techniques]
+    end
+    
+    F[Professional Experience &<br>Security Principles]
+
+    A & B --> C(Initiate Data Gathering)
+    C --> D
+    C --> E
+    
+    subgraph D
+    R[Review Documents]
+    I[Interview Personnel]
+    IN[Inspect Controls]
+    O[Observe Behavior]
+    T[Test Controls]
+    end
+
+    E -- Informs selection for --> IN
+    E -- Informs selection for --> T
+    
+    F -- Underpins all activities --> C
+
+    D --> G[Findings &<br>Identified Vulnerabilities]
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>week_06_comprehensive_study_notes.md - Diagram 1</h2>
+        <div class="mermaid">
+graph TD
+    A[Security Risk Assessment] --> B{Data Gathering Phase};
+    B --> C[Administrative];
+    B --> D[Technical];
+    B --> E[Physical];
+
+    C --> F{Key Areas of Review};
+    F --> G[Human Resources];
+    F --> H[Organizational Structure];
+    F --> I[Information Control];
+    F --> J[Business Continuity];
+    F --> K[System Security];
+
+    subgraph RIIOT Method
+        direction LR
+        L[Review]
+        M[Interview]
+        N[Inspect]
+        O[Observe]
+        P[Test]
+    end
+
+    C -- Applies --> L;
+    C -- Applies --> M;
+    C -- Applies --> N;
+    C -- Applies --> O;
+    C -- Applies --> P;
+
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style B fill:#bbf,stroke:#333,stroke-width:2px
+    style C fill:#ccf,stroke:#333,stroke-width:2px
+    style F fill:#lightgrey,stroke:#333,stroke-width:1px
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>week_07_comprehensive_study_notes.md - Diagram 1</h2>
+        <div class="mermaid">
+graph TD
+    A[Technical Data Gathering] -->|Employs| B(RIIOT Method);
+    
+    subgraph RIIOT Method
+        direction LR
+        B1[Review Documents]
+        B2[Interview Personnel]
+        B3[Inspect Controls]
+        B4[Observe Behavior]
+        B5[Test Controls]
+    end
+
+    B --> C{Understand & Assess};
+    C --> D[Technical Security Landscape];
+
+    subgraph Technical Security Landscape
+        direction TB
+        E[Technical Threats] -->|Mitigated by| F[Technical Safeguards];
+        F -->|Protect| G[Organizational Assets];
+    end
+
+    D --> A;
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>week_08_comprehensive_study_notes.md - Diagram 1</h2>
+        <div class="mermaid">
+graph TD
+    A[Physical Data Gathering] --> B{Key Threat Categories};
+    A --> C{Data Gathering Method};
+
+    B --> D[Environmental & Utility Threats];
+    B --> E[Human Threats];
+
+    D --> D1[Power & Climate];
+    D --> D2[Fire];
+    D --> D3[Water Damage];
+    D --> D4[Natural Disasters];
+    
+    subgraph Safeguards_Env [Environmental Safeguards]
+        direction LR
+        S1[UPS & Conditioners]
+        S2[HVAC & Alarms]
+        S3[Fire Suppression]
+        S4[Proper Siting]
+    end
+
+    D1 --> S1 & S2;
+    D2 --> S3;
+    D3 & D4 --> S4;
+
+    E --> E1[Unauthorized Entry & Access];
+    E --> E2[Unauthorized Removal & Sabotage];
+    
+    subgraph Safeguards_Human [Human Threat Safeguards]
+        direction LR
+        SH1[Barriers & Lighting]
+        SH2[Intrusion Detection & CCTV]
+        SH3[Access Control Systems]
+        SH4[Personnel Procedures]
+    end
+
+    E1 --> SH1 & SH2 & SH3;
+    E1 & E2 --> SH4;
+
+    C --> R[RIIOT Method];
+    subgraph RIIOT [ ]
+        direction LR
+        R1[Review Documents]
+        R2[Interview Personnel]
+        R3[Inspect Controls]
+        R4[Observe Behavior]
+        R5[Test Safeguards]
+    end
+    R --> R1 & R2 & R3 & R4 & R5;
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>week_09_comprehensive_study_notes.md - Diagram 1</h2>
+        <div class="mermaid">
+graph TD
+    subgraph Core Inputs
+        A[Asset Value & Criticality]
+        T[Threat Frequency & Components]
+        V[Vulnerability Likelihood]
+    end
+
+    subgraph Risk Analysis Process
+        direction LR
+        D(1. Determine Individual Risk) --> C(2. Create Risk Statements) --> R(3. Team Review & Consensus)
+    end
+
+    subgraph Outcome
+        O[Overall Security Risk Posture]
+    end
+
+    A --> D
+    T --> D
+    V --> D
+
+    U[Uncertainty] -- Challenges --> D
+    RU[Techniques to Reduce Uncertainty] -- Mitigates --> U
+    RU --> D
+
+    R --> O
+    RT[Risk Tolerance]
+    O -- Compared Against --> RT
+
+    style U fill:#f9f,stroke:#333,stroke-width:2px
+    style RU fill:#ccf,stroke:#333,stroke-width:2px
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>week_10_comprehensive_study_notes.md - Diagram 1</h2>
+        <div class="mermaid">
+graph TD
+    A[Identified Security Risk] --> B{Select Safeguards};
+    
+    subgraph "Selection Methods"
+        B1[Missing Control]
+        B2[People, Process, Technology]
+        B3[Admin, Physical, Technical]
+        B4[Preventive, Detective, Corrective]
+        B5[Available Technology]
+    end
+
+    B1 & B2 & B3 & B4 & B5 --> C[Develop Safeguard Solution Set];
+    C --> D{Justify Implementation};
+    
+    subgraph "Justification Methods"
+        D1[Judgment-Based]
+        D2[Cost-Benefit Analysis]
+    end
+
+    D1 & D2 --> E{Establish Risk Parameters / Final Decision};
+
+    E --> F[Reduce Risk - Implement Safeguard];
+    E --> G[Assign Risk - Transfer via Insurance];
+    E --> H[Accept Risk - Conscious Business Decision];
+    E --> I[Avoid Risk - Eliminate Cause];
+
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style E fill:#ccf,stroke:#333,stroke-width:2px
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>week_11_comprehensive_study_notes.md - Diagram 1</h2>
+        <div class="mermaid">
+graph TD
+    A[Security Risk Assessment] --> B{Data & Findings};
+    B --> C[Report Creation Process];
+    C --> D[Executive Summary];
+    C --> E[Base Report & Appendices];
+    D --> F[Audience: Senior Management];
+    E --> G[Audience: Technical & Operational Staff];
+    subgraph "Communication & Action"
+        F & G --> H(Assessment Briefing);
+        H --> I[Organizational Action Plan];
+        I --> J{Risk Disposition: Reduce, Accept, Assign, Reject};
+    end
+
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style I fill:#ccf,stroke:#333,stroke-width:2px
+    style J fill:#ccf,stroke:#333,stroke-width:2px
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>week_12_comprehensive_study_notes.md - Diagram 1</h2>
+        <div class="mermaid">
+graph TD
+    A[Project Initiation] --> B(Project Planning);
+    B --> C{Define Project};
+    C -- SOW --> D[Breakdown into Phases & Activities];
+    D --> E[Allocate Resources & Hours];
+    E --> F[Create Schedule];
+    
+    subgraph Project Execution & Control
+        G[Track Progress] <--> H[Take Corrective Action];
+        H <--> I[Report Status];
+    end
+
+    F --> G;
+    I --> J[Project Conclusion];
+    J --> K[Final Deliverables & Wrap-up];
+
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style J fill:#f9f,stroke:#333,stroke-width:2px
+    style B fill:#bbf,stroke:#333,stroke-width:2px
+    style G fill:#ccf,stroke:#333,stroke-width:2px
+    style H fill:#ccf,stroke:#333,stroke-width:2px
+    style I fill:#ccf,stroke:#333,stroke-width:2px
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>week_13_comprehensive_study_notes.md - Diagram 1</h2>
+        <div class="mermaid">
+graph TD
+    A[Security Risk Assessment] --> B{Assessment Approach Selection};
+    B --> C[Quantitative Analysis];
+    B --> D[Qualitative Analysis];
+
+    subgraph "Core Decision Variables"
+        V1[Asset Value]
+        V2[Threat Likelihood]
+        V3[Impact Severity]
+    end
+
+    A -- Defines & Measures --> V1;
+    A -- Defines & Measures --> V2;
+    A -- Defines & Measures --> V3;
+
+    C -- uses --> F1[Mathematical Formulas];
+    C -- produces --> F2[Monetary Values - e.g., Dollar, Euro];
+    F1 --> G["SLE = Asset Value x Exposure Factor"];
+    F1 --> H["ALE = SLE x Annual Rate of Occurrence"];
+    F1 --> I["Safeguard Value = ALE_before - ALE_after - Cost"];
+
+    D -- uses --> K1[Subjective Judgment];
+    D -- produces --> K2[Ordinal Scales - High, Med, Low];
+    K2 --> L[Prioritized Risk List];
+
+
+    A -- is supported by --> M[Tools & Checklists];
+    A -- is implemented via --> N{Specific Methodologies};
+    N --> O[OCTAVE];
+    N --> P[CRAMM];
+    N --> Q[FRAP];
+    N --> R[...and others];
+        </div>
+    </div>
+
+</body>
+</html>

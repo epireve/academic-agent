@@ -1,0 +1,32 @@
+# Mermaid Diagram from week_04_comprehensive_study_notes.md
+# Diagram 1 of 1
+# ==================================================
+
+graph TD
+    subgraph A[Phase 1: Project & Team Logistics]
+        A1(Project Kickoff) --> A2(Introductory Letter & Briefing);
+        A2 --> A3(Obtain Permissions & Access);
+    end
+
+    subgraph B[Phase 2: Analytical Groundwork]
+        B1(Review Business Mission) --> B2(Identify Critical Systems);
+        B2 --> B3(Identify & Value Assets);
+        B3 --> B4(Identify Threats);
+    end
+    
+    subgraph C[Phase 3: Scoping & Expectation Setting]
+        C1(Determine Expected Controls);
+    end
+
+    A --> B;
+    B --> C;
+
+    style A fill:#e6f3ff,stroke:#333,stroke-width:2px
+    style B fill:#e6ffe6,stroke:#333,stroke-width:2px
+    style C fill:#fff2e6,stroke:#333,stroke-width:2px
+
+# ==================================================
+# To render this diagram:
+# 1. Copy the code above (without these comments)
+# 2. Paste into https://mermaid.live/
+# 3. Or use any Mermaid-compatible tool

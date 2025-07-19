@@ -1,0 +1,22 @@
+graph TD
+    A[Technical Data Gathering] -->|Employs| B(RIIOT Method);
+    
+    subgraph RIIOT Method
+        direction LR
+        B1[Review Documents]
+        B2[Interview Personnel]
+        B3[Inspect Controls]
+        B4[Observe Behavior]
+        B5[Test Controls]
+    end
+
+    B --> C{Understand & Assess};
+    C --> D[Technical Security Landscape];
+
+    subgraph Technical Security Landscape
+        direction TB
+        E[Technical Threats] -->|Mitigated by| F[Technical Safeguards];
+        F -->|Protect| G[Organizational Assets];
+    end
+
+    D --> A;

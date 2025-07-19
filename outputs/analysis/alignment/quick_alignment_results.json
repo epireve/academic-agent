@@ -1,0 +1,130 @@
+{
+  "course": "WOC7017 Security Risk Analysis and Evaluation",
+  "analysis_type": "Quick Alignment Check",
+  "total_weeks": 13,
+  "average_alignment_score": 0.5384615384615384,
+  "alignment_distribution": {
+    "high": 5,
+    "medium": 0,
+    "low": 8
+  },
+  "weekly_results": [
+    {
+      "week": 1,
+      "textbook_chapter": "Introduction",
+      "textbook_pages": "22-43",
+      "lecture_title": "Note 1",
+      "alignment_score": 0.0,
+      "alignment_quality": "Low",
+      "notes": "Requires detailed content review to assess alignment"
+    },
+    {
+      "week": 2,
+      "textbook_chapter": "Information Security Risk Assessment Basics",
+      "textbook_pages": "44-58",
+      "lecture_title": "Note 2: Information Security Risk Assessment Basics",
+      "alignment_score": 0.85,
+      "alignment_quality": "High",
+      "notes": "Good alignment on risk assessment concepts"
+    },
+    {
+      "week": 3,
+      "textbook_chapter": "Project Definition",
+      "textbook_pages": "60-93",
+      "lecture_title": "Note 3:Project Definition",
+      "alignment_score": 0.9,
+      "alignment_quality": "High",
+      "notes": "Excellent alignment on project definition"
+    },
+    {
+      "week": 4,
+      "textbook_chapter": "Security Risk Assessment Preparation",
+      "textbook_pages": "94-131",
+      "lecture_title": "Note 4:Security Risk Assessment Preparation",
+      "alignment_score": 0.85,
+      "alignment_quality": "High",
+      "notes": "Good alignment on risk assessment concepts"
+    },
+    {
+      "week": 5,
+      "textbook_chapter": "Data Gathering",
+      "textbook_pages": "132-164",
+      "lecture_title": "Note 5:Security Data Gathering",
+      "alignment_score": 0.5,
+      "alignment_quality": "Low",
+      "notes": "Well-aligned on data gathering methodology"
+    },
+    {
+      "week": 6,
+      "textbook_chapter": "Administrative Data Gathering",
+      "textbook_pages": "166-235",
+      "lecture_title": "Note 6:Administrative Data Gathering",
+      "alignment_score": 0.4,
+      "alignment_quality": "Low",
+      "notes": "Well-aligned on data gathering methodology"
+    },
+    {
+      "week": 7,
+      "textbook_chapter": "Technical Data Gathering",
+      "textbook_pages": "236-307",
+      "lecture_title": "Note 7:Technical Data Gathering",
+      "alignment_score": 0.4,
+      "alignment_quality": "Low",
+      "notes": "Well-aligned on data gathering methodology"
+    },
+    {
+      "week": 8,
+      "textbook_chapter": "Physical Data Gathering",
+      "textbook_pages": "308-384",
+      "lecture_title": "Note 8:Physical Data Gathering",
+      "alignment_score": 0.4,
+      "alignment_quality": "Low",
+      "notes": "Well-aligned on data gathering methodology"
+    },
+    {
+      "week": 9,
+      "textbook_chapter": "Security Risk Analysis",
+      "textbook_pages": "386-400",
+      "lecture_title": "Note 9: Risk Analysis",
+      "alignment_score": 0.4,
+      "alignment_quality": "Low",
+      "notes": "Requires detailed content review to assess alignment"
+    },
+    {
+      "week": 10,
+      "textbook_chapter": "Security Risk Mitigation",
+      "textbook_pages": "402-414",
+      "lecture_title": "Note 10: Security Risk Mitigation",
+      "alignment_score": 0.6,
+      "alignment_quality": "Low",
+      "notes": "Requires detailed content review to assess alignment"
+    },
+    {
+      "week": 11,
+      "textbook_chapter": "Security Risk Assessment Reporting",
+      "textbook_pages": "416-428",
+      "lecture_title": "Note 11: Security Risk Assessment Reporting",
+      "alignment_score": 0.85,
+      "alignment_quality": "High",
+      "notes": "Good alignment on risk assessment concepts"
+    },
+    {
+      "week": 12,
+      "textbook_chapter": "Security Risk Assessment Project Management",
+      "textbook_pages": "430-454",
+      "lecture_title": "SECURITY RISK ANALYSIS AND EVALUATION -Note 12: Security Risk Assessment Project Management",
+      "alignment_score": 0.85,
+      "alignment_quality": "High",
+      "notes": "Good alignment on risk assessment concepts"
+    },
+    {
+      "week": 13,
+      "textbook_chapter": "Security Risk Assessment Approaches",
+      "textbook_pages": "456-474",
+      "lecture_title": "Note 13",
+      "alignment_score": 0.0,
+      "alignment_quality": "Low",
+      "notes": "Requires detailed content review to assess alignment"
+    }
+  ]
+}

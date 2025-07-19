@@ -1,0 +1,58 @@
+# Mermaid Diagram from week_08_comprehensive_study_notes.md
+# Diagram 1 of 1
+# ==================================================
+
+graph TD
+    A[Physical Data Gathering] --> B{Key Threat Categories};
+    A --> C{Data Gathering Method};
+
+    B --> D[Environmental & Utility Threats];
+    B --> E[Human Threats];
+
+    D --> D1[Power & Climate];
+    D --> D2[Fire];
+    D --> D3[Water Damage];
+    D --> D4[Natural Disasters];
+    
+    subgraph Safeguards_Env [Environmental Safeguards]
+        direction LR
+        S1[UPS & Conditioners]
+        S2[HVAC & Alarms]
+        S3[Fire Suppression]
+        S4[Proper Siting]
+    end
+
+    D1 --> S1 & S2;
+    D2 --> S3;
+    D3 & D4 --> S4;
+
+    E --> E1[Unauthorized Entry & Access];
+    E --> E2[Unauthorized Removal & Sabotage];
+    
+    subgraph Safeguards_Human [Human Threat Safeguards]
+        direction LR
+        SH1[Barriers & Lighting]
+        SH2[Intrusion Detection & CCTV]
+        SH3[Access Control Systems]
+        SH4[Personnel Procedures]
+    end
+
+    E1 --> SH1 & SH2 & SH3;
+    E1 & E2 --> SH4;
+
+    C --> R[RIIOT Method];
+    subgraph RIIOT [ ]
+        direction LR
+        R1[Review Documents]
+        R2[Interview Personnel]
+        R3[Inspect Controls]
+        R4[Observe Behavior]
+        R5[Test Safeguards]
+    end
+    R --> R1 & R2 & R3 & R4 & R5;
+
+# ==================================================
+# To render this diagram:
+# 1. Copy the code above (without these comments)
+# 2. Paste into https://mermaid.live/
+# 3. Or use any Mermaid-compatible tool

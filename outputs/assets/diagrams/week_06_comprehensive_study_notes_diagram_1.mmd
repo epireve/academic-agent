@@ -1,0 +1,32 @@
+graph TD
+    A[Security Risk Assessment] --> B{Data Gathering Phase};
+    B --> C[Administrative];
+    B --> D[Technical];
+    B --> E[Physical];
+
+    C --> F{Key Areas of Review};
+    F --> G[Human Resources];
+    F --> H[Organizational Structure];
+    F --> I[Information Control];
+    F --> J[Business Continuity];
+    F --> K[System Security];
+
+    subgraph RIIOT Method
+        direction LR
+        L[Review]
+        M[Interview]
+        N[Inspect]
+        O[Observe]
+        P[Test]
+    end
+
+    C -- Applies --> L;
+    C -- Applies --> M;
+    C -- Applies --> N;
+    C -- Applies --> O;
+    C -- Applies --> P;
+
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style B fill:#bbf,stroke:#333,stroke-width:2px
+    style C fill:#ccf,stroke:#333,stroke-width:2px
+    style F fill:#lightgrey,stroke:#333,stroke-width:1px

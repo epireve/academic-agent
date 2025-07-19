@@ -1,0 +1,36 @@
+# Mermaid Diagram from week_03_comprehensive_study_notes.md
+# Diagram 1 of 1
+# ==================================================
+
+graph TD
+    subgraph Project_Definition
+        A[Budget]
+        B[Objective]
+        C[Scope]
+        D[Rigor]
+    end
+
+    subgraph Project_Success
+        S1[Customer Satisfaction]
+        S2[Quality Technical Work]
+        S3[On-Time & On-Budget Completion]
+    end
+
+    subgraph Stakeholders
+        P[Project Sponsor]
+        SO[Security Officer]
+        BM[Business Managers]
+        CO[Compliance/Legal]
+        T[Technicians/Admins]
+    end
+
+    Project_Definition -- Forms the basis of --> SOW[Statement of Work]
+    SOW -- Governs --> Project_Success
+    Stakeholders -- Define --> S1
+    S1 -- Is a key component of --> Project_Success
+
+# ==================================================
+# To render this diagram:
+# 1. Copy the code above (without these comments)
+# 2. Paste into https://mermaid.live/
+# 3. Or use any Mermaid-compatible tool

@@ -1,0 +1,30 @@
+graph TD
+    subgraph Core Inputs
+        A[Asset Value & Criticality]
+        T[Threat Frequency & Components]
+        V[Vulnerability Likelihood]
+    end
+
+    subgraph Risk Analysis Process
+        direction LR
+        D(1. Determine Individual Risk) --> C(2. Create Risk Statements) --> R(3. Team Review & Consensus)
+    end
+
+    subgraph Outcome
+        O[Overall Security Risk Posture]
+    end
+
+    A --> D
+    T --> D
+    V --> D
+
+    U[Uncertainty] -- Challenges --> D
+    RU[Techniques to Reduce Uncertainty] -- Mitigates --> U
+    RU --> D
+
+    R --> O
+    RT[Risk Tolerance]
+    O -- Compared Against --> RT
+
+    style U fill:#f9f,stroke:#333,stroke-width:2px
+    style RU fill:#ccf,stroke:#333,stroke-width:2px

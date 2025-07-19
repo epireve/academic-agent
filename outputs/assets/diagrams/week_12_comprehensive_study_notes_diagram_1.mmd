@@ -1,0 +1,22 @@
+graph TD
+    A[Project Initiation] --> B(Project Planning);
+    B --> C{Define Project};
+    C -- SOW --> D[Breakdown into Phases & Activities];
+    D --> E[Allocate Resources & Hours];
+    E --> F[Create Schedule];
+    
+    subgraph Project Execution & Control
+        G[Track Progress] <--> H[Take Corrective Action];
+        H <--> I[Report Status];
+    end
+
+    F --> G;
+    I --> J[Project Conclusion];
+    J --> K[Final Deliverables & Wrap-up];
+
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style J fill:#f9f,stroke:#333,stroke-width:2px
+    style B fill:#bbf,stroke:#333,stroke-width:2px
+    style G fill:#ccf,stroke:#333,stroke-width:2px
+    style H fill:#ccf,stroke:#333,stroke-width:2px
+    style I fill:#ccf,stroke:#333,stroke-width:2px

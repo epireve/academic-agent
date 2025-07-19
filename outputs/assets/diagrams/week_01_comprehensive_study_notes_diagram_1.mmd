@@ -1,0 +1,28 @@
+graph TD
+    subgraph Security Management
+        A[Security Manager] --> B{Prioritize Initiatives};
+    end
+
+    subgraph Initiative Drivers
+        C[Audit Findings] -.-> D{Security Strategy};
+        E[New Technology] -.-> D;
+        F[Compliance Mandates] -.-> D;
+        G[Security Risk Assessment] --> D;
+    end
+
+    subgraph Risk Assessment Process & Outcomes
+        G --> H[Analyzes Assets, Threats & Controls];
+        H --> I[Identifies & Quantifies Risk];
+        I --> J[Informs Risk-Based Decisions];
+        J --> B;
+    end
+
+    subgraph Related Tactical Activities
+        K[Gap Assessment] --> G;
+        L[Penetration Testing] --> G;
+        M[Audits] --> G;
+        N[Vulnerability Scanning] --> G;
+    end
+
+    style G fill:#cde4ff,stroke:#004a99,stroke-width:2px
+    style D fill:#e1e1e1,stroke:#333,stroke-width:2px

@@ -1,0 +1,32 @@
+# Mermaid Diagram from week_07_comprehensive_study_notes.md
+# Diagram 1 of 1
+# ==================================================
+
+graph TD
+    A[Technical Data Gathering] -->|Employs| B(RIIOT Method);
+    
+    subgraph RIIOT Method
+        direction LR
+        B1[Review Documents]
+        B2[Interview Personnel]
+        B3[Inspect Controls]
+        B4[Observe Behavior]
+        B5[Test Controls]
+    end
+
+    B --> C{Understand & Assess};
+    C --> D[Technical Security Landscape];
+
+    subgraph Technical Security Landscape
+        direction TB
+        E[Technical Threats] -->|Mitigated by| F[Technical Safeguards];
+        F -->|Protect| G[Organizational Assets];
+    end
+
+    D --> A;
+
+# ==================================================
+# To render this diagram:
+# 1. Copy the code above (without these comments)
+# 2. Paste into https://mermaid.live/
+# 3. Or use any Mermaid-compatible tool
