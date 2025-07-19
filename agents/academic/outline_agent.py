@@ -30,7 +30,7 @@ except ImportError:
 BASE_DIR = Path(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 )
-OUTPUT_DIR = BASE_DIR / "output"
+OUTPUT_DIR = BASE_DIR / str(get_output_manager().outputs_dir)
 PROCESSED_DIR = BASE_DIR / "processed"
 OUTLINES_DIR = PROCESSED_DIR / "outlines"
 ANALYSIS_DIR = PROCESSED_DIR / "analysis"

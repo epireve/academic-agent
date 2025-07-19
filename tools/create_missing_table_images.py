@@ -7,6 +7,10 @@ from PIL import Image, ImageDraw, ImageFont
 from pathlib import Path
 import textwrap
 
+from src.core.output_manager import get_output_manager, get_final_output_path, get_processed_output_path, get_analysis_output_path
+from src.core.output_manager import OutputCategory, ContentType
+
+
 def create_table_image(title, content, filename, width=800, height=600):
     """Create a simple table image with text content"""
     
@@ -43,7 +47,7 @@ def create_table_image(title, content, filename, width=800, height=600):
                 y_offset += 20
     
     # Save image
-    output_path = Path("/Users/invoture/dev.local/academic-agent/output/sra/ai_enhanced_study_notes") / filename
+    output_path = Path(get_final_output_path(ContentType.STUDY_NOTES)) / filename
     img.save(output_path)
     print(f"Created: {output_path}")
     return output_path

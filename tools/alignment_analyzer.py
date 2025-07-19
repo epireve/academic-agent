@@ -158,9 +158,9 @@ class AlignmentAnalyzer:
         ]
         
         # Paths
-        self.lecture_notes_path = self.project_root / "output" / "sra" / "lectures" / "markdown"
+        self.lecture_notes_path = self.project_root / str(get_output_manager().outputs_dir) / "sra" / "lectures" / get_processed_output_path(ContentType.MARKDOWN)
         self.textbook_chapters_path = self.project_root / "Split_Chapters"
-        self.output_path = self.project_root / "output" / "sra" / "alignment_analysis"
+        self.output_path = self.project_root / str(get_output_manager().outputs_dir) / "sra" / "alignment_analysis"
         
         # Create output directory
         self.output_path.mkdir(parents=True, exist_ok=True)

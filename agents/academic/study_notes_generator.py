@@ -494,7 +494,7 @@ class StudyNotesGeneratorTool(Tool):
     def __init__(self, base_dir: Optional[Path] = None):
         super().__init__()
         self.base_dir = base_dir or Path.cwd()
-        self.output_dir = self.base_dir / "output" / "study_notes"
+        self.output_dir = self.base_dir / str(get_output_manager().outputs_dir) / "study_notes"
         self.output_dir.mkdir(parents=True, exist_ok=True)
         
         # Initialize components
@@ -526,7 +526,7 @@ class StudyNotesGeneratorTool(Tool):
             if path.suffix.lower() == '.md':
                 with open(path, 'r', encoding='utf-8') as f:
                     content = f.read()
-                metadata["type"] = "markdown"
+                metadata["type"] = get_processed_output_path(ContentType.MARKDOWN)
             elif path.suffix.lower() == '.json':
                 with open(path, 'r', encoding='utf-8') as f:
                     data = json.load(f)
@@ -697,7 +697,7 @@ Format as a JSON array of strings. Each takeaway should be one clear, actionable
         try:
             # Set defaults
             if output_formats is None:
-                output_formats = ["markdown", "json"]
+                output_formats = [get_processed_output_path(ContentType.MARKDOWN), "json"]
             
             # Load content
             content, content_metadata = self._load_content(content_path)
@@ -755,7 +755,7 @@ Format as a JSON array of strings. Each takeaway should be one clear, actionable
             safe_title = re.sub(r'[^\w\-_]', '_', title.lower())
             
             for format_type in output_formats:
-                if format_type == "markdown":
+                if format_type == get_processed_output_path(ContentType.MARKDOWN):
                     md_content = self.formatter.format_markdown(study_note)
                     md_path = self.output_dir / f"{safe_title}_study_notes.md"
                     with open(md_path, 'w', encoding='utf-8') as f:
@@ -843,7 +843,7 @@ if __name__ == "__main__":
         content_path=content_path,
         title="Security Risk Assessment Fundamentals",
         subject="Cybersecurity",
-        output_formats=["markdown", "json", "html"],
+        output_formats=[get_processed_output_path(ContentType.MARKDOWN), "json", "html"],
         include_diagrams=True
     )
     

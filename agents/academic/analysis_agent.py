@@ -27,7 +27,7 @@ load_dotenv()
 
 # Define base paths
 BASE_DIR = Path(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-OUTPUT_DIR = BASE_DIR / "output"
+OUTPUT_DIR = BASE_DIR / str(get_output_manager().outputs_dir)
 ANALYSIS_DIR = BASE_DIR / "processed" / "analysis"
 
 

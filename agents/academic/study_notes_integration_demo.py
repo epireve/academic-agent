@@ -64,7 +64,7 @@ class StudyNotesIntegrationDemo:
     
     def __init__(self, project_root: str):
         self.project_root = Path(project_root)
-        self.output_dir = self.project_root / "output" / "study_notes_demo"
+        self.output_dir = self.project_root / str(get_output_manager().outputs_dir) / "study_notes_demo"
         self.output_dir.mkdir(parents=True, exist_ok=True)
         
         # Initialize components
@@ -401,7 +401,7 @@ Network security requires a comprehensive approach combining technology, process
                         content_path=str(file_path),
                         title=title,
                         subject="Cybersecurity",
-                        output_formats=["markdown", "json", "html"],
+                        output_formats=[get_processed_output_path(ContentType.MARKDOWN), "json", "html"],
                         include_diagrams=True
                     )
                     
@@ -422,7 +422,7 @@ Network security requires a comprehensive approach combining technology, process
                     # Fallback to notes agent
                     result = self.notes_agent.process_file(
                         str(file_path),
-                        output_formats=["markdown", "json"],
+                        output_formats=[get_processed_output_path(ContentType.MARKDOWN), "json"],
                         use_comprehensive_generator=False
                     )
                     

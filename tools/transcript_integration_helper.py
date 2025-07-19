@@ -23,12 +23,12 @@ class TranscriptIntegrationHelper:
         
         # Multiple transcript directories as mentioned by user
         self.transcript_directories = [
-            self.project_root / "output" / "sra" / "transcripts" / "markdown",
+            self.project_root / str(get_output_manager().outputs_dir) / "sra" / "transcripts" / get_processed_output_path(ContentType.MARKDOWN),
             Path("/Users/invoture/dev.local/mse-st/sra")
         ]
         
         # Standardized output directory
-        self.standardized_output = self.project_root / "output" / "sra" / "transcripts" / "standardized"
+        self.standardized_output = self.project_root / str(get_output_manager().outputs_dir) / "sra" / "transcripts" / "standardized"
         
         # Create directories
         self.standardized_output.mkdir(parents=True, exist_ok=True)

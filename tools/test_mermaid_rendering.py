@@ -11,7 +11,7 @@ import tempfile
 def test_mermaid_cli_rendering():
     """Test rendering with different mermaid-cli options"""
     
-    diagrams_dir = Path("/Users/invoture/dev.local/academic-agent/output/sra/mermaid_diagrams")
+    diagrams_dir = Path(get_output_manager().get_output_path(OutputCategory.ASSETS, ContentType.DIAGRAMS, subdirectory="mermaid"))
     test_diagram = diagrams_dir / "week_01_comprehensive_study_notes_diagram_1.mmd"
     
     if not test_diagram.exists():

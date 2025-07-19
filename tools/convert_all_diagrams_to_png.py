@@ -10,7 +10,7 @@ import json
 def convert_all_to_png():
     """Convert all Mermaid diagrams to PNG with optimal settings"""
     
-    diagrams_dir = Path("/Users/invoture/dev.local/academic-agent/output/sra/mermaid_diagrams")
+    diagrams_dir = Path(get_output_manager().get_output_path(OutputCategory.ASSETS, ContentType.DIAGRAMS, subdirectory="mermaid"))
     output_dir = diagrams_dir / "png_output"
     output_dir.mkdir(exist_ok=True)
     
