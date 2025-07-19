@@ -23,7 +23,7 @@ import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
-from agents.academic.content_quality_agent import (
+from src.agents.content_quality_agent import (
     ContentQualityAgent,
     ContentStructure,
     FormattingIssue,
@@ -381,7 +381,7 @@ Some basic content but missing required sections.
         # Should have proper list spacing
         self.assertIn("- badlist", fixed_content)
 
-    @patch('agents.academic.content_quality_agent.ContentQualityAgent.assess_content_quality')
+    @patch('src.agents.content_quality_agent.ContentQualityAgent.assess_content_quality')
     def test_integrate_with_consolidation(self, mock_assess):
         """Test integration with consolidation results"""
         # Mock consolidation result
@@ -551,7 +551,7 @@ class TestQualityReportDataClass(unittest.TestCase):
 
     def test_quality_report_to_dict(self):
         """Test QualityReport serialization"""
-        from agents.academic.quality_manager import QualityMetrics, QualityEvaluation
+        from src.agents.quality_manager import QualityMetrics, QualityEvaluation
         
         quality_evaluation = QualityEvaluation(
             content_type="notes",
